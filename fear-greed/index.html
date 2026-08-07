@@ -1,0 +1,948 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crypto Fear &amp; Greed Index live — Sentiment &amp; Contrarian-DCA | RenditeX</title>
+<meta name="description" content="Der Crypto Fear &amp; Greed Index live: aktueller Wert, 30-Tage-Verlauf, alle fünf Zonen erklärt und ein DCA-Rechner, der deinen Sparplan an die Marktstimmung anpasst.">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=13">
+
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span><span id="updatedAt">Live-Daten werden geladen</span></div>
+  <h1>Die Stimmung im Kryptomarkt, <em>in einer Zahl</em>.</h1>
+  <p class="hero-sub">Der Fear &amp; Greed Index misst, ob Anleger gerade panisch verkaufen oder euphorisch kaufen. Diese Seite zeigt den Live-Wert, den Verlauf der letzten Monate und rechnet dir aus, wie du deinen Sparplan daran ausrichten kannst.</p>
+
+  <div class="gauge-card">
+    <div class="gauge-top">
+      <div class="bignum">
+        <div class="v" id="bigVal">—</div>
+        <div class="of">/ 100</div>
+      </div>
+      <div class="verdict">
+        <div class="label" id="vLabel">Wird geladen</div>
+        <div class="en mono" id="vEn">—</div>
+        <p id="vText">Der aktuelle Indexwert wird von der Datenquelle abgerufen.</p>
+        <div class="delta" id="vDelta"></div>
+      </div>
+    </div>
+
+    <div class="band-wrap">
+      <div class="band" id="band">
+        <span class="seg" style="left:25%"></span>
+        <span class="seg" style="left:45%"></span>
+        <span class="seg" style="left:56%"></span>
+        <span class="seg" style="left:76%"></span>
+      </div>
+      <div class="trail" id="trail">
+        <div class="marker" id="marker" style="left:50%"></div>
+      </div>
+      <div class="band-scale">
+        <span>0 · Extreme Angst</span>
+        <span>25</span>
+        <span>50 · Neutral</span>
+        <span>75</span>
+        <span>100 · Extreme Gier</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Gestern</div><div class="n" id="sYest">—</div><div class="s" id="sYestL">—</div></div>
+      <div class="stat"><div class="k">Vor 7 Tagen</div><div class="n" id="s7">—</div><div class="s" id="s7L">—</div></div>
+      <div class="stat"><div class="k">Vor 30 Tagen</div><div class="n" id="s30">—</div><div class="s" id="s30L">—</div></div>
+      <div class="stat"><div class="k">30 Tage Hoch / Tief</div><div class="n" id="sHL">—</div><div class="s">Spannweite</div></div>
+    </div>
+    <div class="src-note" id="srcNote">Quelle: alternative.me · Aktualisierung täglich um 01:00 Uhr UTC</div>
+  </div>
+</div>
+
+<!-- ============ VERLAUF ============ -->
+<section id="verlauf">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Wo der Markt zuletzt stand</h2>
+      <p>Die farbigen Bänder im Hintergrund markieren die fünf Zonen. Interessant sind weniger einzelne Tage als die Frage, wie lange sich der Index in einem Bereich festsetzt — anhaltende Angst über mehrere Wochen war historisch aussagekräftiger als ein einzelner Ausschlag.</p>
+    </div>
+
+    <div class="chart-card reveal">
+      <div class="chart-bar">
+        <div class="rangebtns" id="rangeBtns" role="group" aria-label="Zeitraum wählen">
+          <button data-days="30" aria-pressed="false">30 Tage</button>
+          <button data-days="90" aria-pressed="false">3 Monate</button>
+          <button data-days="365" aria-pressed="true">1 Jahr</button>
+        </div>
+        <div class="chart-legend">
+          <span><i style="background:var(--z0)"></i>Extreme Angst (0–24)</span>
+          <span><i style="background:var(--z1)"></i>Angst (25–44)</span>
+          <span><i style="background:var(--z2)"></i>Neutral (45–55)</span>
+          <span><i style="background:var(--z3)"></i>Gier (56–75)</span>
+          <span><i style="background:var(--z4)"></i>Extreme Gier (76–100)</span>
+          <span><i style="background:#FFFFFF"></i>Halving</span>
+        </div>
+      </div>
+      <div class="chart-host" id="chartHost">
+        <div id="chart" role="img" aria-label="Verlauf des Fear and Greed Index"></div>
+        <div class="tip" id="tip"></div>
+      </div>
+      <p class="chart-hint">Ziehen zum Verschieben durch die Zeit, Mausrad oder Zwei-Finger-Geste zum Zoomen — wie in einem Trading-Chart. Die Linie zeigt den Indexwert, die farbigen Bänder die fünf Zonen im Hintergrund.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTRARIAN ============ -->
+<section id="contrarian">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Warum man gegen die Stimmung kauft</h2>
+      <p>Der Index misst nicht den Wert von Bitcoin, sondern die Gefühlslage der Anleger. Und die kippt an Wendepunkten regelmäßig ins Extreme: Wenn alle verkaufen wollen, sind die Käufer knapp und die Kurse tief. Wenn alle kaufen wollen, ist es umgekehrt. Genau daran setzt die Contrarian-Variante an — sie dreht die eigene Kaufhöhe gegen die Stimmung.</p>
+    </div>
+
+    <div class="princ reveal">
+      <div class="card">
+        <div class="tag">Ausgangspunkt</div>
+        <h3>Klassisches DCA</h3>
+        <p>Du kaufst jeden Monat für denselben Betrag, unabhängig vom Kurs. In teuren Monaten bekommst du weniger Coins, in günstigen mehr. Das nimmt dir die Entscheidung ab und glättet den Einstiegspreis über die Zeit.</p>
+        <div class="formula">Kaufbetrag = Standardbetrag <span>· immer gleich</span></div>
+      </div>
+      <div class="card accent">
+        <div class="tag">Die Variante</div>
+        <h3>Contrarian-DCA</h3>
+        <p>Du behältst den Rhythmus bei, veränderst aber die Höhe: In Angstphasen kaufst du mehr als den Standardbetrag, in Gierphasen weniger. Der Indexwert bestimmt den Faktor. Der Effekt verstärkt sich mit der Zeit, weil überdurchschnittlich viele Coins zu unterdurchschnittlichen Kursen zusammenkommen.</p>
+        <div class="formula">Kaufbetrag = Standardbetrag × Multiplikator <span>· je nach Zone</span></div>
+      </div>
+    </div>
+
+    <div class="multibars reveal" id="multiBars">
+      <div class="mb-head">
+        <span class="t">So verteilen sich die Käufe</span>
+        <span class="s" id="mbBase">Beispiel: 200 € Standardbetrag</span>
+      </div>
+      <div class="mb-grid" id="mbGrid"></div>
+    </div>
+
+    <div class="callout reveal">
+      <b>Drei Bedingungen, damit das aufgeht:</b> Erstens brauchst du eine Cash-Reserve, sonst kannst du in Angstphasen nicht erhöhen. Zweitens musst du es durchhalten, wenn es sich falsch anfühlt — genau das ist der schwierige Teil. Und drittens bleibt es eine Wette darauf, dass sich der Markt erholt. Extreme Angst kann berechtigt sein: Wenn ein Projekt fundamental beschädigt ist, kauft man nicht günstig ein, sondern wirft gutes Geld hinterher.
+    </div>
+  </div>
+</section>
+
+<!-- ============ ZONEN ============ -->
+<section id="zonen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Fünf Zonen, fünf Verhaltensmuster</h2>
+      <p>Jede Zone beschreibt eine typische Marktlage. Tippe eine Zeile an, um zu sehen, was sie bedeutet und was erfahrene Anleger in dieser Phase üblicherweise tun.</p>
+    </div>
+    <div class="zones" id="zoneList"></div>
+  </div>
+</section>
+
+<!-- ============ RECHNER ============ -->
+<section id="rechner">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Sparplan nach Marktstimmung</h2>
+      <p>Der Schieberegler steht auf dem Live-Wert. Zieh ihn, um andere Marktlagen durchzuspielen, oder passe die Multiplikatoren an deine eigene Risikobereitschaft an.</p>
+    </div>
+
+    <div class="calc reveal">
+      <div class="panel">
+        <label class="fl" for="baseAmt">Dein monatlicher Standardbetrag</label>
+        <div class="inputrow">
+          <span id="curSym">€</span>
+          <input id="baseAmt" type="number" inputmode="numeric" min="10" max="100000" step="10" value="200">
+        </div>
+        <div class="quick" id="quickAmts">
+          <button data-a="50">50 €</button><button data-a="100">100 €</button>
+          <button data-a="200">200 €</button><button data-a="500">500 €</button>
+          <button data-a="1000">1.000 €</button>
+        </div>
+
+        <div class="sliderblock">
+          <label class="fl" for="fgSlider">Marktstimmung durchspielen</label>
+          <div class="slidertop">
+            <span class="cur" id="slVal">—</span>
+            <span class="cl mono" id="slLbl">—</span>
+            <button id="resetLive" type="button">Auf Live-Wert</button>
+          </div>
+          <input id="fgSlider" type="range" min="0" max="100" value="29" aria-label="Fear and Greed Wert">
+          <div class="rangelabels"><span>0 Panik</span><span>50 Neutral</span><span>100 Euphorie</span></div>
+        </div>
+
+        <details class="multiedit" id="multiEdit">
+          <summary>Multiplikatoren anpassen<span class="plus">+</span></summary>
+          <p style="color:var(--muted); font-size:14px; margin:14px 0 0">Die Standardwerte sind ein verbreiteter Richtwert, keine feste Regel. Wer vorsichtiger vorgehen will, nimmt eine flachere Staffelung — etwa 1,5× / 1,25× / 1× / 0,75× / 0,5×. Wichtig ist nur, dass der Faktor bei Angst höher liegt als bei Gier.</p>
+          <div class="me-rows" id="meRows"></div>
+          <div class="me-foot">
+            <button type="button" id="meReset">Standard wiederherstellen</button>
+            <button type="button" id="meFlat">Vorsichtige Staffelung</button>
+            <span id="meStatus">Wird auf diesem Gerät gespeichert</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="result" id="resultBox">
+        <label class="fl">Kaufbetrag diesen Monat</label>
+        <div class="out" id="outAmt">— €</div>
+        <div class="outsub" id="outSub">—</div>
+        <div class="resgrid">
+          <div><div class="k">Multiplikator</div><div class="v" id="outMult">—</div></div>
+          <div><div class="k">Differenz</div><div class="v" id="outDiff">—</div></div>
+          <div><div class="k">Reserve nötig</div><div class="v" id="outReserve">—</div></div>
+          <div><div class="k">Jahresbudget</div><div class="v" id="outYear">—</div></div>
+        </div>
+        <div class="advice" id="outAdvice">—</div>
+        <div class="disclaimer">Beispielrechnung nach der Contrarian-DCA-Systematik. Keine Anlageberatung und keine Kaufempfehlung. Krypto-Anlagen können vollständig an Wert verlieren.</div>
+      </div>
+    </div>
+
+    <div class="panel bt reveal" id="btBox" hidden>
+      <h3 style="font-size:19px">Was hätte die Contrarian-Variante gebracht?</h3>
+      <p style="color:var(--muted); font-size:14.5px; margin-top:10px">Simulation: monatlicher Kauf am Ersten, einmal mit festem Betrag, einmal mit dem Multiplikator des jeweiligen Indexwerts. Basis ist dein eingestellter Standardbetrag.</p>
+      <div class="bt-grid">
+        <div class="bt-col" id="btA">
+          <h4>Klassisches DCA</h4>
+          <div class="bt-row"><span>Investiert</span><b id="btAInv">—</b></div>
+          <div class="bt-row"><span>Ø Kaufkurs</span><b id="btAAvg">—</b></div>
+          <div class="bt-row"><span>Bestand</span><b id="btABtc">—</b></div>
+          <div class="bt-row"><span>Heutiger Wert</span><b id="btAVal">—</b></div>
+          <div class="bt-row"><span>Rendite</span><b id="btARoi">—</b></div>
+        </div>
+        <div class="bt-col" id="btB">
+          <h4>Contrarian-DCA</h4>
+          <div class="bt-row"><span>Investiert</span><b id="btBInv">—</b></div>
+          <div class="bt-row"><span>Ø Kaufkurs</span><b id="btBAvg">—</b></div>
+          <div class="bt-row"><span>Bestand</span><b id="btBBtc">—</b></div>
+          <div class="bt-row"><span>Heutiger Wert</span><b id="btBVal">—</b></div>
+          <div class="bt-row"><span>Rendite</span><b id="btBRoi">—</b></div>
+        </div>
+      </div>
+      <div class="bt-note" id="btNote"></div>
+    </div>
+
+    <div class="callout reveal">
+      <b>Die Regel in einem Satz:</b> Je niedriger der Index, desto mehr kaufen. Je höher, desto weniger. Das klingt banal, ist aber schwer durchzuhalten — denn es heißt, genau dann zu investieren, wenn es sich am unangenehmsten anfühlt. Voraussetzung ist eine Cash-Reserve, die in Angstphasen die erhöhten Käufe abdeckt.
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAKTOREN ============ -->
+<section id="faktoren">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Woraus sich der Wert zusammensetzt</h2>
+      <p>Sechs Faktoren werden einzeln normalisiert, auf eine Skala von 0 bis 100 gebracht und gewichtet zusammengezählt. Hohe Volatilität und fallende Kurse drücken den Index Richtung Angst, steigende Kurse bei hohem Volumen Richtung Gier.</p>
+    </div>
+    <div class="factors" id="factorList"></div>
+    <div class="callout reveal">
+      <b>Wichtig zu wissen:</b> Alle sechs Faktoren beziehen sich überwiegend auf Bitcoin. Das Sentiment einzelner Altcoins kann deutlich abweichen — bei Ethereum, Solana oder kleineren Projekten sagt der Index nur indirekt etwas aus.
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXTREME ============ -->
+<section id="extreme">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Wenn der Index ins Extrem kippt</h2>
+      <p>Diese Datenpunkte helfen, den heutigen Wert einzuordnen. Sie zeigen auch die Grenze des Indikators: Extreme fallen oft mit Wendepunkten zusammen, sagen sie aber nicht zuverlässig voraus.</p>
+    </div>
+    <div class="tl" id="timeline"></div>
+    <div class="callout reveal">
+      Auffällig ist das Muster, nicht der Einzelfall: Phasen extremer Angst dauerten historisch Wochen bis Monate, extreme Gier ging häufig größeren Korrekturen voraus. Der Index bildet die kollektive Stimmung ab, nicht die künftige Kursentwicklung.
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEHLER ============ -->
+<section id="fehler">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Fünf teure Fehler in Angstphasen</h2>
+      <p>Wenn der Index in den Extreme-Fear-Bereich fällt, steigt der emotionale Druck. Genau dann passieren die Fehler, die langfristig Rendite kosten.</p>
+    </div>
+    <div class="acc" id="mistakes"></div>
+    <div class="callout reveal" style="border-top-color:var(--z0)">
+      <b>Die wichtigste Regel:</b> Nie aus Panik verkaufen. Wer sich vor der Angstphase einen Plan zurechtlegt — maximaler Verlust, Nachkauf-Level, Haltefrist — muss in der Krise keine Entscheidung mehr treffen, sondern nur noch einem Plan folgen.
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRENZEN ============ -->
+<section id="grenzen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was der Index nicht kann</h2>
+      <p>Ein Werkzeug ist nur so gut wie das Wissen um seine Schwächen. Diese fünf Punkte gehören zu jeder ehrlichen Betrachtung.</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Er schaut zurück</h3><p>Alle sechs Datenquellen bilden Vergangenes ab. Der Index reagiert auf Ereignisse, er prognostiziert sie nicht.</p></div>
+      <div class="limit"><h3>Er ist Bitcoin-lastig</h3><p>Volatilität, Volumen und Dominanz beziehen sich primär auf BTC. Für Altcoin-Portfolios ist die Aussagekraft begrenzt.</p></div>
+      <div class="limit"><h3>Ihm fehlen Derivate</h3><p>Keine Options-Daten, keine Funding Rates, keine implizite Volatilität. Institutionelle Positionierung wird nur indirekt erfasst.</p></div>
+      <div class="limit"><h3>Social Media lässt sich verzerren</h3><p>15 Prozent des Werts stammen aus Social-Sentiment. Bots und koordinierte Kampagnen können diesen Teil beeinflussen.</p></div>
+      <div class="limit"><h3>Er taugt nicht zum Timing</h3><p>Extreme Angst kann Wochen oder Monate anhalten. Der Index markiert eine Zone, nicht den Tiefpunkt.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Kurz beantwortet</h2>
+    </div>
+    <div class="acc" id="faqList"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Was ist der Crypto Fear & Greed Index?","acceptedAnswer":{"@type":"Answer","text":"Der Crypto Fear & Greed Index ist ein Stimmungsindikator, der die Emotionen im Kryptomarkt auf einer Skala von 0 bis 100 abbildet. Niedrige Werte stehen für Angst, hohe Werte für Gier."}},
+{"@type":"Question","name":"Wie oft wird der Index aktualisiert?","acceptedAnswer":{"@type":"Answer","text":"Der Index wird einmal täglich um 01:00 Uhr UTC neu berechnet."}},
+{"@type":"Question","name":"Kann man mit dem Index den Markt timen?","acceptedAnswer":{"@type":"Answer","text":"Nein. Der Index markiert Stimmungszonen, aber keine exakten Wendepunkte. Phasen extremer Angst können Wochen oder Monate anhalten."}},
+{"@type":"Question","name":"Was bedeutet Contrarian-DCA?","acceptedAnswer":{"@type":"Answer","text":"Beim Contrarian-DCA wird der monatliche Sparplanbetrag an die Marktstimmung angepasst: mehr kaufen bei Angst, weniger bei Gier."}}]}
+</script>
+
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="/assets/site.js?v=13"></script>
+<script>
+RX.header({ live:true, nav:[
+  {href:'#verlauf',    label:'Verlauf'},
+  {href:'#contrarian', label:'Strategie'},
+  {href:'#zonen',      label:'Zonen'},
+  {href:'#rechner',    label:'Rechner'},
+  {href:'/',           label:'Alle Tools'}
+]});
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Tools', href:'/#tools'},
+    {label:'Fear & Greed Index', current:true}
+  ],
+  pills: [
+    {label:'Fear & Greed Index', href:'/fear-greed/', current:true},
+    {label:'Heatzone Chart', href:'/heatzone-chart/'},
+    {label:'Scam-Check', href:'/scam-check/'},
+    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/'}
+  ]
+});
+RX.footer();
+</script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- Zonen-Modell ---------- */
+const ZONES = [
+  {key:"ef", min:0,  max:24,  de:"Extreme Angst", en:"Extreme Fear", c:"var(--z0)", hex:"#D91B26", mult:2.5,
+   short:"Panik am Markt, Verkäufe oft unter fairem Wert.",
+   long:"Anleger verkaufen aus Angst vor weiteren Verlusten. Historisch waren solche Phasen häufig gute Einstiegspunkte für geduldige Investoren, etwa im Bärenmarkt 2022, als der Index wochenlang unter 20 verharrte. Gleichzeitig kann extreme Angst auf reale fundamentale Risiken hindeuten — eigene Recherche bleibt Pflicht.",
+   act:"Sparplan konsequent weiterlaufen lassen, Nachkäufe nur bei Assets mit intakten Fundamentaldaten.",
+   advice:"Historisch die günstigsten Einstiegskurse — und die Phase, in der Kaufen am schwersten fällt. Nur mit Geld arbeiten, das du mehrere Jahre entbehren kannst."},
+  {key:"f",  min:25, max:44,  de:"Angst", en:"Fear", c:"var(--z1)", hex:"#C24A0A", mult:1.5,
+   short:"Skepsis dominiert, viele zögern bei Neukäufen.",
+   long:"Die Kurse tendieren nach unten oder stagnieren. Für Sparplan-Investoren sind solche Phasen attraktiv, weil die durchschnittlichen Einstiegskurse tendenziell günstiger ausfallen. Der Unterschied zur Extremzone: Die Panik ist noch nicht flächendeckend, Rückschläge sind weiterhin möglich.",
+   act:"Standardbetrag leicht erhöhen, Positionsgrößen im Blick behalten.",
+   advice:"Kurse unter dem Durchschnitt, aber ohne Panikausverkauf. Ein moderat erhöhter Sparplan senkt den Durchschnittspreis, ohne die Reserve zu strapazieren."},
+  {key:"n",  min:45, max:55,  de:"Neutral", en:"Neutral", c:"var(--z2)", hex:"#8F6A00", mult:1.0,
+   short:"Gleichgewicht zwischen Optimismus und Pessimismus.",
+   long:"Es gibt keine extremen Signale in eine Richtung. Diese Phase eignet sich gut für eine sachliche Portfolioanalyse ohne emotionalen Druck: Gewichtung prüfen, Rebalancing durchführen, Strategie für die nächste Extremphase festlegen.",
+   act:"Standardbetrag beibehalten, Portfolio-Struktur überprüfen.",
+   advice:"Kein Signal in eine Richtung. Der beste Zeitpunkt, um Regeln festzulegen, solange keine Emotion im Spiel ist."},
+  {key:"g",  min:56, max:75,  de:"Gier", en:"Greed", c:"var(--z3)", hex:"#0C7A3A", mult:0.5,
+   short:"Optimismus und FOMO nehmen zu, neue Käufer strömen rein.",
+   long:"Steigende Kurse ziehen unerfahrene Anleger an. Das Risiko einer Korrektur wächst allmählich. Teilgewinnmitnahmen können sinnvoll sein — vor allem, wenn einzelne Positionen durch den Kursanstieg deutlich über ihre Zielgewichtung hinausgewachsen sind.",
+   act:"Sparplanrate reduzieren, Rebalancing prüfen, Reserve aufbauen.",
+   advice:"Teurere Einstiege. Reduzierte Käufe bauen automatisch die Cash-Reserve für die nächste Angstphase auf."},
+  {key:"eg", min:76, max:100, de:"Extreme Gier", en:"Extreme Greed", c:"var(--z4)", hex:"#04806A", mult:0,
+   short:"Markt überhitzt, Gewinn-Posts dominieren die Timeline.",
+   long:"Social-Media-Beiträge über schnelle Gewinne nehmen stark zu, unerfahrene Anleger drängen in den Markt. Historisch gingen Extreme-Greed-Phasen oft größeren Korrekturen voraus, etwa Ende 2021 vor dem anschließenden Bärenmarkt. Das heißt nicht, dass der Kurs sofort dreht — Euphorie kann sich lange halten.",
+   act:"Neukäufe pausieren, Teilgewinne realisieren, Cash-Quote erhöhen.",
+   advice:"Keine Neukäufe. Diese Phase eignet sich zum Realisieren von Teilgewinnen und zum Auffüllen der Reserve — nicht zum Aufstocken."}
+];
+const zoneOf = v => ZONES.find(z => v >= z.min && v <= z.max) || ZONES[2];
+
+/* ---------- Fallback-Daten (falls API nicht erreichbar) ---------- */
+function fallbackSeries(n){
+  let seed = 20260728, out = [], v = 29;
+  const rnd = () => { seed = (seed*1664525 + 1013904223) % 4294967296; return seed/4294967296; };
+  const today = new Date(); today.setHours(0,0,0,0);
+  const recent = [29,30,26,27,28,31,33,25,29,28,25,27,25,25,22,28,26,26,23,22,20,27,24,23,22,21,19,11,15,12];
+  for(let i=0;i<n;i++){
+    if(i < recent.length) v = recent[i];
+    else { v = Math.round(Math.max(6, Math.min(94, v + (rnd()-.48)*11))); }
+    out.push({v:v, t:new Date(today.getTime() - i*86400000)});
+  }
+  return out;
+}
+
+/* ---------- State ---------- */
+const state = { series:[], live:29, isDemo:false, prices:null, range:365 };
+
+/* ---------- Helpers ---------- */
+const $ = id => document.getElementById(id);
+const eur = n => RX.currency.format(n, 0);
+const eur2 = n => RX.currency.format(n, 2);
+function refreshCurrencyLabels(){
+  const sym = RX.currency.symbol();
+  const s = $('curSym'); if(s) s.textContent = sym;
+  document.querySelectorAll('#quickAmts button').forEach(b=>{
+    b.textContent = Number(b.dataset.a).toLocaleString('de-DE') + ' ' + sym;
+  });
+}
+const dfmt = d => d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'});
+const dfmtShort = d => d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'});
+
+/* ---------- Daten laden ---------- */
+async function loadIndex(){
+  try{
+    // limit=0 liefert die komplette Historie seit Start der Aufzeichnungen (Feb. 2018),
+    // statt nur der letzten 400 Tage — mehr Daten fuers Chart, spaeter frei durchscrollbar.
+    const r = await fetch('https://api.alternative.me/fng/?limit=0&format=json', {cache:'no-store'});
+    if(!r.ok) throw new Error('http '+r.status);
+    const j = await r.json();
+    if(!j.data || !j.data.length) throw new Error('leer');
+    return j.data.map(d => ({ v: parseInt(d.value,10), t: new Date(parseInt(d.timestamp,10)*1000) }));
+  }catch(e){
+    state.isDemo = true;
+    return fallbackSeries(400);
+  }
+}
+async function loadPrices(){
+  try{
+    const cur = RX.currency.get().toLowerCase();
+    const r = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency='+cur+'&days=365', {cache:'no-store'});
+    if(!r.ok) throw new Error('http '+r.status);
+    const j = await r.json();
+    if(!j.prices || j.prices.length < 100) throw new Error('zu wenig');
+    const map = new Map();
+    j.prices.forEach(([ts,p]) => { map.set(new Date(ts).toISOString().slice(0,10), p); });
+    return map;
+  }catch(e){ return null; }
+}
+
+/* ---------- Hero rendern ---------- */
+function renderHero(){
+  const s = state.series, v = s[0].v, z = zoneOf(v);
+  state.live = v;
+  document.documentElement.style.setProperty('--rc', z.hex);
+
+  // Zahl hochzählen
+  const el = $('bigVal'); el.style.color = z.hex;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ el.textContent = v; } else {
+    let c = 0, step = Math.max(1, Math.round(v/28));
+    const iv = setInterval(()=>{ c = Math.min(v, c+step); el.textContent = c; if(c>=v) clearInterval(iv); }, 26);
+  }
+
+  $('vLabel').textContent = z.de; $('vLabel').style.color = z.hex;
+  $('vEn').textContent = z.en;
+  $('vText').textContent = z.short + ' ' + z.advice;
+  $('brandDot').style.background = z.hex;
+  $('pillVal').textContent = v; $('pillLbl').textContent = z.de; $('pillDot').style.background = z.hex;
+
+  const y = s[1] ? s[1].v : v, diff = v - y;
+  $('vDelta').innerHTML = diff === 0
+    ? 'Unverändert gegenüber gestern'
+    : `Gegenüber gestern <b>${diff>0?'+':''}${diff}</b> ${diff>0?'Richtung Gier':'Richtung Angst'}`;
+
+  $('updatedAt').textContent = state.isDemo
+    ? 'Demo-Daten — Live-Quelle nicht erreichbar'
+    : 'Stand ' + dfmt(s[0].t) + ' · täglich aktualisiert';
+  if(state.isDemo) $('srcNote').textContent = 'Hinweis: Die Live-API war nicht erreichbar, angezeigt werden hinterlegte Beispieldaten.';
+
+  // Marker + Trail
+  $('marker').style.left = v + '%';
+  const trail = $('trail');
+  s.slice(0,30).reverse().forEach((d,i)=>{
+    const t = document.createElement('div');
+    t.className = 't'; t.style.left = d.v + '%';
+    t.style.opacity = (0.12 + (i/30)*0.55).toFixed(2);
+    t.style.top = (16 + (i%3)*4) + 'px';
+    trail.appendChild(t);
+  });
+
+  const set = (idN,idL,idx) => {
+    const d = s[idx]; if(!d) return;
+    $(idN).textContent = d.v; $(idN).style.color = zoneOf(d.v).hex;
+    $(idL).textContent = zoneOf(d.v).de;
+  };
+  set('sYest','sYestL',1); set('s7','s7L',7); set('s30','s30L',30);
+  const last30 = s.slice(0,30).map(d=>d.v);
+  $('sHL').innerHTML = `<span style="color:var(--z3)">${Math.max(...last30)}</span> <span style="color:var(--muted-2);font-size:18px">/</span> <span style="color:var(--z0)">${Math.min(...last30)}</span>`;
+}
+
+/* ---------- Chart (TradingView Lightweight Charts — echtes Ziehen/Zoomen) ---------- */
+function cssVar(name){ return getComputedStyle($('chart')).getPropertyValue(name).trim(); }
+const toLwTime = d => d.toISOString().slice(0,10);
+
+// Bitcoin-Halvings — rein informative Zeitmarken, unabhaengig vom Indexwert.
+// 2012 liegt vor Beginn der FGI-Aufzeichnung (Feb. 2018) und wird darum nie
+// im sichtbaren Bereich auftauchen, ist der Vollstaendigkeit halber trotzdem
+// gelistet.
+const HALVINGS = [
+  Date.UTC(2012,10,28), Date.UTC(2016,6,9), Date.UTC(2020,4,11), Date.UTC(2024,3,20)
+];
+
+let lwChart = null, lwLine = null, lwBands = [];
+
+/* ================================================================
+   Chart-Aufbau: derselbe Ansatz wie beim Heatzone-Chart — der Chart
+   wird bei jedem Zeitraum-Wechsel mit einer passend berechneten
+   Balkenbreite komplett neu aufgebaut, statt eine bestehende Instanz
+   nachtraeglich zu zoomen (fitContent/setVisibleRange nach der
+   Erstellung griffen dort unzuverlaessig nicht).
+   ================================================================ */
+let roSetup = false;
+
+function buildChart(desiredBars){
+  if(lwChart){ lwChart.remove(); lwChart = null; }
+  lwBands = [];
+  const box = $('chart').getBoundingClientRect();
+  const width = Math.round(box.width) || 600, height = Math.round(box.height) || 340;
+  const barSpacing = Math.max(0.02, width / Math.max(1, desiredBars));
+
+  lwChart = LightweightCharts.createChart($('chart'), {
+    width, height,
+    layout: { background:{color:'transparent'}, textColor:cssVar('--muted-2'), fontFamily:'IBM Plex Mono, monospace', fontSize:11 },
+    grid: { vertLines:{color:cssVar('--line')}, horzLines:{color:cssVar('--line')} },
+    rightPriceScale: { borderColor:cssVar('--line-soft') },
+    timeScale: { borderColor:cssVar('--line-soft'), barSpacing, minBarSpacing:0.02, rightOffset:2 },
+    crosshair: {
+      mode: LightweightCharts.CrosshairMode.Magnet,
+      vertLine:{ color:cssVar('--text'), width:1, labelBackgroundColor:cssVar('--text') },
+      horzLine:{ visible:false, labelVisible:false }
+    },
+    handleScroll:true, handleScale:true
+  });
+
+  // Zonenbänder: von der höchsten Grenze nach unten gestapelt, so entstehen
+  // aus einfachen Flächen-Serien die farbig getrennten Bänder (kein Custom-Plugin nötig).
+  for(let i=ZONES.length-1;i>=0;i--){
+    const z = ZONES[i];
+    lwBands.push({ max:z.max, series: lwChart.addAreaSeries({
+      topColor:z.hex+'CC', bottomColor:z.hex+'CC', lineColor:'transparent',
+      priceLineVisible:false, lastValueVisible:false, crosshairMarkerVisible:false,
+      autoscaleInfoProvider: () => null
+    })});
+  }
+
+  lwLine = lwChart.addLineSeries({
+    // Feste, immer gut sichtbare Farbe statt an die aktuelle Zone angepasst —
+    // sonst verschwindet die Linie im gleichfarbigen Band darunter. Aus
+    // demselben Grund sind auch die Halving-Marker weiß statt farbig.
+    // priceLineVisible:false — die zusaetzliche volle Referenzlinie beim
+    // letzten Wert wirkte wie eine zweite, verwirrende Linie.
+    color:'#FFFFFF', lineWidth:2.2, priceLineVisible:false, lastValueVisible:true,
+    crosshairMarkerVisible:true, crosshairMarkerRadius:5
+  });
+
+  const tip = $('tip');
+  lwChart.subscribeCrosshairMove(param=>{
+    const d = param.seriesData && param.seriesData.get(lwLine);
+    if(!param.point || !d){ tip.style.opacity = 0; return; }
+    const v = Math.round(d.value), z = zoneOf(v);
+    tip.innerHTML = `<div class="tv" style="color:${z.hex}">${v} · ${z.de}</div><div class="td">${dfmt(new Date(param.time+'T00:00:00Z'))}</div>`;
+    tip.style.left = param.point.x + 'px';
+    tip.style.top  = param.point.y + 'px';
+    tip.style.opacity = 1;
+  });
+
+  if(!roSetup){
+    roSetup = true;
+    const ro = new ResizeObserver(entries=>{
+      const cr = entries[0].contentRect;
+      if(lwChart && cr.width>0 && cr.height>0) lwChart.resize(Math.round(cr.width), Math.round(cr.height));
+    });
+    ro.observe($('chart'));
+    window.addEventListener('resize', ()=>{
+      if(!lwChart) return;
+      const box = $('chart').getBoundingClientRect();
+      if(box.width>0 && box.height>0) lwChart.resize(Math.round(box.width), Math.round(box.height));
+    });
+  }
+}
+
+function updateHalvingMarkers(points){
+  if(!lwLine || !points.length) return;
+  const earliest = new Date(points[0].time+'T00:00:00Z').getTime();
+  const latest = new Date(points[points.length-1].time+'T00:00:00Z').getTime();
+  const marks = HALVINGS
+    .filter(t => t >= earliest && t <= latest)
+    .map(t => ({ time:toLwTime(new Date(t)), position:'aboveBar', color:'#FFFFFF', shape:'arrowDown', text:'Halving', size:1.8 }));
+  lwLine.setMarkers(marks);
+}
+
+function rebuildAndDraw(days){
+  const asc = [...state.series].reverse();
+  const points = asc.map(d => ({ time:toLwTime(d.t), value:d.v }));
+  const desired = Math.min(days, points.length);
+  buildChart(desired);
+  lwLine.setData(points);
+  lwBands.forEach(b => b.series.setData(points.map(p => ({ time:p.time, value:b.max }))));
+  updateHalvingMarkers(points);
+}
+
+function renderChart(){
+  rebuildAndDraw(state.range);
+}
+
+function applyRange(days){
+  state.range = days;
+  if(!state.series.length) return;
+  rebuildAndDraw(days);
+}
+
+/* ---------- Zonen-Liste ---------- */
+function renderZones(){
+  const host = $('zoneList'); host.innerHTML = '';
+  const cur = zoneOf(state.live);
+  ZONES.forEach(z=>{
+    const btn = document.createElement('button');
+    btn.className = 'zone'; btn.style.setProperty('--zc', z.hex);
+    btn.setAttribute('aria-expanded','false');
+    btn.dataset.active = (z.key===cur.key);
+    btn.innerHTML = `
+      <div class="rngbox"><div class="rng">${z.min}–${z.max}</div><div class="nm">${z.en}</div></div>
+      <div><div class="ttl">${z.de}${z.key===cur.key?'<span class="now">Aktuell</span>':''}</div><div class="mini">${z.short}</div></div>
+      <div class="mult">${z.mult===0?'Keine Käufe':fmtMult(z.mult)+' Sparplan'}</div>`;
+    const det = document.createElement('div');
+    det.className = 'zone-detail'; det.style.setProperty('--zc', z.hex);
+    det.innerHTML = `<p style="margin:0 0 10px">${z.long}</p><p style="margin:0"><b>Typisches Vorgehen:</b> ${z.act}</p>`;
+    btn.addEventListener('click', ()=>{
+      const open = det.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+    });
+    if(z.key===cur.key) det.classList.add('open');
+    host.appendChild(btn); host.appendChild(det);
+  });
+}
+
+/* ---------- Rechner ---------- */
+function calc(){
+  const base = Math.max(0, parseFloat($('baseAmt').value) || 0);
+  const v = parseInt($('fgSlider').value,10);
+  const z = zoneOf(v);
+  const amt = Math.round(base * z.mult);
+  const diff = amt - base;
+
+  document.documentElement.style.setProperty('--rc', z.hex);
+  $('slVal').textContent = v; $('slVal').style.color = z.hex;
+  $('slLbl').textContent = z.de; $('slLbl').style.color = z.hex;
+  $('outAmt').textContent = eur(amt);
+  $('outSub').textContent = z.mult===0 ? 'Keine Neukäufe in dieser Zone' : `Statt ${eur(base)} Standardbetrag`;
+  $('outMult').textContent = fmtMult(z.mult);
+  $('outDiff').textContent = (diff>0?'+':'') + eur(diff);
+  $('outDiff').style.color = diff>0 ? z.hex : (diff<0 ? 'var(--muted)' : 'var(--text)');
+  $('outReserve').textContent = eur(Math.max(0, Math.round(base*1.5*6)));
+  $('outYear').textContent = eur(Math.round(base*12*1.15));
+  $('outAdvice').textContent = z.advice;
+  if(state.prices) runBacktest(base);
+}
+
+function runBacktest(base){
+  const map = state.prices; if(!map) return;
+  const fg = new Map(); state.series.forEach(d => fg.set(d.t.toISOString().slice(0,10), d.v));
+  // Kauftage: der 1. jedes Monats der letzten 12 Monate
+  const days = [];
+  const now = new Date();
+  for(let k=12;k>=1;k--){
+    const d = new Date(now.getFullYear(), now.getMonth()-k+1, 1);
+    days.push(d.toISOString().slice(0,10));
+  }
+  let aInv=0,aBtc=0,bInv=0,bBtc=0,used=0;
+  days.forEach(key=>{
+    const price = map.get(key); if(!price) return;
+    let f = fg.get(key);
+    if(f===undefined) return;
+    used++;
+    aInv += base; aBtc += base/price;
+    const m = zoneOf(f).mult;
+    bInv += base*m; bBtc += (base*m)/price;
+  });
+  if(used < 6){ $('btBox').hidden = true; return; }
+  const lastKey = [...map.keys()].sort().pop();
+  const spot = map.get(lastKey);
+  const aVal = aBtc*spot, bVal = bBtc*spot;
+  const aRoi = aInv? (aVal/aInv-1)*100 : 0, bRoi = bInv? (bVal/bInv-1)*100 : 0;
+  const btc = n => n.toFixed(5).replace('.',',') + ' BTC';
+  const pct = n => (n>=0?'+':'') + n.toFixed(1).replace('.',',') + ' %';
+  $('btAInv').textContent = eur(aInv); $('btAAvg').textContent = aBtc? eur(aInv/aBtc):'—';
+  $('btABtc').textContent = btc(aBtc); $('btAVal').textContent = eur(aVal);
+  $('btARoi').textContent = pct(aRoi); $('btARoi').style.color = aRoi>=0?'var(--z4)':'var(--z0)';
+  $('btBInv').textContent = eur(bInv); $('btBAvg').textContent = bBtc? eur(bInv/bBtc):'—';
+  $('btBBtc').textContent = btc(bBtc); $('btBVal').textContent = eur(bVal);
+  $('btBRoi').textContent = pct(bRoi); $('btBRoi').style.color = bRoi>=0?'var(--z4)':'var(--z0)';
+  $('btA').classList.toggle('win', aRoi>bRoi); $('btB').classList.toggle('win', bRoi>=aRoi);
+  const better = bRoi>=aRoi ? 'Contrarian-DCA' : 'klassisches DCA';
+  $('btNote').textContent = `${used} Kaufzeitpunkte simuliert · Vorteil in diesem Zeitraum: ${better} (${Math.abs(bRoi-aRoi).toFixed(1).replace('.',',')} Prozentpunkte). Ohne Gebühren und Steuern. Ein anderer Zeitraum kann zu einem anderen Ergebnis führen — dieses Beispiel ist kein Beleg für künftige Überlegenheit.`;
+  $('btBox').hidden = false;
+}
+
+/* ---------- Faktoren ---------- */
+const FACTORS = [
+  {n:"Volatilität", w:25, d:"Vergleich der aktuellen Schwankungsbreite mit dem 30- und 90-Tage-Durchschnitt. Starke Ausschläge deuten auf Unsicherheit hin."},
+  {n:"Handelsvolumen", w:25, d:"Aktuelles Volumen gegen historische Durchschnitte. Hohes Volumen in einem Aufwärtstrend signalisiert Gier."},
+  {n:"Social Media", w:15, d:"Sentiment-Analyse von Beiträgen auf X mit Krypto-Hashtags. Positive Stimmung treibt den Index nach oben."},
+  {n:"Umfragen", w:15, d:"Regelmäßige Abstimmungen unter Krypto-Investoren zur eigenen Markteinschätzung."},
+  {n:"Bitcoin-Dominanz", w:10, d:"Steigt der BTC-Anteil an der Gesamtmarktkapitalisierung, flüchten Anleger in den als sicherer geltenden Bitcoin."},
+  {n:"Google Trends", w:10, d:"Suchvolumen für Begriffe wie „Bitcoin crash“ oder „buy crypto“ als zusätzliches Stimmungssignal."}
+];
+function renderFactors(){
+  const host = $('factorList');
+  host.innerHTML = FACTORS.map(f=>`
+    <div class="factor">
+      <div class="factor-top"><span class="fn">${f.n}</span><span class="fw">${f.w} %</span></div>
+      <div class="fd">${f.d}</div>
+      <div class="fbar"><i data-w="${f.w*4}"></i></div>
+    </div>`).join('');
+}
+
+/* ---------- Historie ---------- */
+const HIST = [
+  {d:"Juni 2022", v:6, btc:"BTC ≈ 17.600 €", c:"#D91B26", t:"Terra/Luna-Kollaps und Celsius-Insolvenz lösten eine Panikwelle aus. Der Index fiel auf den niedrigsten Wert seit Beginn der Aufzeichnungen."},
+  {d:"März 2020", v:8, btc:"BTC ≈ 4.600 €", c:"#D91B26", t:"COVID-Crash: Bitcoin verlor binnen 48 Stunden über 50 Prozent. Wer in dieser Phase kaufte und bis zum Hoch 2021 hielt, lag deutlich im Plus."},
+  {d:"Jan 2023", v:52, btc:"BTC ≈ 20.800 €", c:"#8F6A00", t:"Erholung nach dem Bärenmarkt. Der Index erreichte erstmals seit Monaten die Neutral-Zone — rückblickend der Beginn einer neuen Aufwärtsbewegung."},
+  {d:"Feb 2024", v:82, btc:"BTC ≈ 48.000 €", c:"#04806A", t:"ETF-Euphorie: Die Zulassung der Spot-ETFs in den USA trieb den Index in den Extreme-Greed-Bereich, der Kurs stieg zunächst weiter."},
+  {d:"Nov 2021", v:84, btc:"BTC ≈ 57.000 €", c:"#04806A", t:"Allzeithoch. Extreme Gier hielt wochenlang an, Social Media war voller Gewinn-Posts. Wenige Monate später folgte ein Rückgang von über 70 Prozent."}
+];
+function renderTimeline(){
+  $('timeline').innerHTML = HIST.map(h=>`
+    <div class="tl-item" style="--tc:${h.c}">
+      <div class="d">${h.d}</div>
+      <div class="btc">${h.btc}</div>
+      <div class="val">${h.v}</div>
+      <div class="txt">${h.t}</div>
+    </div>`).join('');
+}
+
+/* ---------- Fehler ---------- */
+const MISTAKES = [
+  {t:"Panikverkauf am Tiefpunkt", b:"Der häufigste und teuerste Fehler: Bei Extreme Fear alles verkaufen. Historisch waren ausgerechnet die Tage mit den niedrigsten Indexwerten oft die schlechtesten Verkaufszeitpunkte. Wer im Juni 2022 bei einem Wert von 6 verkaufte, realisierte Verluste kurz vor der Erholung.", f:"Vorab festgelegte Ausstiegsregeln definieren und in der Krise nur dem Plan folgen, statt spontan zu entscheiden."},
+  {t:"Auf Scams hereinfallen", b:"In Angstphasen steigt die Aktivität von Betrügern deutlich. Fake-Recovery-Programme, Phishing-Mails angeblicher Börsen und Angebote mit „garantierter Rendite“ häufen sich genau dann, wenn Anleger verzweifelt nach Lösungen suchen.", f:"Nur regulierte Börsen nutzen, niemals Seed-Phrasen eingeben, größere Bestände auf ein Hardware-Wallet auslagern."},
+  {t:"Den Sparplan stoppen", b:"Viele pausieren ihren DCA-Sparplan bei fallenden Kursen. Damit fällt genau der Teil weg, der das Konzept trägt: In Angstphasen kauft der Sparplan automatisch zu günstigeren Kursen und senkt den Durchschnittspreis.", f:"Sparplan weiterlaufen lassen. Wer kann und will, erhöht nach der Contrarian-Systematik sogar."},
+  {t:"Blind nachkaufen", b:"Contrarian Investing heißt nicht, bei jedem Extreme-Fear-Signal blindlings zu kaufen. Manchmal ist die Angst berechtigt — etwa wenn ein Projekt fundamentale Probleme hat, wie bei Terra/Luna 2022, oder wenn regulatorische Risiken bestehen.", f:"Nur bei Assets nachkaufen, deren Fundamentaldaten intakt sind. Große, etablierte Netzwerke waren historisch resilienter als kleine Altcoins."},
+  {t:"Zu konzentriertes Portfolio", b:"Wer sein gesamtes Vermögen in einem einzelnen Token hält, leidet in Angstphasen besonders — finanziell und psychologisch. Eine breite Streuung über Anlageklassen dämpft die Volatilität und damit den emotionalen Druck.", f:"Krypto als Beimischung mit einem Anteil begrenzen, den du im Ernstfall verkraften kannst, und den Rest breit streuen."}
+];
+function renderMistakes(){
+  $('mistakes').innerHTML = MISTAKES.map((m,i)=>`
+    <details>
+      <summary><span class="no">${String(i+1).padStart(2,'0')}</span>${m.t}<span class="plus">+</span></summary>
+      <div class="body">${m.b}<div class="fix"><b>Besser</b>${m.f}</div></div>
+    </details>`).join('');
+}
+
+/* ---------- FAQ ---------- */
+const FAQ = [
+  {q:"Wie oft wird der Index aktualisiert?", a:"Einmal täglich um 01:00 Uhr UTC. Innerhalb eines Tages ändert sich der Wert also nicht, auch wenn der Kurs stark schwankt."},
+  {q:"Gilt der Index auch für Altcoins?", a:"Nur eingeschränkt. Volatilität, Volumen und Dominanz beziehen sich überwiegend auf Bitcoin. Kleinere Coins können ein völlig anderes Sentiment haben — vor allem bei projektspezifischen Nachrichten."},
+  {q:"Kann ich damit den perfekten Einstieg finden?", a:"Nein. Der Index markiert Zonen, keine Wendepunkte. Extreme Angst hielt in der Vergangenheit teils monatelang an, bevor sich die Kurse erholten. Er eignet sich als Kontext, nicht als Auslöser für einzelne Trades."},
+  {q:"Warum ist der Index ein Contrarian-Indikator?", a:"Weil er die Emotionen der Masse abbildet — und die Masse ist an Wendepunkten historisch häufig auf der falschen Seite. Das ist eine Beobachtung, keine Gesetzmäßigkeit."},
+  {q:"Woher kommen die Daten auf dieser Seite?", a:"Die Indexwerte stammen aus der öffentlichen API von alternative.me, die Bitcoin-Kurse für den Rückblick von CoinGecko. Beide werden direkt im Browser abgerufen."}
+];
+function renderFaq(){
+  $('faqList').innerHTML = FAQ.map(f=>`
+    <details><summary>${f.q}<span class="plus">+</span></summary><div class="body">${f.a}</div></details>`).join('');
+}
+
+/* ---------- Scroll-Effekte ---------- */
+function initReveal(){
+  RX.reveal();
+  RX.stickyPill('.gauge-card');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){ e.target.style.width = e.target.dataset.w + '%'; io.unobserve(e.target); } });
+    },{threshold:.4});
+    document.querySelectorAll('.fbar i').forEach(n=>io.observe(n));
+  }else{
+    document.querySelectorAll('.fbar i').forEach(n=>{ n.style.width = n.dataset.w + '%'; });
+  }
+}
+
+/* ---------- Einstellungen speichern (nur lokal im Browser) ---------- */
+const LS_KEY = 'renditex_fgi_settings_v1';
+let storageOK = true;
+
+function loadSettings(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ storageOK = false; return null; }
+}
+function saveSettings(){
+  if(!storageOK) return;
+  try{
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      base: parseFloat($('baseAmt').value) || 200,
+      mults: ZONES.map(z => z.mult)
+    }));
+  }catch(e){ storageOK = false; updateStorageStatus(); }
+}
+function clearSettings(){
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  $('baseAmt').value = 200;
+  setMults(DEFAULT_MULTS);
+  renderMultiBars();
+  updateStorageStatus('Einstellungen gelöscht.');
+}
+function applySettings(){
+  const s = loadSettings();
+  if(!s) return;
+  if(typeof s.base === 'number' && s.base > 0) $('baseAmt').value = s.base;
+  if(Array.isArray(s.mults) && s.mults.length === ZONES.length){
+    ZONES.forEach((z,i)=>{ const v = parseFloat(s.mults[i]); if(!isNaN(v) && v >= 0 && v <= 10) z.mult = v; });
+  }
+}
+function updateStorageStatus(msg){
+  const el = $('meStatus'); if(!el) return;
+  if(msg){ el.innerHTML = msg; return; }
+  el.innerHTML = storageOK
+    ? 'Wird auf diesem Gerät gespeichert · <button type="button" id="meClear" class="linky">löschen</button>'
+    : 'Speichern in diesem Browser nicht möglich — Einstellungen gelten nur für diese Sitzung.';
+}
+
+/* ---------- Multiplikatoren: Anzeige & Bearbeitung ---------- */
+const DEFAULT_MULTS = ZONES.map(z => z.mult);
+const CAREFUL_MULTS = [1.5, 1.25, 1, 0.75, 0.5];
+
+function fmtMult(m){ return m === 0 ? 'Pause' : m.toString().replace('.', ',') + '×'; }
+
+function renderMultiBars(){
+  const base = Math.max(0, parseFloat($('baseAmt').value) || 0);
+  const maxM = Math.max(1, ...ZONES.map(z => z.mult));
+  $('mbBase').textContent = `Beispiel: ${eur(base)} Standardbetrag`;
+  $('mbGrid').innerHTML = ZONES.map(z => `
+    <div class="mb-col" style="--mc:${z.hex}">
+      <div class="mb-bar${z.mult === 0 ? ' zero' : ''}">
+        <i data-h="${Math.max(3, (z.mult / maxM) * 100)}" data-amt="${eur(Math.round(base * z.mult))}"></i>
+      </div>
+      <div class="mb-zone">${z.de}</div>
+      <div class="mb-range">${z.min}–${z.max}</div>
+    </div>`).join('');
+  requestAnimationFrame(()=>{
+    $('mbGrid').querySelectorAll('.mb-bar i').forEach(b=>{ b.style.height = b.dataset.h + '%'; });
+  });
+}
+
+function renderMultiEditor(){
+  $('meRows').innerHTML = ZONES.map((z,i) => `
+    <div class="me-row" style="--mc:${z.hex}">
+      <div class="lbl"><i></i>${z.de} <span style="color:var(--muted-2)">(${z.min}–${z.max})</span></div>
+      <input type="number" min="0" max="10" step="0.25" value="${z.mult}" data-zi="${i}"
+             aria-label="Multiplikator für ${z.de}">
+    </div>`).join('');
+  $('meRows').querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      let v = parseFloat(inp.value);
+      if(isNaN(v) || v < 0) v = 0;
+      if(v > 10) v = 10;
+      ZONES[+inp.dataset.zi].mult = v;
+      applyMults();
+      saveSettings();
+    });
+  });
+}
+
+function applyMults(){
+  renderZones();
+  renderMultiBars();
+  calc();
+}
+
+function setMults(arr){
+  ZONES.forEach((z,i)=>{ z.mult = arr[i]; });
+  $('meRows').querySelectorAll('input').forEach(inp=>{ inp.value = ZONES[+inp.dataset.zi].mult; });
+  applyMults();
+  saveSettings();
+}
+
+/* ---------- Init ---------- */
+async function init(){
+  renderFactors(); renderMistakes(); renderFaq(); renderTimeline();
+  initReveal();                       // sofort, unabhaengig von den Marktdaten
+
+  state.series = await loadIndex();
+  renderHero(); renderChart(); renderZones();
+
+  $('fgSlider').value = state.live;
+  applySettings();
+  renderMultiEditor();
+  updateStorageStatus();
+  renderMultiBars();
+  refreshCurrencyLabels();
+  calc();
+
+  $('baseAmt').addEventListener('input', ()=>{ calc(); renderMultiBars(); saveSettings(); });
+  $('fgSlider').addEventListener('input', calc);
+  $('resetLive').addEventListener('click', ()=>{ $('fgSlider').value = state.live; calc(); });
+  $('meReset').addEventListener('click', ()=>setMults(DEFAULT_MULTS));
+  $('meFlat').addEventListener('click', ()=>setMults(CAREFUL_MULTS));
+  $('multiEdit').addEventListener('click', e=>{
+    if(e.target.id === 'meClear'){ clearSettings(); }
+  });
+  $('quickAmts').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    $('baseAmt').value = b.dataset.a; calc(); renderMultiBars(); saveSettings();
+  });
+  $('rangeBtns').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    [...$('rangeBtns').children].forEach(x=>x.setAttribute('aria-pressed', x===b));
+    state.range = Math.min(parseInt(b.dataset.days,10), state.series.length);
+    applyRange(state.range);
+  });
+
+  if(!state.isDemo){
+    state.prices = await loadPrices();
+    if(state.prices) calc();
+  }
+
+  // Waehrung im Header umgeschaltet: Kurse in der neuen Waehrung nachladen,
+  // Rechner/Backtest sofort mit den neuen Betraegen neu anzeigen.
+  window.addEventListener('rx-currency', async ()=>{
+    refreshCurrencyLabels();
+    calc();
+    if(!state.isDemo){
+      state.prices = await loadPrices();
+      if(state.prices) calc();
+    }
+  });
+}
+init().catch(function(err){
+  console.error('Fehler beim Initialisieren:', err);
+  document.querySelectorAll('.reveal:not(.in)').forEach(function(n){ n.classList.add('in'); });
+});
+})();
+</script>
+</body>
+</html>

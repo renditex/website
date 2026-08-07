@@ -1,0 +1,23 @@
+LOGOS
+=====
+
+Fehlt noch: deficircle.png
+Solange die Datei fehlt, zeigt die Seite eine Kachel mit dem
+Buchstaben "D". Es geht nichts kaputt.
+
+BITTE PRUEFEN - ich konnte drei Logos nicht sicher zuordnen:
+
+  pionex.png    tuerkiser Kreis mit zwei Pfeilen
+  bitopex.png   gruenes Symbol
+  smartit.png   goldenes Symbol
+
+Wenn eine Zuordnung falsch ist: Dateien einfach untereinander
+umbenennen. Mehr ist nicht noetig, der Rest passt sich an.
+
+NEUES LOGO ERGAENZEN
+--------------------
+Datei hier ablegen, benannt wie im HTML angegeben. PNG mit weissem
+oder transparentem Hintergrund, moeglichst quadratisch, ca. 256 Pixel.
+Bei dunklen Logos in index.html beim jeweiligen Eintrag
+  style="--lc:#FARBE"  um  --lb:#000000  ergaenzen,
+dann sitzt das Logo auf dunklem statt weissem Grund.

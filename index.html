@@ -1,0 +1,458 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RenditeX — Krypto verständlich erklärt: Wissen, Tools und ehrliche Erfahrungen</title>
+<meta name="description" content="Krypto, Investments und Cashflow verständlich erklärt. Grundlagenwissen ohne Fachchinesisch, kostenlose Rechner und Marktdaten sowie ehrliche Erfahrungen mit Plattformen.">
+<meta property="og:title" content="RenditeX — Krypto verständlich erklärt">
+<meta property="og:description" content="Wissen, kostenlose Tools und ehrliche Erfahrungen rund um Krypto und Investments.">
+<meta property="og:type" content="website">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top" class="home">
+
+<header id="rx-top"></header>
+
+<div class="wrap hub-hero">
+  <div class="hero-split">
+    <div>
+      <h1>Krypto verstehen, <em>bevor du investierst</em>.</h1>
+      <p class="lead">Das ist meine Seite. Hier findest du meinen kostenlosen Krypto-Guide, Werkzeuge zum Ausprobieren und ehrliche Erfahrungen mit Plattformen — inklusive der Punkte, die in der Werbung nicht vorkommen.</p>
+      <div class="hub-cta">
+        <a class="btn primary" href="#wissen">Krypto-Guide kostenlos laden</a>
+        <a class="btn" href="#tools">Tools ausprobieren</a>
+      </div>
+      <div class="trust-line">Kostenlos <span>·</span> Ohne Anmeldung <span>·</span> Ohne Tracking</div>
+      <div class="hero-quote">
+        <blockquote>Du brauchst kein Vermögen, um anzufangen. Du brauchst <em>Verständnis</em> — und den Mut, den ersten kleinen Schritt zu machen.</blockquote>
+        <div class="sig">Viktor · RenditeX</div>
+      </div>
+    </div>
+    <div class="portrait-wrap">
+      <img class="portrait-cut" src="/assets/img/viktor-cutout.png" alt="Viktor von RenditeX" loading="eager" width="620" height="817">
+    </div>
+  </div>
+</div>
+
+<!-- ============ WISSEN ============ -->
+<section id="wissen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Fang beim Verstehen an, nicht beim Kaufen</h2>
+      <div class="intro">
+        <p>Als ich angefangen habe, gab es zwei Sorten von Inhalten: Videos, die mir einen Coin verkaufen wollten, und Texte, die ich nach drei Sätzen nicht mehr verstanden habe. Was fehlte, war jemand, der einfach mal erklärt, wie das Ganze eigentlich funktioniert.</p>
+        <p>Genau das habe ich aufgeschrieben. Mein Krypto-Guide ist keine Verkaufsbroschüre und kein Hochglanz-PDF mit drei Sätzen pro Seite. Es sind zehn Kapitel, in denen ich das durchgehe, was du wirklich brauchst — von der Frage, was hinter einer Blockchain steckt, über die Wahl einer Börse bis zu den steuerlichen Regeln in Deutschland.</p>
+      </div>
+    </div>
+
+    <div class="guide reveal">
+      <img class="cover" src="/guide/cover.png" alt="Titelseite des RenditeX Krypto-Guides" loading="lazy">
+      <div>
+        <span class="freebadge">100 % kostenlos</span>
+        <h3>Der RenditeX Krypto-Guide</h3>
+        <p>Für Einsteiger und Fortgeschrittene. Grundlagen und Begriffe, die ersten praktischen Schritte, Wallets und Sicherheit, ein Kapitel über DeFi, Steuern in Deutschland und ein Glossar zum Nachschlagen. Geschrieben in normalem Deutsch, nicht in Fachchinesisch.</p>
+        <p style="margin-top:12px"><b style="color:var(--text)">Kein Preis, keine E-Mail-Adresse, keine Anmeldung.</b> Du klickst, das PDF ist da. Ich verlange dafür nichts, weil ich möchte, dass die Leute erst verstehen und dann entscheiden.</p>
+        <div class="meta">
+          <span>10 Kapitel</span><span>PDF zum Mitnehmen</span><span>Stand Mai 2026</span>
+        </div>
+        <div class="actions">
+          <a class="btn primary" href="/guide/RenditeX-Krypto-Guide.pdf" download>Kostenlos herunterladen</a>
+          <a class="btn" href="/guide/RenditeX-Krypto-Guide.pdf" target="_blank" rel="noopener">Erst mal reinschauen</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-head reveal" style="margin-top:clamp(38px,5vw,58px); margin-bottom:18px">
+      <h2 style="font-size:clamp(19px,2.4vw,25px)">Diese Artikel schreibe ich gerade</h2>
+      <p style="margin-top:10px">Vier Themen, bei denen ich in meinen Videos immer wieder dieselben Fragen bekomme. Die beantworte ich hier demnächst ausführlich zum Nachlesen.</p>
+    </div>
+
+    <div class="notes reveal">
+      <div class="note soon feature">
+        <div class="kicker">Strategie</div>
+        <h3>Was ist DCA?</h3>
+        <p>Warum regelmäßiges Kaufen für die meisten besser funktioniert als der Versuch, den perfekten Moment zu erwischen — und wo die Grenzen dieser Strategie liegen.</p>
+      </div>
+      <div class="note soon">
+        <div class="kicker">Sicherheit</div>
+        <h3>Wallets richtig nutzen</h3>
+        <p>Der Unterschied zwischen Börse, Hot Wallet und Hardware Wallet. Was eine Seed Phrase ist, warum du sie nie eintippst und ab wann sich ein eigenes Gerät lohnt.</p>
+      </div>
+      <div class="note soon">
+        <div class="kicker">Steuern</div>
+        <h3>Die Einjahresfrist</h3>
+        <p>Deutschlands wichtigste Krypto-Regel: Wann Gewinne steuerfrei bleiben, warum die Freigrenze keine Freibetrag ist und was du von Anfang an dokumentieren solltest.</p>
+      </div>
+      <div class="note soon">
+        <div class="kicker">Risiko</div>
+        <h3>Scam erkennen</h3>
+        <p>Feste Tagesrenditen, Empfehlungsdruck, anonyme Teams. Die Warnsignale in der Reihenfolge, in der sie meistens auftauchen — und was du prüfen kannst, bevor du einzahlst.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOOLS ============ -->
+<section id="tools" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Tools, die du sofort benutzen kannst</h2>
+      <div class="intro">
+        <p>Manche Fragen beantwortet man besser mit einem Werkzeug als mit einem Video. Wie steht die Marktstimmung heute? Was wäre aus meinem Sparplan geworden? Läuft die Haltefrist schon ab? Für genau solche Fragen baue ich hier nach und nach kleine Rechner und Übersichten.</p>
+        <p>Alles läuft direkt in deinem Browser. Du musst dich nirgends anmelden, nichts installieren und keine E-Mail-Adresse hinterlassen. Deine Eingaben bleiben auf deinem Gerät — ich sehe sie nicht, und niemand sonst.</p>
+      </div>
+    </div>
+
+    <div class="usehint reveal">
+      <span class="tag">Zum Mitmachen</span>
+      Karten mit dem grünen <b>Live</b>-Etikett kannst du anklicken und direkt benutzen.
+      <span>Der Rest ist noch in Arbeit.</span>
+    </div>
+
+    <div class="tools-live reveal">
+
+      <a class="tool" href="/fear-greed/">
+        <span class="badge live">Live</span>
+        <h3>Fear &amp; Greed Index</h3>
+        <div class="live-val" id="fgLive">— <small id="fgLiveLbl">wird geladen</small></div>
+        <p>Zeigt, ob im Markt gerade Angst oder Gier herrscht. Mit Verlauf der letzten Monate, allen fünf Zonen im Klartext und einem Sparplan-Rechner, der den Betrag an die Marktlage anpasst.</p>
+        <span class="open">Jetzt öffnen und ausprobieren <span class="arr">→</span></span>
+      </a>
+
+      <a class="tool" href="/heatzone-chart/">
+        <span class="badge live">Live</span>
+        <h3>Heatzone Chart</h3>
+        <div class="live-val" id="fvrLive">— <small id="fvrLiveLbl">wird geladen</small></div>
+        <p>Die langfristige Bewertungsbrille: Ist Bitcoin gemessen an seiner eigenen Kurshistorie gerade günstig oder teuer? Das Regressionsmodell wird live aus den aktuellen Kursdaten berechnet, inklusive Zonen-Rechner und Zukunfts-Simulator.</p>
+        <span class="open">Jetzt öffnen und ausprobieren <span class="arr">→</span></span>
+      </a>
+
+      <a class="tool" href="/scam-check/">
+        <span class="badge live">Live</span>
+        <h3>Scam-Check</h3>
+        <p>Zwölf bekannte Warnsignale zum Ankreuzen — mit Punktzahl und ehrlicher Einschätzung, wie viele davon auf ein Projekt zutreffen. Bleibt komplett im Browser.</p>
+        <span class="open">Jetzt öffnen und ausprobieren <span class="arr">→</span></span>
+      </a>
+
+      <a class="tool" href="/haltefrist-tracker/">
+        <span class="badge live">Live</span>
+        <h3>Haltefrist-Tracker</h3>
+        <p>Käufe eintragen, Countdown zur einjährigen Steuerfreiheit sehen, als CSV exportieren. Sortiert automatisch danach, was als Nächstes fällig wird.</p>
+        <span class="open">Jetzt öffnen und ausprobieren <span class="arr">→</span></span>
+      </a>
+
+    </div>
+
+    <div class="tools-soon reveal">
+      <div class="soon-head">In Arbeit — als Nächstes geplant</div>
+
+      <div class="soon-row">
+        <h4>Sparplan-Rechner</h4><span class="tag">bald</span>
+        <p>Was wäre aus 100 Euro im Monat geworden? Rückrechnung mit echten Kursen für Bitcoin, Ethereum, Solana und XRP — samt Vergleich zum Einmalkauf.</p>
+      </div>
+      <div class="soon-row">
+        <h4>Altcoin Season Index</h4><span class="tag">bald</span>
+        <p>Fließt das Geld gerade in Bitcoin oder in Altcoins? Der Indikator zeigt, in welcher Phase des Zyklus der Markt steht.</p>
+      </div>
+      <div class="soon-row">
+        <h4>Portfolio-Check</h4><span class="tag">bald</span>
+        <p>Wie ist dein Depot wirklich aufgestellt? Klumpenrisiken und Gewichtung auf einen Blick, ohne dass du irgendwo ein Wallet verbinden musst.</p>
+      </div>
+      <div class="soon-row">
+        <h4>Halving-Countdown</h4><span class="tag">bald</span>
+        <p>Wie viele Blöcke noch bis zum nächsten Halving? Mit Einordnung, was in den Zyklen davor und danach passiert ist.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLATTFORMEN ============ -->
+<section id="plattformen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Plattformen, die ich nutze oder getestet habe</h2>
+      <div class="intro">
+        <p>Ich rede in meinen Videos über Plattformen, die ich selbst ausprobiert habe — Börsen, Bots, P2P-Kredite, Banking. Manche nutze ich seit Jahren, andere habe ich nach ein paar Wochen wieder verlassen. Zu den meisten findest du auf dem Kanal ein Video, in dem ich zeige, wie sie funktionieren und wo die Haken liegen.</p>
+        <p>Wichtig zur Einordnung: Das hier ist eine Liste von Anbietern, keine Rangliste und keine Empfehlung. Was für mich passt, muss für dich nicht passen. Und jede einzelne dieser Plattformen ist mit Risiken verbunden — je höher die versprochene Rendite, desto größer das Risiko. Projekte mit täglichen Fixauszahlungen gehören zur riskantesten Kategorie überhaupt. Setz dort, wenn überhaupt, nur Beträge ein, deren Verlust dich nicht trifft.</p>
+      </div>
+    </div>
+
+    <div class="adnotice reveal">
+      <b>Werbehinweis:</b> Die folgenden Links sind Partnerlinks. Wenn du dich darüber anmeldest, kann ich eine Provision erhalten — für dich entstehen dabei in der Regel keine zusätzlichen Kosten. Das beeinflusst nicht, worüber ich berichte. Jede dieser Plattformen ist mit Risiken verbunden, bis hin zum Totalverlust. Prüfe jedes Angebot selbst, bevor du Geld einzahlst.
+    </div>
+
+    <div class="reveal">
+      <div class="plat-group">
+        <h3>Börsen &amp; Handel</h3>
+        <div class="plats">
+          <a class="plat" href="https://www.binance.com/activity/referral-entry/CPA/together-v4?hl=en&amp;ref=CPA_00ZPRA7X5Z" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#F3BA2F"><i>B</i><img src="/assets/logos/binance.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Binance</span><span class="d">Eine der größten Krypto-Börsen weltweit, seit 2017.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://coinbase.com/join/KCPHHH7?src=referral-link" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#0052FF; --lt:#fff"><i>C</i><img src="/assets/logos/coinbase.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Coinbase</span><span class="d">US-Börse seit 2012, börsennotiert, einsteigerfreundlich.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://www.pionex.com/en/signUp?r=0UohUuZHQSn" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#2BB6A3"><i>P</i><img src="/assets/logos/pionex.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Pionex</span><span class="d">Börse mit eingebauten Handels-Bots, etwa Grid-Bots.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://client.lirunex.online/partner/signup?partnerId=344912" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#1E5FD8; --lt:#fff"><i>L</i><img src="/assets/logos/lirunex.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Lirunex</span><span class="d">Social Trading und automatisierte Strategien, ab 100 $.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="plat-group">
+        <h3>Krypto-Projekte</h3>
+        <div class="plats">
+          <a class="plat" href="https://bitopex.io/?ref=51dc337877d4" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#22C1E8; --lb:#101418"><i>B</i><img src="/assets/logos/bitopex.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Bitopex</span><span class="d">Krypto-Optionshandel mit Copy-Trading-Ansatz, seit 2024.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://www.smartit.cc/smt351525/" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#4FD48A; --lb:#0F1115"><i>S</i><img src="/assets/logos/smartit.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">SmartIT</span><span class="d">Staking rund um den SIT Token und Mining-Konzepte.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://hyperocket.io/?ref=RenditeX" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#12E6D6; --lb:#0A0A0A"><i>H</i><img src="/assets/logos/hyperocket.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">HyperRocket</span><span class="d">Cashflow-Projekt mit Einzahlungen in USDT und USDC.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://discord.gg/HdXWJZYe2x" target="_blank" rel="noopener">
+            <span class="logo" style="--lc:#5865F2"><i>D</i><img src="/assets/logos/deficircle.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">DeFi Circle</span><span class="d">Community für DeFi, Strategien und Bots. Basiszugang gratis.</span></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="plat-group">
+        <h3>Zinsen &amp; P2P</h3>
+        <div class="plats">
+          <a class="plat" href="https://goandgrow.eu/ref/viktore4" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#2BA7B5"><i>B</i><img src="/assets/logos/bondora.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Bondora Go &amp; Grow</span><span class="d">P2P-Plattform mit flexibler Verfügbarkeit, außerhalb von Krypto.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://www.mintos.com/de/l/ref/YKUR47" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#E8EDF5"><i>M</i><img src="/assets/logos/mintos.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Mintos</span><span class="d">Europäische Kreditplattform seit 2015, Einstieg ab 50 €.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://smartsaver.monefit.com/de/referral/link?code=6dqyyz5e" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#111111; --lb:#111111; --lt:#fff"><i>M</i><img src="/assets/logos/monefit.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Monefit SmartSaver</span><span class="d">Verbraucherkredite der Creditstar Group, Einstieg ab 10 €.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="plat-group">
+        <h3>Banking</h3>
+        <div class="plats">
+          <a class="plat" href="https://s.c24.de/azOeiDrivi/" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#0B41CD; --lt:#fff"><i>C</i><img src="/assets/logos/c24.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">C24</span><span class="d">Kostenloses Girokonto mit Unterkonten und Cashback.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://tfbank.de/mastercard-gold/freundewerbenfreunde-antrag?referralIdentifier=a0e8b7e3-2ac9-4c48-9930-63375178dfcd" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#C97F52"><i>T</i><img src="/assets/logos/tfbank.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">TF Bank</span><span class="d">Mastercard Gold ohne Jahresgebühr, weltweit gebührenfrei.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://freundewerben.dkb.de/PPZP8P9X" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#0F80D6"><i>D</i><img src="/assets/logos/dkb.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">DKB</span><span class="d">Girokonto einer etablierten deutschen Direktbank.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+          <a class="plat" href="https://revolut.com/referral/?referral-code=viktorvgiu!JAN1-25-VR-DE" target="_blank" rel="sponsored noopener">
+            <span class="logo" style="--lc:#E8EDF5"><i>R</i><img src="/assets/logos/revolut.png" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span class="body"><span class="n">Revolut</span><span class="d">Online-Bank mit Multiwährungskonto und App-Steuerung.</span></span>
+            <span class="ad">Anzeige</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+</section><!-- ============ COMMUNITY ============ -->
+<section id="kanal" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Wo du mich sonst findest</h2>
+      <p>Diese Seite ist der ruhige Teil. Auf YouTube erkläre ich ausführlich, in Telegram gibt es kurze Updates, und im Discord tauschen sich Leute aus, die tiefer einsteigen wollen.</p>
+    </div>
+    <div class="channels reveal">
+      <a class="channel" style="--ch:var(--red)" href="https://www.youtube.com/@RenditeX" target="_blank" rel="noopener">
+        <div class="head">
+          <span class="ic" style="background:#fff; border-color:#fff"><img src="/assets/logos/youtube.png" alt="" loading="lazy"></span>
+          <span class="k">YouTube</span>
+        </div>
+        <h3>Der RenditeX Kanal</h3>
+        <p>Videos zu Krypto, Investments und Cashflow. Plattformen im Test.</p>
+      </a>
+      <a class="channel" style="--ch:var(--brand)" href="https://t.me/+_PoyewKyz8JjZTVi" target="_blank" rel="noopener">
+        <div class="head">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1L18 6.6c.4-.4-.1-.6-.6-.2L7.1 13.2l-5-1.6c-1.1-.3-1.1-1 .2-1.5l19.6-7.5c.9-.3 1.7.2 1.4 1.7z"/></svg></span>
+          <span class="k">Telegram</span>
+        </div>
+        <h3>Kostenloser Kanal</h3>
+        <p>Kurze Updates und Hinweise auf neue Videos und Tools.</p>
+      </a>
+      <a class="channel" style="--ch:#5865F2" href="https://discord.gg/HdXWJZYe2x" target="_blank" rel="noopener">
+        <div class="head">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.9A19.7 19.7 0 0 0 15.4 3.4l-.2.4a18 18 0 0 0-6.4 0l-.2-.4a19.7 19.7 0 0 0-4.9 1.5C.7 9.5-.4 14 .2 18.4a19.9 19.9 0 0 0 6 3 14.5 14.5 0 0 0 1.3-2.1 12.9 12.9 0 0 1-2-1c.2-.1.3-.3.5-.4a14.2 14.2 0 0 0 12.1 0l.5.4a12.9 12.9 0 0 1-2 1c.4.7.8 1.4 1.3 2.1a19.8 19.8 0 0 0 6-3c.7-5.1-1-9.6-3.6-13.5zM8 15.5c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.6 8 10.6s2.2 1.1 2.2 2.5-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.5 2.2-2.5 2.2 1.1 2.2 2.5-1 2.4-2.2 2.4z"/></svg></span>
+          <span class="k">Discord</span>
+        </div>
+        <h3>DeFi Circle</h3>
+        <p>Community für DeFi und Strategien. Basiszugang kostenlos.</p>
+      </a>
+      <a class="channel" style="--ch:#3B39B8" href="https://heylink.me/RenditeX/" target="_blank" rel="noopener">
+        <div class="head">
+          <span class="ic" style="background:#fff; border-color:#fff"><img src="/assets/logos/heylink.png" alt="" loading="lazy"></span>
+          <span class="k">Linksammlung</span>
+        </div>
+        <h3>Alle Links auf einen Blick</h3>
+        <p>Alle Plattformen, Buchempfehlungen und Erklärvideos.</p>
+      </a>
+    </div>
+  </div>
+</section>
+<!-- ============ ÜBER MICH ============
+     BITTE ANPASSEN: Der folgende Text ist ein Geruest.
+     Schreib ihn in deinen eigenen Worten um - das ist die
+     Stelle, an der Vertrauen entsteht.
+     ============================================ -->
+<section id="ueber-mich">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Wer hier spricht</h2>
+    </div>
+    <div class="about reveal">
+      <div class="text">
+        <p>Ich bin Viktor und stehe hinter RenditeX. Angefangen habe ich wie die meisten: zu viele Meinungen, zu wenig Verständnis und ein paar Lektionen, die mich Geld gekostet haben.</p>
+        <p>Rückblickend war der teuerste Fehler nicht ein einzelner Coin. Es war, Dinge zu kaufen, die ich nicht verstanden hatte, weil jemand überzeugend geklungen hat. Deshalb fängt bei mir heute alles beim Verstehen an — und deshalb steht das Wissen auf dieser Seite ganz oben und nicht unten bei den Links.</p>
+        <p>Auf dem Kanal zeige ich, was ich selbst nutze, teste Plattformen und erkläre Grundlagen so, wie ich es mir damals gewünscht hätte. Hier auf der Seite entsteht das, was ein Video nicht kann: Sachen zum Nachlesen und Werkzeuge zum Ausprobieren.</p>
+        <p>Was du bei mir nicht findest: Kursziele, Kaufempfehlungen und das nächste sichere Ding. Ich bin kein Anlageberater und will keiner sein. Entscheiden musst du selbst — meine Aufgabe ist es, dir eine ordentliche Grundlage dafür zu geben.</p>
+      </div>
+      <div class="facts">
+        <img class="about-photo" src="/assets/img/viktor-about.png" alt="Viktor von RenditeX" loading="lazy">
+        <div class="row"><span>Kanal</span><b>RenditeX</b></div>
+        <div class="row"><span>Themen</span><b>Krypto · Investment<br>Optionen · Trading</b></div>
+        <div class="row"><span>Standort</span><b>Köln</b></div>
+        <div class="row"><span>Guide</span><b>kostenlos, ohne E-Mail</b></div>
+        <div class="row"><span>Tools</span><b>kostenlos, ohne Login</b></div>
+        <div class="row"><span>Tracking</span><b>keines</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABSCHLUSS ============ -->
+<section id="dabeibleiben" class="tint">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div>
+        <h2>Nichts verpassen, ohne E-Mail-Adresse</h2>
+        <p>Neue Tools, neue Artikel und Marktbeobachtungen gibt es zuerst im Telegram-Kanal. Kein Newsletter, kein Formular, keine E-Mail-Adresse — einfach beitreten und wieder gehen, wann du willst.</p>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="https://t.me/+_PoyewKyz8JjZTVi" target="_blank" rel="noopener">Telegram beitreten</a>
+        <a class="btn red" href="https://www.youtube.com/@RenditeX" target="_blank" rel="noopener">Kanal abonnieren</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script src="/assets/site.js?v=13"></script>
+<script>
+RX.header({ nav:[
+  {href:'#wissen',      label:'Wissen'},
+  {href:'#tools',       label:'Tools'},
+  {href:'#plattformen', label:'Plattformen'},
+  {href:'#ueber-mich',  label:'Über mich'}
+]});
+RX.footer();
+RX.reveal();
+
+/* Live-Wert in der Fear-&-Greed-Karte */
+(function(){
+  var ZONES = [
+    {max:24, de:'Extreme Angst', c:'#D91B26'},
+    {max:44, de:'Angst',         c:'#C24A0A'},
+    {max:55, de:'Neutral',       c:'#8F6A00'},
+    {max:75, de:'Gier',          c:'#0C7A3A'},
+    {max:100,de:'Extreme Gier',  c:'#04806A'}
+  ];
+  fetch('https://api.alternative.me/fng/?limit=1&format=json', {cache:'no-store'})
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      var v = parseInt(j.data[0].value, 10);
+      var z = ZONES.find(function(x){ return v <= x.max; });
+      var el = document.getElementById('fgLive');
+      el.style.color = z.c;
+      el.innerHTML = v + ' <small style="color:var(--muted)">' + z.de + '</small>';
+    })
+    .catch(function(){
+      document.getElementById('fgLive').innerHTML =
+        '<small style="color:var(--muted-2); margin-left:0">Live-Wert im Tool</small>';
+    });
+})();
+
+/* Live-Kurs in der Heatzone-Chart-Karte — folgt der oben gewählten Währung */
+(function(){
+  function load(){
+    var cur = RX.currency.get().toLowerCase();
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=' + cur, {cache:'no-store'})
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        var p = j && j.bitcoin && j.bitcoin[cur];
+        var el = document.getElementById('fvrLive');
+        if(!p){ throw new Error('keine Daten'); }
+        el.innerHTML = RX.currency.format(p) + ' <small style="color:var(--muted)">aktueller Kurs</small>';
+      })
+      .catch(function(){
+        document.getElementById('fvrLive').innerHTML =
+          '<small style="color:var(--muted-2); margin-left:0">Live-Wert im Tool</small>';
+      });
+  }
+  load();
+  window.addEventListener('rx-currency', load);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scam-Check — Krypto-Projekte auf Warnsignale prüfen | RenditeX</title>
+<meta name="description" content="Zwölf bekannte Warnsignale für Krypto-Betrug zum Ankreuzen — mit Punktzahl, ehrlicher Einschätzung und Erklärung zu jedem einzelnen Punkt. Kostenlos, ohne Anmeldung, bleibt im Browser.">
+<meta property="og:title" content="Scam-Check — Krypto-Projekte auf Warnsignale prüfen">
+<meta property="og:description" content="Zwölf bekannte Warnsignale zum Ankreuzen, mit Punktzahl und Einschätzung. Kostenlos, ohne Anmeldung.">
+<meta property="og:type" content="website">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Kostenlos · Ohne Anmeldung · Bleibt im Browser</div>
+  <h1>Ist das Projekt <em>seriös oder ein Warnsignal-Sammelsurium</em>?</h1>
+  <p class="hero-sub">Zwölf Fragen zu den bekanntesten Mustern bei Krypto-Betrug — von garantierten Renditen bis zu anonymen Teams. Kreuz an, was zutrifft, und du bekommst eine Punktzahl und eine ehrliche Einschätzung. Deine Eingaben verlassen nie deinen Browser.</p>
+</div>
+
+<!-- ============ CHECK ============ -->
+<section id="check">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Die Warnsignale durchgehen</h2>
+      <div class="intro">
+        <p>Kreuz jeden Punkt an, der auf das Projekt zutrifft, das du gerade prüfst — eine Plattform, einen Coin, ein Investment-Angebot, das dir jemand empfohlen hat. Unsicher bei einem Punkt? Dann lies dir die kurze Erklärung darunter durch oder lass ihn erst mal offen und recherchier gezielt nach.</p>
+      </div>
+    </div>
+
+    <div class="calc reveal">
+      <div class="panel">
+        <label class="fl">Warnsignale ankreuzen</label>
+        <div class="scam-list" id="scamList"></div>
+      </div>
+
+      <div class="result" id="resultBox">
+        <label class="fl">Einschätzung</label>
+        <div class="out" id="levelOut">—</div>
+        <div class="outsub" id="levelTxt">Kreuz oben die zutreffenden Punkte an, die Einschätzung erscheint hier.</div>
+        <div class="fbar" style="height:10px; margin-top:16px"><i id="scoreBar"></i></div>
+        <div class="score-meta"><span id="hitCount">0</span> von <span id="flagCount">12</span> Warnsignalen angekreuzt · Punktzahl <b id="scoreOut">0</b> <span id="scoreMax" class="mono">/ 26</span></div>
+        <div class="disclaimer">Diese Einschätzung basiert auf einer festen Liste bekannter Warnsignale und ersetzt keine eigene Recherche und keine Rechtsberatung. Ein niedriger Wert ist keine Garantie für Seriosität, ein hoher Wert kein Beweis für Betrug — siehe „Grenzen dieses Checks" weiter unten.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ METHODE ============ -->
+<section id="methode" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Wie kommt diese Einschätzung zustande?</h2>
+      <div class="intro">
+        <p>Kein Algorithmus, kein Geheimrezept: Die zwölf Punkte oben sind Muster, die bei dokumentierten Krypto-Betrugsfällen immer wieder auftauchen — feste Renditeversprechen, Empfehlungsstrukturen nach Schneeballsystem-Art, anonyme Teams, erschwerte Auszahlungen. Solche Muster sind seit Jahren von Verbraucherzentralen, der BaFin und Strafverfolgungsbehörden dokumentiert, ich habe sie hier nur gesammelt und mit einer Gewichtung versehen.</p>
+        <p>Jeder Punkt hat ein Gewicht von 1 bis 3 Punkten, je nachdem, wie stark er statistisch mit tatsächlichem Betrug zusammenhängt. Ein garantiertes tägliches Fixrenditeversprechen zum Beispiel ist praktisch nie bei einem seriösen Angebot zu finden — das zählt deshalb 3 Punkte. Dass die Plattform noch jung ist, kommt dagegen auch bei völlig legitimen neuen Projekten vor — das zählt nur 1 Punkt.</p>
+      </div>
+    </div>
+    <div class="callout reveal">
+      <b>Wichtig zur Einordnung:</b> Das ist eine Heuristik, kein Beweis. Sie bildet nur ab, was in der Vergangenheit häufig zusammen mit Betrug auftrat — sie kann weder ein neues, noch unbekanntes Betrugsmuster erkennen, noch garantieren, dass ein Projekt mit wenigen Treffern sicher ist.
+    </div>
+  </div>
+</section>
+
+<!-- ============ WARNSIGNALE ERKLÄRT ============ -->
+<section id="warnsignale">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Jedes Warnsignal einzeln erklärt</h2>
+      <p>Warum genau diese zwölf Punkte — und was sie in der Praxis bedeuten.</p>
+    </div>
+    <div class="acc reveal" id="flagAcc"></div>
+  </div>
+</section>
+
+<!-- ============ WAS TUN ============ -->
+<section id="was-tun" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was tun, wenn viele Punkte zutreffen?</h2>
+      <p>Die richtige Reaktion hängt davon ab, ob schon Geld geflossen ist.</p>
+    </div>
+    <div class="princ reveal">
+      <div class="card">
+        <div class="tag">Noch nichts eingezahlt</div>
+        <h3>Einfach: nicht einzahlen</h3>
+        <p>Kein Geld, keine Wallet-Verbindung, keine Seed Phrase eingeben. Auch nicht „nur um es auszuprobieren" — bei den meisten Maschen reicht schon das für den Schaden. Warnung gern in der Community teilen, damit andere nicht reinfallen.</p>
+      </div>
+      <div class="card accent">
+        <div class="tag">Bereits investiert</div>
+        <h3>Ruhe bewahren, dokumentieren</h3>
+        <p>Screenshots von Website, Kommunikation und Transaktionen sichern, solange sie noch abrufbar sind. Keine weiteren Einzahlungen, egal welche Begründung genannt wird („Gebühr zum Freischalten der Auszahlung" ist selbst ein klassisches Warnsignal). Anzeige bei der Polizei und Meldung bei der BaFin prüfen.</p>
+      </div>
+    </div>
+    <div class="callout reveal">
+      <b>Melden hilft anderen:</b> Verdächtige Plattformen kannst du der BaFin über deren Verbrauchermeldestelle melden, unabhängig davon, ob du selbst Geld verloren hast. Das hilft, andere frühzeitig zu warnen.
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRENZEN ============ -->
+<section id="grenzen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was dieser Check nicht kann</h2>
+      <p>Ein ehrlicher Blick auf die Grenzen ist wichtiger als blindes Vertrauen in eine Punktzahl.</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Kein Ersatz für Recherche</h3><p>Der Check ersetzt nicht das Lesen von Whitepaper, Impressum und unabhängigen Berichten — er ist ein Einstieg, keine Abkürzung.</p></div>
+      <div class="limit"><h3>Legitime Projekte können einzelne Punkte erfüllen</h3><p>Manche echten Frühphasen-Projekte sind jung, kommunizieren nur über Telegram oder haben (noch) kein Audit. Ein einzelner Treffer ist kein Urteil.</p></div>
+      <div class="limit"><h3>Neue Maschen werden nicht automatisch erkannt</h3><p>Die Liste basiert auf bekannten, wiederkehrenden Mustern. Eine völlig neue Betrugsform, die keinem dieser Punkte entspricht, würde hier nicht auffallen.</p></div>
+      <div class="limit"><h3>Keine Rechtsberatung</h3><p>Bei konkretem Verdacht auf eine Straftat oder bei bereits entstandenem Schaden ersetzt dieser Check keine rechtliche Beratung oder eine Anzeige bei der Polizei.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Kurz beantwortet</h2>
+    </div>
+    <div class="acc" id="faqList"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Ist der Scam-Check eine Garantie, dass ein Projekt sicher ist?","acceptedAnswer":{"@type":"Answer","text":"Nein. Eine niedrige Punktzahl bedeutet nur, dass wenige der zwölf bekannten Warnsignale zutreffen — nicht, dass das Projekt sicher ist."}},
+{"@type":"Question","name":"Werden meine Eingaben irgendwo gespeichert oder übertragen?","acceptedAnswer":{"@type":"Answer","text":"Nein. Die Auswertung passiert komplett im Browser, es gibt keine Übertragung an einen Server und keine Speicherung."}},
+{"@type":"Question","name":"Woher stammen die zwölf Warnsignale?","acceptedAnswer":{"@type":"Answer","text":"Aus wiederkehrenden Mustern dokumentierter Krypto-Betrugsfälle, wie sie unter anderem von Verbraucherzentralen und der BaFin beschrieben werden."}}
+]}
+</script>
+
+<script src="/assets/site.js?v=13"></script>
+<script>
+RX.header({ nav:[
+  {href:'#check',       label:'Check'},
+  {href:'#warnsignale', label:'Warnsignale'},
+  {href:'#was-tun',     label:'Was tun?'},
+  {href:'/',            label:'Alle Tools'}
+]});
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Tools', href:'/#tools'},
+    {label:'Scam-Check', current:true}
+  ],
+  pills: [
+    {label:'Fear & Greed Index', href:'/fear-greed/'},
+    {label:'Heatzone Chart', href:'/heatzone-chart/'},
+    {label:'Scam-Check', href:'/scam-check/', current:true},
+    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/'}
+  ]
+});
+RX.footer();
+</script>
+<script>
+(function(){
+"use strict";
+var $ = id => document.getElementById(id);
+
+/* ---------- Die zwölf Warnsignale ----------
+   Gewicht 1-3 je nachdem, wie stark der Punkt historisch mit echtem
+   Betrug zusammenhängt (siehe Methode-Abschnitt oben). */
+var FLAGS = [
+  {id:'rendite',    w:3, q:'Garantierte, feste Rendite versprochen',
+   d:'Etwa „1 % täglich" oder „20 % im Monat garantiert". Echte Investments können nie eine feste Rendite garantieren — Kursschwankungen und Risiko lassen sich nicht wegversprechen. Feste Fixrenditen sind das klassischste aller Warnsignale und tauchen bei den meisten dokumentierten Schneeballsystemen auf.'},
+  {id:'team',       w:2, q:'Team ist anonym oder nicht überprüfbar',
+   d:'Keine echten Namen, keine auffindbaren beruflichen Profile, oder Fotos und Namen lassen sich nicht auf reale Personen zurückführen. Seriöse Teams stehen meist mit Namen und Historie für ihr Projekt gerade.'},
+  {id:'empfehlung', w:3, q:'Belohnung fürs Anwerben neuer Investoren',
+   d:'Ein mehrstufiges Empfehlungsprogramm, bei dem du für geworbene Investoren (und deren Werbung) Provisionen bekommst, ist das Kernmerkmal eines Schneeballsystems — die „Rendite" der Alteinzahler kommt dann aus dem Geld der Neueinzahler.'},
+  {id:'druck',      w:2, q:'Starker Zeitdruck beim Einstieg',
+   d:'„Nur noch heute", ablaufende Bonus-Fenster, künstlich verknappte Plätze. Zeitdruck soll verhindern, dass du in Ruhe recherchierst.'},
+  {id:'whitepaper', w:2, q:'Kein oder sehr dünnes Whitepaper',
+   d:'Kein nachvollziehbarer, technisch plausibler Plan, wie das Projekt tatsächlich Geld verdienen oder Wert schaffen will — oder das Whitepaper wirkt erkennbar von anderen Projekten kopiert.'},
+  {id:'audit',      w:2, q:'Kein unabhängiger Audit des Codes',
+   d:'Bei Token, Smart Contracts oder DeFi-Plattformen: kein Prüfbericht einer bekannten, unabhängigen Audit-Firma auffindbar.'},
+  {id:'auszahlung', w:3, q:'Auszahlungen werden erschwert oder verzögert',
+   d:'Neue Bedingungen, plötzliche Gebühren oder Wartezeiten tauchen erst auf, nachdem du eingezahlt hast oder eine Auszahlung anforderst. Ein sehr starkes Signal — bei seriösen Anbietern ändern sich Auszahlungsregeln nicht rückwirkend zu deinen Ungunsten.'},
+  {id:'impressum',  w:2, q:'Keine erreichbare Firmenadresse / kein Impressum',
+   d:'Kein Impressum, keine reale Postanschrift, kein auffindbarer Handelsregistereintrag. In Deutschland und der EU ist ein Impressum für Geschäftsseiten ohnehin Pflicht — das Fehlen ist schon für sich ein Signal.'},
+  {id:'kanal',      w:1, q:'Kommunikation nur über Telegram/Social Media',
+   d:'Keine unabhängige, offizielle Web-Präsenz außerhalb von Chat-Gruppen — dadurch lassen sich Aussagen später leicht löschen oder abstreiten.'},
+  {id:'provision',  w:2, q:'Unrealistisch hohe Partnerprovisionen',
+   d:'Zweistellige Prozentsätze als Provision fürs Werben neuer Kunden sind bei seriösen Finanzprodukten unüblich und oft ein Ponzi-Signal.'},
+  {id:'jung',       w:1, q:'Plattform sehr jung, ohne nachvollziehbare Historie',
+   d:'Erst seit wenigen Wochen oder Monaten aktiv, keine belastbare Erfolgsbilanz. Kommt für sich allein auch bei legitimen neuen Projekten vor, deshalb nur geringes Gewicht.'},
+  {id:'warnung',    w:3, q:'Warnungen von Aufsichtsbehörden auffindbar',
+   d:'Eine Suche nach „[Projektname] BaFin Warnung" oder „[Projektname] Betrug Erfahrung" bringt konkrete Treffer. Wenn eine Aufsichtsbehörde bereits offiziell gewarnt hat, ist das eines der eindeutigsten Signale überhaupt.'}
+];
+
+/* ---------- Einschätzungs-Stufen ----------
+   Dieselbe Farblogik (kühl = unauffällig, warm = riskant) wie beim
+   Heatzone Chart, für eine konsistente Farbsprache über die Tools hinweg. */
+var LEVELS = [
+  {max:3,        de:'Wenige Warnsignale',        hex:'#1C8F52', txt:'Anhand dieser zwölf Kriterien wenig Anlass zu extremer Vorsicht. Das ist trotzdem keine Entwarnung — eigene Recherche ersetzt das nicht.'},
+  {max:9,        de:'Einige Warnsignale',         hex:'#E06A3A', txt:'Genauer hinschauen. Lies dir die angekreuzten Punkte unten in Ruhe durch und recherchier gezielt dazu, bevor du eine Entscheidung triffst.'},
+  {max:16,       de:'Viele Warnsignale',          hex:'#C92E68', txt:'Deutlich erhöhtes Risiko. Wenn überhaupt, nur mit einem Betrag weitermachen, dessen Totalverlust dich nicht schmerzt.'},
+  {max:Infinity, de:'Extrem viele Warnsignale',   hex:'#A81548', txt:'Dieses Muster ähnelt bekannten Betrugsfällen stark. Von einer Einzahlung rate ich klar ab.'}
+];
+function levelOf(score){ return LEVELS.find(function(l){ return score <= l.max; }); }
+
+var state = { checked:{} };
+var MAX_SCORE = FLAGS.reduce(function(s,f){ return s+f.w; }, 0);
+
+function renderChecklist(){
+  $('flagCount').textContent = FLAGS.length;
+  $('scoreMax').textContent = '/ ' + MAX_SCORE;
+  $('scamList').innerHTML = FLAGS.map(function(f){
+    return '<button type="button" class="scam-item" data-id="' + f.id + '" data-checked="false" aria-pressed="false">' +
+      '<span class="box" aria-hidden="true"></span>' +
+      '<span class="txt"><b>' + f.q + '</b></span>' +
+      '<span class="weight">+' + f.w + '</span>' +
+    '</button>';
+  }).join('');
+  [].forEach.call($('scamList').querySelectorAll('.scam-item'), function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.dataset.id;
+      state.checked[id] = !state.checked[id];
+      btn.dataset.checked = String(!!state.checked[id]);
+      btn.setAttribute('aria-pressed', String(!!state.checked[id]));
+      calc();
+    });
+  });
+}
+
+function calc(){
+  var score = 0, hits = 0;
+  FLAGS.forEach(function(f){ if(state.checked[f.id]){ score += f.w; hits++; } });
+  var level = levelOf(score);
+  $('scoreOut').textContent = score;
+  $('hitCount').textContent = hits;
+  $('levelOut').textContent = hits === 0 ? '—' : level.de;
+  $('levelOut').style.color = hits === 0 ? '' : level.hex;
+  $('levelTxt').textContent = hits === 0
+    ? 'Kreuz oben die zutreffenden Punkte an, die Einschätzung erscheint hier.'
+    : level.txt;
+  var pct = Math.min(100, Math.round(score / MAX_SCORE * 100));
+  $('scoreBar').style.width = pct + '%';
+  $('scoreBar').style.background = hits === 0 ? 'var(--line)' : level.hex;
+}
+
+function renderFlagAccordion(){
+  $('flagAcc').innerHTML = FLAGS.map(function(f, i){
+    return '<details><summary><span class="no">' + String(i+1).padStart(2,'0') + '</span>' + f.q + '<span class="plus">+</span></summary>' +
+      '<div class="body">' + f.d + '</div></details>';
+  }).join('');
+}
+
+var FAQ = [
+  {q:'Ist der Scam-Check eine Garantie, dass ein Projekt sicher ist?', a:'Nein. Eine niedrige Punktzahl bedeutet nur, dass wenige der zwölf bekannten Warnsignale zutreffen — nicht, dass das Projekt sicher ist. Umgekehrt ist ein einzelner Treffer auch kein Beweis für Betrug.'},
+  {q:'Werden meine Eingaben irgendwo gespeichert oder übertragen?', a:'Nein. Die Auswertung passiert komplett im Browser. Es gibt keine Übertragung an einen Server, keine Speicherung, nicht mal in deinem eigenen Browser — beim Neuladen der Seite ist der Stand wieder zurückgesetzt.'},
+  {q:'Woher stammen die zwölf Warnsignale?', a:'Aus wiederkehrenden Mustern dokumentierter Krypto-Betrugsfälle, wie sie unter anderem von Verbraucherzentralen und der BaFin beschrieben werden. Details dazu im Abschnitt „Wie kommt diese Einschätzung zustande?" oben.'},
+  {q:'Was, wenn nur ein oder zwei Punkte zutreffen?', a:'Dann ist das meist kein Grund zur Panik — schau dir aber trotzdem an, welche Punkte es genau sind. Ein einzelnes „garantierte feste Rendite" wiegt deutlich schwerer als ein einzelnes „sehr junge Plattform".'}
+];
+function renderFaq(){
+  $('faqList').innerHTML = FAQ.map(function(f){
+    return '<details><summary>' + f.q + '<span class="plus">+</span></summary><div class="body">' + f.a + '</div></details>';
+  }).join('');
+}
+
+function init(){
+  renderChecklist();
+  renderFlagAccordion();
+  renderFaq();
+  calc();
+  RX.reveal();
+}
+init();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# Claude Code lokale Einstellungen und Skill-Tools — nicht Teil der Website
+.claude/
+
+# OS
+Thumbs.db
+.DS_Store

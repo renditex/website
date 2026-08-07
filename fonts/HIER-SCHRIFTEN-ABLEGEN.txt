@@ -1,0 +1,12 @@
+In diesen Ordner gehoeren neun Schriftdateien im Format woff2.
+
+Bezugsquelle: https://gwfh.mranftl.com/fonts
+Schrift suchen, "woff2" waehlen, Schnitte anhaken, herunterladen,
+entpacken, hier ablegen. Namen muessen exakt so lauten:
+
+  montserrat-700.woff2   inter-400.woff2   plexmono-400.woff2
+  montserrat-800.woff2   inter-500.woff2   plexmono-500.woff2
+  montserrat-900.woff2   inter-600.woff2   plexmono-600.woff2
+
+Fehlen die Dateien, funktioniert die Seite trotzdem und nutzt die
+Standardschrift des Geraets. Diese Textdatei danach loeschen.

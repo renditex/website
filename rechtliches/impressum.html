@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Impressum — RenditeX</title>
+<meta name="robots" content="noindex">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<div class="wrap">
+  <article class="legal-page">
+    <div class="legal-stamp">Angaben gemäß § 5 DDG</div>
+    <h1>Impressum</h1>
+    <nav class="legal-tabs" aria-label="Rechtliche Hinweise">
+      <a href="/rechtliches/impressum.html" aria-current="page">Impressum</a>
+      <a href="/rechtliches/datenschutz.html">Datenschutz</a>
+      <a href="/rechtliches/disclaimer.html">Disclaimer</a>
+    </nav>
+    <div style="margin-top:26px">
+<h3>Anbieter dieser Website</h3>
+<address>Viktor Eggert<br>Artilleriestraße 64<br>51147 Köln<br>Deutschland</address><h3>Kontakt</h3>
+<address>Telefon: 015143373219<br>E-Mail: v.eggert7@gmail.com</address><h3>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
+<address>Viktor Eggert<br>Artilleriestraße 64<br>51147 Köln<br>Deutschland</address><h3>Marke</h3>
+<p>RenditeX — Viktor Investments &amp; Krypto</p>
+<h3>Streitbeilegung</h3>
+<p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung bereit. Ich bin nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+<h3>Haftung für Inhalte und Links</h3>
+<p>Als Diensteanbieter bin ich für eigene Inhalte auf dieser Seite nach den allgemeinen Gesetzen verantwortlich. Für Inhalte externer Links ist stets der jeweilige Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Bei Bekanntwerden von Rechtsverletzungen entferne ich entsprechende Links umgehend.</p>
+
+    </div>
+    <div class="legal-note" style="margin-top:34px">Dieser Text ist ein allgemeines Muster und ersetzt keine rechtliche Prüfung durch einen Anwalt, Steuerberater oder Datenschutzexperten.</div>
+  </article>
+</div>
+
+<footer id="rx-foot"></footer>
+<script src="/assets/site.js?v=13"></script>
+<script>
+RX.header({ nav:[{href:'/', label:'Alle Tools'}, {href:'/fear-greed/', label:'Fear &amp; Greed'}] });
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Rechtliches'},
+    {label:'Impressum', current:true}
+  ]
+});
+RX.footer();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Disclaimer — RenditeX</title>
+<meta name="robots" content="index">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<div class="wrap">
+  <article class="legal-page">
+    <div class="legal-stamp">Risikohinweis</div>
+    <h1>Disclaimer</h1>
+    <nav class="legal-tabs" aria-label="Rechtliche Hinweise">
+      <a href="/rechtliches/impressum.html">Impressum</a>
+      <a href="/rechtliches/datenschutz.html">Datenschutz</a>
+      <a href="/rechtliches/disclaimer.html" aria-current="page">Disclaimer</a>
+    </nav>
+    <div style="margin-top:26px">
+<h3>1. Allgemeiner Hinweis</h3>
+<p>Die auf dieser Seite bereitgestellten Inhalte dienen ausschließlich Informations- und Bildungszwecken. Sie stellen keine Finanzberatung, Anlageberatung, Steuerberatung, Rechtsberatung oder sonstige individuelle Beratung dar.</p>
+<h3>2. Keine Anlageempfehlung</h3>
+<p>Alle Inhalte, Erklärungen, Zonen-Beschreibungen und Rechenbeispiele sind allgemeiner Natur. Sie berücksichtigen nicht Ihre persönliche finanzielle Situation, Ihre Ziele, Ihre Risikobereitschaft oder Ihre Erfahrung. Es handelt sich nicht um eine Aufforderung zum Kauf, Verkauf, Halten oder Investieren in bestimmte Produkte, Plattformen, Coins, Tokens oder Strategien.</p>
+<h3>3. Zum Sparplan-Rechner und zum Rückblick</h3>
+<p>Der Rechner bildet eine allgemein bekannte Systematik ab und multipliziert einen von Ihnen selbst eingegebenen Betrag mit einem festen Faktor. Das Ergebnis ist eine Rechengröße, keine Empfehlung, diesen Betrag zu investieren. Der 12-Monats-Rückblick ist eine vereinfachte Simulation ohne Gebühren, Spreads und Steuern. Ein anderer Betrachtungszeitraum führt zu anderen Ergebnissen. Vergangene Verläufe lassen keinen Rückschluss auf künftige Entwicklungen zu.</p>
+<h3>4. Eigene Verantwortung und Recherche</h3>
+<p>Jede Entscheidung treffen Sie eigenverantwortlich. Informieren Sie sich vor jeder finanziellen Entscheidung selbst, prüfen Sie Chancen und Risiken sorgfältig und holen Sie bei Bedarf professionellen Rat ein. Handeln Sie nur mit Geld, dessen Verlust Sie finanziell und mental verkraften können. Gier, Druck oder die Angst, etwas zu verpassen, sind schlechte Entscheidungsgrundlagen.</p>
+<h3>5. Risiken von Krypto, Trading, DeFi und Plattformen</h3>
+<p>Kryptowährungen, Trading, Copy Trading, Staking, DeFi, Bots und andere Finanzprodukte sind mit erheblichen Risiken verbunden. Dazu gehören unter anderem starke Kursschwankungen, Totalverlust, Liquiditätsrisiken, Plattformrisiken, technische Fehler, Smart-Contract-Risiken, Hacks, regulatorische Änderungen, Auszahlungsbeschränkungen und mögliche Insolvenzen von Anbietern.</p>
+<h3>6. Keine Erfolgsgarantie</h3>
+<p>Vergangene Gewinne, Renditen, Backtests oder persönliche Ergebnisse sind keine Garantie für zukünftige Entwicklungen. Verluste sind jederzeit möglich.</p>
+<h3>7. Datenqualität</h3>
+<p>Die angezeigten Werte stammen von externen Anbietern und werden ohne Gewähr auf Richtigkeit, Vollständigkeit und Aktualität dargestellt. Bei technischen Störungen kann die Seite auf hinterlegte Beispieldaten zurückfallen; darauf wird an der entsprechenden Stelle hingewiesen.</p>
+<h3>8. Externe Links und Affiliate-Hinweis</h3>
+<p>Diese Seite enthält Links zu externen Websites und Kanälen. Einige Links können Affiliate- oder Partnerlinks sein. Wenn Sie sich darüber anmelden oder ein Angebot nutzen, kann ich eine Provision erhalten. Für Sie entstehen dadurch in der Regel keine zusätzlichen Kosten. Für Inhalte, Angebote, Bedingungen und Datenverarbeitung externer Anbieter übernehme ich keine Verantwortung.</p>
+<h3>9. Haftungsausschluss</h3>
+<p>Ich übernehme keine Haftung für Verluste, Schäden oder Nachteile, die direkt oder indirekt aus der Nutzung dieser Inhalte entstehen. Die Nutzung erfolgt auf eigenes Risiko.</p>
+<p><b>Betreiber:</b> Viktor Eggert · <b>Marke:</b> RenditeX — Viktor Investments &amp; Krypto</p>
+
+    </div>
+    <div class="legal-note" style="margin-top:34px">Dieser Text ist ein allgemeines Muster und ersetzt keine rechtliche Prüfung durch einen Anwalt, Steuerberater oder Datenschutzexperten.</div>
+  </article>
+</div>
+
+<footer id="rx-foot"></footer>
+<script src="/assets/site.js?v=13"></script>
+<script>
+RX.header({ nav:[{href:'/', label:'Alle Tools'}, {href:'/fear-greed/', label:'Fear &amp; Greed'}] });
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Rechtliches'},
+    {label:'Disclaimer', current:true}
+  ]
+});
+RX.footer();
+
+</script>
+</body>
+</html>

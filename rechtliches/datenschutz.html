@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Datenschutzerklärung — RenditeX</title>
+<meta name="robots" content="noindex">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<div class="wrap">
+  <article class="legal-page">
+    <div class="legal-stamp">Stand: Juli 2026</div>
+    <h1>Datenschutzerklärung</h1>
+    <nav class="legal-tabs" aria-label="Rechtliche Hinweise">
+      <a href="/rechtliches/impressum.html">Impressum</a>
+      <a href="/rechtliches/datenschutz.html" aria-current="page">Datenschutz</a>
+      <a href="/rechtliches/disclaimer.html">Disclaimer</a>
+    </nav>
+    <div style="margin-top:26px">
+<p>Der Schutz Ihrer personenbezogenen Daten ist mir wichtig. Nachfolgend informiere ich Sie darüber, welche Daten beim Besuch dieser Seite verarbeitet werden.</p>
+<h3>1. Verantwortlicher</h3>
+<address>Viktor Eggert<br>Artilleriestraße 64<br>51147 Köln<br>Deutschland<br>E-Mail: v.eggert7@gmail.com</address><h3>2. Was diese Seite <b>nicht</b> tut</h3>
+<p>Diese Seite setzt keine Cookies, verwendet keine Analyse- oder Tracking-Werkzeuge und bindet keine Werbenetzwerke ein. Es findet keine Registrierung statt, es werden keine Nutzerprofile gebildet und keine Ihrer Eingaben an mich oder an Dritte übertragen.</p>
+<h3>3. Lokale Speicherung Ihrer Einstellungen</h3>
+<p>Wenn Sie im Sparplan-Rechner den Standardbetrag oder die Multiplikatoren ändern, werden diese Werte im lokalen Speicher Ihres Browsers (localStorage) abgelegt, damit sie beim nächsten Besuch wieder zur Verfügung stehen. Gespeichert werden ausschließlich die von Ihnen selbst eingegebenen Zahlen unter dem Schlüssel <b>renditex_fgi_settings_v1</b>.</p>
+<p>Diese Daten verbleiben auf Ihrem Gerät. Sie werden nicht an einen Server übertragen, nicht ausgewertet und enthalten keine personenbezogenen Angaben. Rechtsgrundlage für die Speicherung ist § 25 Abs. 2 Nr. 2 TDDDG, da sie ausschließlich der von Ihnen angeforderten Funktion dient.</p>
+<p>Sie können die gespeicherten Werte jederzeit selbst entfernen: über die Schaltfläche <b>löschen</b> im Bereich „Multiplikatoren anpassen“, über die Schaltfläche unten oder über die Einstellungen Ihres Browsers.</p>
+<p><button type="button" class="linky" id="dsClear">Gespeicherte Einstellungen jetzt löschen</button></p>
+<h3>4. Server-Logdateien beim Hosting</h3>
+<p>Beim Aufruf der Seite werden durch den Hosting-Anbieter automatisch technische Zugriffsdaten verarbeitet. Dazu gehören in der Regel IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Datei, übertragene Datenmenge, Browsertyp und Betriebssystem. Diese Verarbeitung ist für die technische Auslieferung der Seite erforderlich. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, mein berechtigtes Interesse am sicheren und störungsfreien Betrieb. Die Daten werden nicht mit anderen Datenquellen zusammengeführt.</p>
+<h3>5. Externe Datenquellen (Schnittstellen)</h3>
+<p>Die angezeigten Marktdaten werden beim Öffnen der Seite direkt aus Ihrem Browser von folgenden Anbietern abgerufen. Dabei wird technisch bedingt Ihre IP-Adresse an den jeweiligen Anbieter übermittelt:</p>
+<ul><li><b>alternative.me</b> — Werte des Fear &amp; Greed Index</li><li><b>CoinGecko</b> — historische Bitcoin-Kurse für den 12-Monats-Rückblick</li></ul><p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, mein berechtigtes Interesse an der Darstellung aktueller Marktdaten. Auf die Datenverarbeitung durch diese Anbieter habe ich keinen Einfluss. Bitte entnehmen Sie Einzelheiten den Datenschutzhinweisen der jeweiligen Anbieter.</p>
+<h3>6. Schriftarten</h3>
+<p>Die verwendeten Schriftarten werden lokal von diesem Server ausgeliefert. Es findet <b>keine</b> Verbindung zu Google Fonts oder anderen externen Schriftdiensten statt.</p>
+<h3>7. Externe Links</h3>
+<p>Diese Seite verlinkt auf externe Angebote, unter anderem meine Linksammlung und meine Social-Media-Kanäle. Einige Links können Affiliate- oder Partnerlinks sein. Sobald Sie einem Link folgen, gelten ausschließlich die Datenschutzbestimmungen des jeweiligen Anbieters. Für deren Datenverarbeitung bin ich nicht verantwortlich.</p>
+<h3>8. Ihre Rechte</h3>
+<p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch gegen die Verarbeitung (Art. 21). Wenden Sie sich dafür an die oben genannte Adresse. Zudem steht Ihnen ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde zu, in Nordrhein-Westfalen bei der Landesbeauftragten für Datenschutz und Informationsfreiheit NRW.</p>
+<h3>9. Änderungen</h3>
+<p>Diese Datenschutzerklärung wird angepasst, wenn sich Inhalte, eingebundene Dienste oder rechtliche Anforderungen ändern.</p>
+
+    </div>
+    <div class="legal-note" style="margin-top:34px">Dieser Text ist ein allgemeines Muster und ersetzt keine rechtliche Prüfung durch einen Anwalt, Steuerberater oder Datenschutzexperten.</div>
+  </article>
+</div>
+
+<footer id="rx-foot"></footer>
+<script src="/assets/site.js?v=13"></script>
+<script>
+RX.header({ nav:[{href:'/', label:'Alle Tools'}, {href:'/fear-greed/', label:'Fear &amp; Greed'}] });
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Rechtliches'},
+    {label:'Datenschutz', current:true}
+  ]
+});
+RX.footer();
+
+/* Speicher-Löschung auch von dieser Seite aus */
+var b = document.getElementById('dsClear');
+if(b) b.addEventListener('click', function(){
+  try{ localStorage.removeItem('renditex_fgi_settings_v1'); }catch(e){}
+  b.outerHTML = '<span style="color:var(--z3); font-family:var(--font-mono); font-size:13px">Gespeicherte Einstellungen wurden gelöscht.</span>';
+});
+
+</script>
+</body>
+</html>

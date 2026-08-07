@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haltefrist-Tracker — Wann wird dein Krypto-Kauf steuerfrei? | RenditeX</title>
+<meta name="description" content="Trag deine Käufe ein und sieh auf einen Blick, wann für jeden Kauf die einjährige Spekulationsfrist abläuft. Kostenlos, ohne Anmeldung, mit CSV-Export — alles bleibt in deinem Browser.">
+<meta property="og:title" content="Haltefrist-Tracker — Wann wird dein Krypto-Kauf steuerfrei?">
+<meta property="og:description" content="Käufe eintragen, Countdown zur Steuerfreiheit sehen, als CSV exportieren. Kostenlos, ohne Anmeldung.">
+<meta property="og:type" content="website">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Kostenlos · Ohne Anmeldung · Bleibt im Browser</div>
+  <h1>Wann wird dein Kauf <em>steuerfrei</em>?</h1>
+  <p class="hero-sub">Trag jeden Kauf einmal ein — Coin, Datum, Menge. Der Tracker zeigt dir sofort, wann für jeden einzelnen Kauf die einjährige Haltefrist abläuft, sortiert nach „als Nächstes fällig". Alles bleibt in deinem Browser, exportierbar als CSV für deine eigenen Unterlagen.</p>
+</div>
+
+<!-- ============ EINTRAGEN ============ -->
+<section id="eintragen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Kauf eintragen</h2>
+      <div class="intro">
+        <p>Ein Eintrag pro Kauf — hast du einen Coin mehrfach gekauft, trag jeden Kauf einzeln ein. Das Kaufdatum ist der einzige Pflichtwert für den Countdown, Menge und Kaufpreis sind für deine eigene Übersicht gedacht.</p>
+      </div>
+    </div>
+
+    <div class="panel reveal">
+      <div class="hf-form" id="hfForm">
+        <div class="hf-field">
+          <label class="fl" for="hfCoin">Coin</label>
+          <input id="hfCoin" type="text" placeholder="z. B. Bitcoin" autocomplete="off">
+          <div class="quick" id="hfQuickCoin">
+            <button type="button" data-c="Bitcoin">Bitcoin</button>
+            <button type="button" data-c="Ethereum">Ethereum</button>
+            <button type="button" data-c="Solana">Solana</button>
+            <button type="button" data-c="XRP">XRP</button>
+          </div>
+        </div>
+        <div class="hf-field">
+          <label class="fl" for="hfDate">Kaufdatum</label>
+          <input id="hfDate" type="date">
+        </div>
+        <div class="hf-field">
+          <label class="fl" for="hfAmount">Menge</label>
+          <input id="hfAmount" type="number" step="any" min="0" placeholder="0,00">
+        </div>
+        <div class="hf-field">
+          <label class="fl" for="hfPrice">Kaufpreis gesamt <span class="opt">(optional)</span></label>
+          <div class="inputrow">
+            <span id="hfCurSym">€</span>
+            <input id="hfPrice" type="number" step="any" min="0" placeholder="0">
+          </div>
+        </div>
+        <button type="button" class="btn primary" id="hfAdd">Kauf hinzufügen</button>
+      </div>
+      <p class="hf-err" id="hfErr" hidden>Bitte mindestens Coin und Kaufdatum ausfüllen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ÜBERSICHT ============ -->
+<section id="uebersicht" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Deine Käufe im Überblick</h2>
+      <p>Sortiert danach, welcher Kauf als Nächstes steuerfrei wird — bereits steuerfreie Käufe stehen oben.</p>
+    </div>
+
+    <div class="panel reveal" style="padding:0; overflow:hidden">
+      <div class="table-scroll">
+        <table class="holdings-table" id="hfTable">
+          <thead>
+            <tr>
+              <th>Coin</th><th>Kaufdatum</th><th>Menge</th><th>Kaufpreis</th><th>Steuerfrei ab</th><th>Status</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="hfBody"></tbody>
+        </table>
+        <div class="hf-empty" id="hfEmpty">Noch keine Käufe eingetragen — trag oben deinen ersten Kauf ein.</div>
+      </div>
+    </div>
+
+    <div class="hf-actions reveal">
+      <button type="button" class="btn" id="hfExport">CSV exportieren</button>
+      <button type="button" class="btn" id="hfClear">Alle löschen</button>
+      <span class="hf-status" id="hfStatus">Wird nur auf diesem Gerät gespeichert</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REGEL ============ -->
+<section id="regel">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Die Einjahresfrist kurz erklärt</h2>
+      <div class="intro">
+        <p>In Deutschland zählen Gewinne aus dem Verkauf von Kryptowährungen als „privates Veräußerungsgeschäft" (§ 23 EStG). Die Grundregel: Verkaufst du einen Coin <b style="color:var(--text)">mehr als ein Jahr</b> nach dem Kauf, ist der Gewinn komplett steuerfrei — unabhängig von der Höhe. Verkaufst du innerhalb eines Jahres, ist der Gewinn grundsätzlich steuerpflichtig.</p>
+        <p>Hier passiert der Fehler, der Leuten am häufigsten unterläuft: Es gibt eine <b style="color:var(--text)">Freigrenze</b> von 1.000 € pro Jahr für Gewinne aus solchen Verkäufen — aber eine Freigrenze ist kein Freibetrag. Bleiben deine gesamten Gewinne aus privaten Veräußerungsgeschäften im Jahr unter 1.000 €, bleibt alles steuerfrei. Liegst du auch nur einen Euro darüber, wird der <b style="color:var(--text)">gesamte</b> Gewinn steuerpflichtig — nicht nur der Betrag über der Grenze.</p>
+        <p>Verkaufst du von einem Coin, den du mehrfach zu unterschiedlichen Zeitpunkten gekauft hast, nur einen Teil, gilt in der Praxis meist das <b style="color:var(--text)">FIFO-Prinzip</b> (First In, First Out): Die zuerst gekauften Einheiten gelten als zuerst verkauft. Genau deshalb lohnt es sich, jeden Kauf einzeln mit Datum zu dokumentieren, statt nur eine Gesamtsumme zu führen.</p>
+      </div>
+    </div>
+    <div class="callout reveal">
+      <b>Stand und Einordnung:</b> Die 1.000-€-Freigrenze gilt seit dem Steuerjahr 2024. Steuerrecht kann sich ändern, und dein persönlicher Fall kann Besonderheiten haben, die eine allgemeine Erklärung nicht abdeckt — das hier ersetzt keine Steuerberatung.
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRENZEN ============ -->
+<section id="grenzen" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was dieser Tracker nicht kann</h2>
+      <p>Ein ehrlicher Blick auf die Grenzen ist wichtiger als blindes Vertrauen in eine Liste.</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Keine Steuerberatung</h3><p>Der Tracker zeigt dir Daten, keine Steuerberatung. Bei realen Verkäufen und der Steuererklärung hilft nur ein Steuerberater oder eine geprüfte Krypto-Steuersoftware zuverlässig weiter.</p></div>
+      <div class="limit"><h3>Kein automatischer FIFO-Abgleich</h3><p>Der Tracker zeigt dir pro Kauf, wann er einzeln steuerfrei wird — er rechnet nicht automatisch aus, welche Einheiten bei einem Teilverkauf nach FIFO als verkauft gelten.</p></div>
+      <div class="limit"><h3>Freigrenze wird nicht automatisch geprüft</h3><p>Ob du unter der 1.000-€-Freigrenze bleibst, hängt von der Summe all deiner Gewinne im Jahr ab — auch aus anderen privaten Veräußerungsgeschäften. Das rechnet der Tracker nicht mit.</p></div>
+      <div class="limit"><h3>Keine Synchronisierung</h3><p>Die Daten liegen nur in diesem einen Browser auf diesem einen Gerät. Browser-Daten gelöscht oder anderes Gerät benutzt heißt: Liste ist weg — deshalb der CSV-Export als Sicherung.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Kurz beantwortet</h2>
+    </div>
+    <div class="acc" id="faqList"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Ab wann genau gilt ein Krypto-Kauf als steuerfrei?","acceptedAnswer":{"@type":"Answer","text":"Nach Ablauf von einem Jahr (365 Tagen) nach dem Kauf ist ein Verkauf mit Gewinn in Deutschland grundsätzlich steuerfrei, unabhängig von der Höhe."}},
+{"@type":"Question","name":"Werden meine eingetragenen Käufe irgendwohin übertragen?","acceptedAnswer":{"@type":"Answer","text":"Nein. Alle Daten bleiben im localStorage deines Browsers auf diesem Gerät. Es gibt keine Übertragung an einen Server."}},
+{"@type":"Question","name":"Was ist der Unterschied zwischen Freigrenze und Freibetrag?","acceptedAnswer":{"@type":"Answer","text":"Ein Freibetrag bleibt immer steuerfrei, der Rest wird besteuert. Bei einer Freigrenze wird bei Überschreiten der gesamte Betrag steuerpflichtig, nicht nur der übersteigende Teil. Die 1.000-Euro-Grenze bei privaten Veräußerungsgeschäften ist eine Freigrenze."}}
+]}
+</script>
+
+<script src="/assets/site.js?v=13"></script>
+<script>
+RX.header({ nav:[
+  {href:'#eintragen',  label:'Eintragen'},
+  {href:'#uebersicht', label:'Übersicht'},
+  {href:'#regel',      label:'Die Regel'},
+  {href:'/',           label:'Alle Tools'}
+]});
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Tools', href:'/#tools'},
+    {label:'Haltefrist-Tracker', current:true}
+  ],
+  pills: [
+    {label:'Fear & Greed Index', href:'/fear-greed/'},
+    {label:'Heatzone Chart', href:'/heatzone-chart/'},
+    {label:'Scam-Check', href:'/scam-check/'},
+    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/', current:true}
+  ]
+});
+RX.footer();
+</script>
+<script>
+(function(){
+"use strict";
+var $ = id => document.getElementById(id);
+var LS_KEY = 'renditex_holdings_v1';
+var DAY = 86400000;
+var YEAR_DAYS = 365;
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+
+/* ---------- Speichern (nur lokal im Browser) ---------- */
+var storageOK = true;
+function load(){
+  try{
+    var raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ storageOK = false; return []; }
+}
+function save(){
+  if(!storageOK) return;
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(state.holdings)); }
+  catch(e){ storageOK = false; updateStatus(); }
+}
+function updateStatus(msg){
+  $('hfStatus').textContent = msg || (storageOK
+    ? 'Wird nur auf diesem Gerät gespeichert'
+    : 'Speichern in diesem Browser nicht möglich — gilt nur für diese Sitzung');
+}
+
+var state = { holdings: load() };
+
+/* ---------- Datum & Fristberechnung ---------- */
+function parseDate(s){ var d = new Date(s + 'T00:00:00'); return isNaN(d.getTime()) ? null : d; }
+function addDays(d, n){ return new Date(d.getTime() + n*DAY); }
+function fmtDate(d){ return d.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'}); }
+function daysBetween(a, b){ return Math.round((b.getTime() - a.getTime()) / DAY); }
+
+function statusOf(h){
+  var buy = parseDate(h.date);
+  if(!buy) return { key:'unknown', label:'—', hex:'var(--muted-2)', freeDate:null };
+  var free = addDays(buy, YEAR_DAYS);
+  var today = new Date(); today.setHours(0,0,0,0);
+  var remaining = daysBetween(today, free);
+  if(remaining <= 0) return { key:'free', label:'Steuerfrei', hex:'#1C8F52', freeDate:free, remaining:remaining };
+  if(remaining <= 30) return { key:'soon', label:'In ' + remaining + ' Tagen', hex:'#E06A3A', freeDate:free, remaining:remaining };
+  return { key:'waiting', label:'Noch ' + remaining + ' Tage', hex:'#2E52C7', freeDate:free, remaining:remaining };
+}
+
+/* ---------- Formular ---------- */
+function readForm(){
+  return {
+    coin: $('hfCoin').value.trim(),
+    date: $('hfDate').value,
+    amount: $('hfAmount').value.trim(),
+    price: $('hfPrice').value.trim()
+  };
+}
+function resetForm(){
+  $('hfCoin').value = ''; $('hfAmount').value = ''; $('hfPrice').value = '';
+  $('hfDate').value = new Date().toISOString().slice(0,10);
+}
+function addHolding(){
+  var f = readForm();
+  if(!f.coin || !f.date){ $('hfErr').hidden = false; return; }
+  $('hfErr').hidden = true;
+  state.holdings.push({
+    id: uid(), coin: f.coin, date: f.date,
+    amount: f.amount === '' ? null : parseFloat(f.amount),
+    price: f.price === '' ? null : parseFloat(f.price)
+  });
+  save();
+  resetForm();
+  renderTable();
+}
+function removeHolding(id){
+  state.holdings = state.holdings.filter(function(h){ return h.id !== id; });
+  save();
+  renderTable();
+}
+
+/* ---------- Übersicht ---------- */
+function eur(n){ return RX.currency.format(n, 0); }
+function renderTable(){
+  var sorted = state.holdings.slice().sort(function(a, b){
+    var fa = statusOf(a).freeDate, fb = statusOf(b).freeDate;
+    if(!fa) return 1; if(!fb) return -1;
+    return fa.getTime() - fb.getTime();
+  });
+  $('hfEmpty').hidden = sorted.length > 0;
+  $('hfTable').hidden = sorted.length === 0;
+  $('hfBody').innerHTML = sorted.map(function(h){
+    var s = statusOf(h);
+    var buy = parseDate(h.date);
+    return '<tr>' +
+      '<td><b>' + escapeHtml(h.coin) + '</b></td>' +
+      '<td class="mono">' + (buy ? fmtDate(buy) : '—') + '</td>' +
+      '<td class="mono">' + (h.amount != null ? h.amount : '—') + '</td>' +
+      '<td class="mono">' + (h.price != null ? eur(h.price) : '—') + '</td>' +
+      '<td class="mono">' + (s.freeDate ? fmtDate(s.freeDate) : '—') + '</td>' +
+      '<td><span class="hf-badge" style="--bc:' + s.hex + '">' + s.label + '</span></td>' +
+      '<td><button type="button" class="hf-del" data-id="' + h.id + '" aria-label="Kauf löschen">✕</button></td>' +
+    '</tr>';
+  }).join('');
+  [].forEach.call($('hfBody').querySelectorAll('.hf-del'), function(btn){
+    btn.addEventListener('click', function(){ removeHolding(btn.dataset.id); });
+  });
+}
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+/* ---------- CSV-Export ---------- */
+function csvEscape(v){
+  v = String(v == null ? '' : v);
+  return /[;"\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v;
+}
+function exportCsv(){
+  var rows = [['Coin','Kaufdatum','Menge','Kaufpreis','Steuerfrei ab','Status']];
+  state.holdings.forEach(function(h){
+    var s = statusOf(h);
+    var buy = parseDate(h.date);
+    rows.push([
+      h.coin, buy ? fmtDate(buy) : '', h.amount != null ? h.amount : '',
+      h.price != null ? h.price : '', s.freeDate ? fmtDate(s.freeDate) : '', s.label
+    ]);
+  });
+  var csv = rows.map(function(r){ return r.map(csvEscape).join(';'); }).join('\r\n');
+  var blob = new Blob(['﻿' + csv], {type:'text/csv;charset=utf-8;'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'renditex-haltefrist.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+
+/* ---------- FAQ ---------- */
+var FAQ = [
+  {q:'Ab wann genau gilt ein Krypto-Kauf als steuerfrei?', a:'Nach Ablauf von einem Jahr (365 Tagen) nach dem Kauf ist ein Verkauf mit Gewinn in Deutschland grundsätzlich steuerfrei, unabhängig von der Höhe des Gewinns.'},
+  {q:'Werden meine eingetragenen Käufe irgendwohin übertragen?', a:'Nein. Alle Daten bleiben im localStorage deines Browsers auf diesem Gerät. Es gibt keine Übertragung an einen Server und keinen Server-Speicher.'},
+  {q:'Was ist der Unterschied zwischen Freigrenze und Freibetrag?', a:'Ein Freibetrag bleibt immer steuerfrei, nur der Rest wird besteuert. Bei einer Freigrenze wird beim Überschreiten der gesamte Betrag steuerpflichtig, nicht nur der übersteigende Teil. Die 1.000-Euro-Grenze bei privaten Veräußerungsgeschäften ist eine Freigrenze — deshalb lohnt sich genaues Dokumentieren.'},
+  {q:'Kann ich meine Liste sichern oder auf ein anderes Gerät übertragen?', a:'Über den CSV-Export ja — die Datei kannst du speichern oder dir selbst zuschicken. Ein automatischer Abgleich zwischen Geräten ist bewusst nicht eingebaut, weil dafür ein Konto und ein Server nötig wären.'}
+];
+function renderFaq(){
+  $('faqList').innerHTML = FAQ.map(function(f){
+    return '<details><summary>' + f.q + '<span class="plus">+</span></summary><div class="body">' + f.a + '</div></details>';
+  }).join('');
+}
+
+function init(){
+  resetForm();
+  $('hfCurSym').textContent = RX.currency.symbol();
+  renderTable();
+  renderFaq();
+  RX.reveal();
+
+  $('hfAdd').addEventListener('click', addHolding);
+  $('hfQuickCoin').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    $('hfCoin').value = b.dataset.c;
+    $('hfCoin').focus();
+  });
+  $('hfExport').addEventListener('click', exportCsv);
+  $('hfClear').addEventListener('click', function(){
+    if(!state.holdings.length) return;
+    state.holdings = [];
+    save();
+    renderTable();
+    updateStatus('Alle Einträge gelöscht.');
+  });
+  window.addEventListener('rx-currency', function(){
+    $('hfCurSym').textContent = RX.currency.symbol();
+    renderTable();
+  });
+}
+init();
+})();
+</script>
+</body>
+</html>

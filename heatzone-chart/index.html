@@ -1,0 +1,1060 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heatzone Chart — Ist Bitcoin gerade günstig oder teuer? | RenditeX</title>
+<meta name="description" content="Heatzone Chart ordnet den Bitcoin-Kurs live in sieben Bewertungszonen ein — auf Basis eines Regressionsmodells, das direkt aus den aktuellen Kursdaten berechnet wird. Mit großem Kursverlauf, Zonen-Rechner und Zukunfts-Simulator.">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=13">
+
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span><span id="updatedAt">Modell wird berechnet</span></div>
+  <h1>Ist Bitcoin gerade <em>günstig oder teuer</em>?</h1>
+  <p class="hero-sub">Heatzone Chart färbt den Bitcoin-Kurs nach sieben Bewertungszonen ein — von Kapitulation (günstig) bis Blase (teuer) —, berechnet aus einem Regressionsmodell. Anders als bei vielen ähnlichen Charts sind die Werte nicht fest einprogrammiert — sie werden bei jedem Aufruf neu aus den aktuellen Kursdaten berechnet.</p>
+
+  <div class="pr-ticker reveal" id="prTicker">
+    <div class="pr-price"><span id="bigVal">—</span><small>aktueller Kurs</small></div>
+    <div class="pr-sep"></div>
+    <div class="pr-zone"><span class="pr-dot" id="prDot"></span><b id="vLabel">wird geladen</b></div>
+    <div class="pr-sep"></div>
+    <div class="pr-mini" id="vDelta">—</div>
+  </div>
+</div>
+
+<!-- ============ VERLAUF ============ -->
+<section id="verlauf">
+  <div class="wrap">
+    <div class="chart-card big reveal">
+      <div class="chart-bar">
+        <div class="chart-legend">
+          <span><i style="background:#FFFFFF"></i>Kurs</span>
+          <span><i style="background:#0B1638"></i>Modell (auch Zukunft)</span>
+          <span><i style="background:#FFFFFF; border-style:dashed"></i>Halving</span>
+        </div>
+        <div class="chart-settings">
+          <button type="button" id="chartSettingsBtn" class="chart-gear" aria-haspopup="true" aria-expanded="false" aria-label="Chart-Einstellungen">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94a7.14 7.14 0 0 0 .06-.94 7.14 7.14 0 0 0-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.63-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54a7.3 7.3 0 0 0-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.65 8.84a.5.5 0 0 0 .12.64l2.03 1.58a7.14 7.14 0 0 0-.06.94 7.14 7.14 0 0 0 .06.94L2.77 14.5a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.4 1.05.71 1.63.94l.36 2.54a.5.5 0 0 0 .5.42h3.84a.5.5 0 0 0 .5-.42l.36-2.54a7.3 7.3 0 0 0 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>
+          </button>
+          <div class="chart-settings-panel" id="chartSettingsPanel" hidden>
+            <div class="csp-row">
+              <span>Y-Achse</span>
+              <div class="csp-toggle" id="axisToggle" role="group" aria-label="Y-Achse Skalierung">
+                <button type="button" data-mode="log" aria-pressed="true">Log</button>
+                <button type="button" data-mode="linear" aria-pressed="false">Linear</button>
+              </div>
+            </div>
+            <div class="csp-row">
+              <span>Halvings anzeigen</span>
+              <button type="button" class="csp-switch on" id="halvingToggle" role="switch" aria-checked="true" aria-label="Halvings anzeigen"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-host" id="chartHost">
+        <div id="chart" role="img" aria-label="Bitcoin-Kurs im Vergleich zum Heatzone-Chart-Modell"></div>
+        <div class="tip" id="tip"></div>
+      </div>
+      <p class="chart-hint">Ziehen zum Verschieben durch die Zeit, Mausrad oder Zwei-Finger-Geste zum Zoomen — wie in einem Trading-Chart. Die Linie zeigt den Kurs, die farbigen Bänder die sieben Bewertungszonen um das Modell. Rechts vom heutigen Datum ist alles reine Modell-Projektion (gestrichelte Linie) — dort gibt es noch keinen echten Kurs.</p>
+      <div class="zone-strip" id="zoneStrip"></div>
+    </div>
+    <div class="src-note reveal" id="srcNote" style="margin-top:14px">Quelle: CoinGecko · Regression wird bei jedem Laden neu berechnet</div>
+  </div>
+</section>
+
+<!-- ============ MODELL ============ -->
+<section id="modell">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was steckt hinter dem Modell?</h2>
+      <p>Die Idee, den Bitcoin-Kurs per logarithmischer Regression einzuordnen, ist nicht meine Erfindung — sie geht auf Community-Modelle aus den Jahren ab 2014 zurück und wurde seither von vielen Seiten in eigenen Varianten umgesetzt. Der Grundgedanke: Weil Bitcoin nicht linear, sondern mit abnehmender prozentualer Rate wächst, lässt sich der langfristige Trend über eine Gerade im doppelt-logarithmischen Maßstab annähern.</p>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><div class="k">Fair Value heute</div><div class="n" id="sFair">—</div><div class="s">Modellwert</div></div>
+      <div class="stat"><div class="k">Verhältnis zum Fair Value</div><div class="n" id="sRatio">—</div><div class="s">Kurs ÷ Fair Value</div></div>
+      <div class="stat"><div class="k">Modellgüte (R²)</div><div class="n" id="sR2">—</div><div class="s">Erklärte Varianz</div></div>
+      <div class="stat"><div class="k">Abstand (σ)</div><div class="n" id="sSigma">—</div><div class="s">Standardabweichungen</div></div>
+    </div>
+    <div class="callout reveal">
+      <b>Was wir anders machen:</b> Viele vergleichbare Charts arbeiten mit fest hinterlegten Koeffizienten, die nur gelegentlich manuell nachjustiert werden. Heatzone Chart berechnet Steigung, Achsenabschnitt und Streuung bei jedem Seitenaufruf per einfacher linearer Regression direkt aus den bei CoinGecko abgerufenen historischen Tagespreisen. Das Modell hinkt also nie lange hinterher — es hat aber auch keine „Autorität": Es ist nur so gut wie die Annahme, dass sich das bisherige Wachstumsmuster fortsetzt.
+    </div>
+  </div>
+</section>
+
+<!-- ============ ZONEN ============ -->
+<section id="zonen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Sieben Zonen, sieben Verhaltensmuster</h2>
+      <p>Jede Zone beschreibt, wie weit der Kurs vom Modellwert entfernt liegt — inklusive der aktuell berechneten Grenzen in Euro.</p>
+    </div>
+    <div class="zones reveal" id="zoneList"></div>
+  </div>
+</section>
+
+
+<!-- ============ VERGLEICH ============ -->
+<section id="vergleich">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Heatzone Chart vs. Fear &amp; Greed Index</h2>
+      <p>Beide Tools zeigen etwas anderes, ergänzen sich aber gut.</p>
+    </div>
+    <div class="princ reveal">
+      <div class="card">
+        <div class="tag">Zeithorizont: Jahre</div>
+        <h3>Heatzone Chart</h3>
+        <p>Rein mathematisch, unabhängig von Nachrichtenlage oder Stimmung. Reagiert nicht auf einzelne Tage, sondern zeigt die langfristige Position im Wachstumstrend.</p>
+      </div>
+      <div class="card accent">
+        <div class="tag">Zeithorizont: Tage</div>
+        <h3><a href="/fear-greed/" style="color:inherit; text-decoration:none">Fear &amp; Greed Index →</a></h3>
+        <p>Misst die aktuelle Stimmung der Marktteilnehmer. Reagiert schnell auf News und Kursbewegungen, sagt aber nichts über die langfristige Bewertung aus.</p>
+      </div>
+    </div>
+    <div class="callout reveal">
+      Am aussagekräftigsten ist die Kombination: Zeigen beide Tools in dieselbe Richtung — z. B. „stark unterbewertet" und gleichzeitig „Extreme Angst" — war das historisch ein selteneres und deutlicheres Signal als jedes Tool für sich allein.
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECHNER 1: DCA ============ -->
+<section id="rechner">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>DCA-Zonen-Rechner</h2>
+      <p>Verschiebe den Regler, um zu sehen, wie sich dein Sparplan-Betrag je nach Zone verändern würde — und was ein zonenbasierter Sparplan in den letzten zwölf Monaten gebracht hätte.</p>
+    </div>
+
+    <div class="calc reveal">
+      <div class="panel">
+        <label class="fl" for="baseAmt">Dein monatlicher Standardbetrag</label>
+        <div class="inputrow">
+          <span id="curSym">€</span>
+          <input id="baseAmt" type="number" inputmode="numeric" min="10" max="100000" step="10" value="200">
+        </div>
+        <div class="quick" id="quickAmts">
+          <button data-a="50">50 €</button><button data-a="100">100 €</button>
+          <button data-a="200">200 €</button><button data-a="500">500 €</button>
+          <button data-a="1000">1.000 €</button>
+        </div>
+
+        <div class="sliderblock">
+          <label class="fl" for="zSlider">Bewertungslage durchspielen</label>
+          <div class="slidertop">
+            <span class="cur" id="slVal">—</span>
+            <span class="cl mono" id="slLbl">—</span>
+            <button id="resetLive" type="button">Auf Live-Wert</button>
+          </div>
+          <input id="zSlider" type="range" min="-220" max="220" value="0" aria-label="Sigma-Abstand vom Fair Value">
+          <div class="rangelabels"><span>günstig</span><span>fair</span><span>teuer</span></div>
+        </div>
+
+        <details class="multiedit" id="multiEdit">
+          <summary>Multiplikatoren anpassen<span class="plus">+</span></summary>
+          <p style="color:var(--muted); font-size:14px; margin:14px 0 0">Die Standardwerte folgen dem gleichen Prinzip wie beim Fear-&amp;-Greed-Rechner: mehr kaufen in günstigen Zonen, weniger in teuren. Wer vorsichtiger vorgehen will, wählt eine flachere Staffelung.</p>
+          <div class="me-rows" id="meRows"></div>
+          <div class="me-foot">
+            <button type="button" id="meReset">Standard wiederherstellen</button>
+            <button type="button" id="meFlat">Vorsichtige Staffelung</button>
+            <span id="meStatus">Wird auf diesem Gerät gespeichert</span>
+          </div>
+        </details>
+      </div>
+
+      <div class="result" id="resultBox">
+        <label class="fl">Kaufbetrag diesen Monat</label>
+        <div class="out" id="outAmt">— €</div>
+        <div class="outsub" id="outSub">—</div>
+        <div class="resgrid">
+          <div><div class="k">Multiplikator</div><div class="v" id="outMult">—</div></div>
+          <div><div class="k">Differenz</div><div class="v" id="outDiff">—</div></div>
+          <div><div class="k">Reserve nötig</div><div class="v" id="outReserve">—</div></div>
+          <div><div class="k">Jahresbudget</div><div class="v" id="outYear">—</div></div>
+        </div>
+        <div class="advice" id="outAdvice">—</div>
+        <div class="disclaimer">Beispielrechnung nach der zonenbasierten DCA-Systematik. Keine Anlageberatung und keine Kaufempfehlung. Krypto-Anlagen können vollständig an Wert verlieren.</div>
+      </div>
+    </div>
+
+    <div class="panel bt reveal" id="btBox" hidden>
+      <h3 style="font-size:19px">Was hätte die Zonen-Variante gebracht?</h3>
+      <p style="color:var(--muted); font-size:14.5px; margin-top:10px">Simulation: monatlicher Kauf am Ersten, einmal mit festem Betrag, einmal mit dem Multiplikator der zu diesem Zeitpunkt errechneten Zone. Basis ist dein eingestellter Standardbetrag.</p>
+      <div class="bt-grid">
+        <div class="bt-col" id="btA">
+          <h4>Stures DCA</h4>
+          <div class="bt-row"><span>Investiert</span><b id="btAInv">—</b></div>
+          <div class="bt-row"><span>Ø Kaufkurs</span><b id="btAAvg">—</b></div>
+          <div class="bt-row"><span>Bestand</span><b id="btABtc">—</b></div>
+          <div class="bt-row"><span>Heutiger Wert</span><b id="btAVal">—</b></div>
+          <div class="bt-row"><span>Rendite</span><b id="btARoi">—</b></div>
+        </div>
+        <div class="bt-col" id="btB">
+          <h4>Zonen-DCA</h4>
+          <div class="bt-row"><span>Investiert</span><b id="btBInv">—</b></div>
+          <div class="bt-row"><span>Ø Kaufkurs</span><b id="btBAvg">—</b></div>
+          <div class="bt-row"><span>Bestand</span><b id="btBBtc">—</b></div>
+          <div class="bt-row"><span>Heutiger Wert</span><b id="btBVal">—</b></div>
+          <div class="bt-row"><span>Rendite</span><b id="btBRoi">—</b></div>
+        </div>
+      </div>
+      <div class="bt-note" id="btNote"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECHNER 2: ZUKUNFT ============ -->
+<section id="zukunft">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Zukunfts-Simulator</h2>
+      <p>Wähle eine Zone und ein Zieljahr: Das Modell rechnet vor, welcher Preis-Range dieser Zone zu diesem Zeitpunkt entsprechen würde — rein rechnerisch, unter der Annahme, dass das bisherige Wachstumsmuster anhält.</p>
+    </div>
+
+    <div class="panel reveal">
+      <label class="fl">Ziel-Zone</label>
+      <div class="quick" id="zoneBtns"></div>
+
+      <label class="fl" style="margin-top:22px" for="yearSlider">Ziel-Jahr: <b id="yearOut" class="mono">2028</b></label>
+      <input id="yearSlider" type="range" min="2026" max="2036" step="1" value="2028" style="width:100%">
+
+      <div class="result" style="margin-top:22px">
+        <label class="fl" id="futZoneLbl">Fair Value in gewählter Zone</label>
+        <div class="out" id="futRange">— €</div>
+        <div class="outsub" id="futMid">—</div>
+      </div>
+      <div class="disclaimer">Rein theoretische Modellrechnung auf Basis der Power-Law-Regression. Keine Kursprognose und keine Anlageberatung — je weiter der Zeithorizont, desto unsicherer die Annahme.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORMEL ============ -->
+<section id="formel">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Die Mathematik dahinter</h2>
+      <p>Im Kern steckt eine einfache doppelt-logarithmische Regression:</p>
+    </div>
+    <div class="formula reveal">log₁₀(Preis) = A + B × log₁₀(Tage seit Genesis-Block)</div>
+    <div class="facts reveal" id="modelFacts"></div>
+    <div class="callout reveal">
+      Die Tage werden ab dem 3. Januar 2009 gezählt, dem Datum des ersten Bitcoin-Blocks. <b>A</b> und <b>B</b> stammen aus einer einfachen linearen Regression über log(Tage) und log(Preis) sämtlicher verfügbarer Tagesschlusskurse. <b>σ</b> ist die Standardabweichung der Abweichungen zwischen Modell und tatsächlichem Kurs — sie definiert die Breite jeder Zone. Weil alle drei Werte aus den jeweils aktuellen Daten neu berechnet werden, verschieben sie sich mit der Zeit minimal — anders als bei einem Modell mit fest hinterlegten Zahlen.
+    </div>
+  </div>
+</section>
+
+<!-- ============ HISTORIE ============ -->
+<section id="historie">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Historische Momente im Modell</h2>
+      <p>So hätte das aktuelle Modell einige bekannte Marktphasen rückblickend eingeordnet. Die Zuordnung wird mit den heutigen Modellparametern berechnet, nicht nachträglich angepasst.</p>
+    </div>
+    <div class="tl" id="timeline"></div>
+    <div class="callout reveal">
+      Auffällig: Bärenmarkt-Tiefs fielen historisch fast immer in die günstigen Zonen, Allzeithochs fast immer in die teuren. Das bestätigt nicht, dass es künftig genauso bleibt — es zeigt nur, dass das Muster bisher relativ stabil war.
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRENZEN ============ -->
+<section id="grenzen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was das Modell nicht kann</h2>
+      <p>Ein ehrlicher Blick auf die Grenzen ist wichtiger als blindes Vertrauen in eine Kurve.</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Er schaut zurück</h3><p>Die Regression passt eine Gerade an die Vergangenheit an. Sie sagt nichts darüber, ob sich das Wachstumsmuster fortsetzt.</p></div>
+      <div class="limit"><h3>Kurzfristig wenig aussagekräftig</h3><p>Auf Sicht von Wochen kann der Kurs weit vom Modellwert abweichen, ohne dass sich daraus ein Zeitpunkt ableiten lässt.</p></div>
+      <div class="limit"><h3>Ignoriert Fundamentaldaten</h3><p>ETF-Zuflüsse, Regulierung wie MiCA oder makroökonomische Faktoren fließen nicht in die Formel ein.</p></div>
+      <div class="limit"><h3>Ein Modell unter vielen</h3><p>Andere Kalibrierungen derselben Grundidee kommen zu leicht anderen Bandgrenzen. Keine Version ist „die eine richtige".</p></div>
+      <div class="limit"><h3>Nur für Bitcoin</h3><p>Das Modell nutzt Bitcoins durchgehende Kurshistorie seit 2013. Für andere Coins ist es nicht ohne Weiteres übertragbar.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Kurz beantwortet</h2>
+    </div>
+    <div class="acc" id="faqList"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Ist Heatzone Chart eine Kaufempfehlung?","acceptedAnswer":{"@type":"Answer","text":"Nein. Das Tool ordnet den Kurs in ein historisches Bewertungsmodell ein. Es ist keine Anlageberatung und keine Prognose."}},
+{"@type":"Question","name":"Woher stammen die Kursdaten?","acceptedAnswer":{"@type":"Answer","text":"Von der öffentlichen API von CoinGecko. Das Regressionsmodell wird direkt im Browser aus diesen Daten berechnet."}},
+{"@type":"Question","name":"Ist dieses Modell eine Erfindung von RenditeX?","acceptedAnswer":{"@type":"Answer","text":"Nein, die Grundidee der logarithmischen Regression für Bitcoin ist ein seit 2014 bekanntes Community-Konzept. Ich habe daraus eine eigene, live berechnete Umsetzung gebaut."}}]}
+</script>
+
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="/assets/site.js?v=13"></script>
+<script>
+RX.header({ live:true, nav:[
+  {href:'#verlauf',  label:'Verlauf'},
+  {href:'#zonen',    label:'Zonen'},
+  {href:'#rechner',  label:'Rechner'},
+  {href:'#zukunft',  label:'Zukunft'},
+  {href:'/',         label:'Alle Tools'}
+]});
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Tools', href:'/#tools'},
+    {label:'Heatzone Chart', current:true}
+  ],
+  pills: [
+    {label:'Fear & Greed Index', href:'/fear-greed/'},
+    {label:'Heatzone Chart', href:'/heatzone-chart/', current:true},
+    {label:'Scam-Check', href:'/scam-check/'},
+    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/'}
+  ]
+});
+RX.footer();
+</script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- Konstanten ---------- */
+const GENESIS = Date.UTC(2009,0,3);
+const daysSince = t => Math.max(1, (t - GENESIS) / 86400000);
+const $ = id => document.getElementById(id);
+const eur = n => RX.currency.format(n, 0);
+function refreshCurrencyLabels(){
+  const sym = RX.currency.symbol();
+  const s = $('curSym'); if(s) s.textContent = sym;
+  document.querySelectorAll('#quickAmts button').forEach(b=>{
+    b.textContent = Number(b.dataset.a).toLocaleString('de-DE') + ' ' + sym;
+  });
+}
+const dfmt = d => d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'});
+const dfmtShort = d => d.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'});
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+
+/* ---------- Zonen-Modell (Grenzen in Sigma-Einheiten) ----------
+   Sieben statt fünf Zonen, angelehnt an gängige "Rainbow Chart"-Einteilungen:
+   von Kapitulation (sehr günstig) bis Blase (sehr teuer). Farben bilden
+   ein durchgehendes Regenbogen-Spektrum, jede einzeln gegen Weiß UND
+   gegen --bg auf ≥4.5:1 Kontrast geprüft (siehe renditex.css-Kommentar). */
+/* EIN Farbfeld (hex) für ALLES — Chart-Bänder, Zonen-Streifen, Zonen-Liste,
+   Timeline, Multiplikator-Editor. Vorher gab es zwei getrennte Paletten
+   (hex fürs Layout, fill fürs Chart), dadurch stimmten Chart und Legende/
+   Zonen-Liste farblich nicht überein. Bewusst KEIN klassischer Regenbogen
+   (zu nah an gängigen Vorlagen, zu leicht wiederzuerkennen): Indigo→Blau→
+   Türkis→Grün→Koralle→Pink→Weinrot, kein Gelb/Oliv, kein reines Orange/Rot
+   am oberen Ende. Kräftig genug fürs Chart, aber dunkel genug, dass weißer
+   Text darauf (Zonen-Streifen) UND die Farbe als Text auf Weiß (Zonen-
+   Liste, Timeline) beides gut lesbar bleiben. */
+const ZONES = [
+  {key:"kap", de:"Kapitulation", hex:"#4C3A9E", mult:2.5, lo:-Infinity, hi:-1.5,
+   short:"Kurs weit unter dem Modellwert, Verkaufsdruck dominiert.", act:"Sparplan so weit erhöhen, wie es die Cash-Reserve zulässt.",
+   long:"Der Kurs liegt mehr als 1,5 Standardabweichungen unter dem Modell-Fair-Value. Solche Phasen waren historisch selten und fielen mit den tiefsten Punkten vergangener Bärenmärkte zusammen. Das sagt nichts über den exakten Zeitpunkt einer Erholung — nur, dass der Kurs im historischen Vergleich extrem weit unten liegt."},
+  {key:"buy", de:"Kaufen", hex:"#2E52C7", mult:1.75, lo:-1.5, hi:-0.9,
+   short:"Kurs deutlich unter dem Modellwert.", act:"Sparplan spürbar erhöhen.",
+   long:"Der Kurs liegt zwischen 0,9 und 1,5 Standardabweichungen unter dem Fair Value — eine ausgeprägt unterdurchschnittliche Bewertung, aber noch nicht im historischen Extrembereich."},
+  {key:"acc", de:"Akkumulieren", hex:"#0D7A82", mult:1.25, lo:-0.9, hi:-0.3,
+   short:"Kurs leicht unter dem Modellwert.", act:"Sparplan leicht erhöhen.",
+   long:"Der Kurs liegt zwischen 0,3 und 0,9 Standardabweichungen unter dem Fair Value — eine moderat günstige Phase ohne besonderen Ausschlag."},
+  {key:"f",  de:"Neutral", hex:"#1C8F52", mult:1,   lo:-0.3, hi:0.3,
+   short:"Kurs nahe am Modellwert.", act:"Sparplan unverändert lassen.",
+   long:"Der Kurs liegt innerhalb von 0,3 Standardabweichungen um den Modellwert — weder auffällig günstig noch auffällig teuer."},
+  {key:"fomo", de:"FOMO", hex:"#E06A3A", mult:0.5, lo:0.3, hi:0.9,
+   short:"Kurs leicht über dem Modellwert, erste Euphorie-Signale.", act:"Sparplan reduzieren, Rebalancing prüfen.",
+   long:"Der Kurs liegt zwischen 0,3 und 0,9 Standardabweichungen über dem Fair Value. Steigende Kurse ziehen zunehmend unerfahrene Anleger an — die Angst, etwas zu verpassen (Fear of Missing Out), wird zum spürbaren Marktfaktor."},
+  {key:"eup", de:"Euphorie", hex:"#C92E68", mult:0.25, lo:0.9, hi:1.5,
+   short:"Kurs deutlich über dem Modellwert.", act:"Neukäufe stark reduzieren, Teilgewinne prüfen.",
+   long:"Der Kurs liegt zwischen 0,9 und 1,5 Standardabweichungen über dem Fair Value. Solche Phasen begleiteten historisch spätere Abschnitte vergangener Marktzyklen — optimistische Stimmung dominiert, Warnsignale werden oft ausgeblendet."},
+  {key:"bub", de:"Blase", hex:"#A81548", mult:0, lo:1.5, hi:Infinity,
+   short:"Kurs weit über dem Modellwert.", act:"Neukäufe pausieren, Teilgewinne realisieren, Cash-Quote erhöhen.",
+   long:"Der Kurs liegt mehr als 1,5 Standardabweichungen über dem Modell-Fair-Value. Solche Phasen fielen historisch häufig mit späteren Marktzyklus-Hochs zusammen — eine Garantie für einen unmittelbaren Rückgang ist das aber nicht."}
+];
+const zoneOfZ = z => ZONES.find(zo => z > zo.lo && z <= zo.hi) || ZONES[3];
+const fmtMult = m => m === 0 ? 'Pause' : m.toString().replace('.', ',') + '×';
+
+/* ---------- Ältere Historie (feste Eckwerte, log-interpoliert) ----------
+   CoinGecko erlaubt im kostenlosen API-Zugriff seit einer Richtlinien-
+   änderung nur noch Anfragen für die letzten 365 Tage (Fehlercode 10012,
+   "Public API users are limited to querying historical data within the
+   past 365 days"). "days=max" — was dieses Modell für seine Langzeit-
+   Regression braucht — schlägt seither IMMER fehl, auch wenn CoinGecko
+   sonst erreichbar ist. Die Lösung: die letzten 365 Tage kommen live von
+   CoinGecko, alles Ältere sind bekannte, öffentlich dokumentierte Eckwerte
+   (ATHs/ATLs je Jahr) — die ändern sich rückwirkend nicht, müssen also
+   nicht live abgefragt werden. Nur der ganz aktuelle Kurs (oben groß
+   angezeigt) kommt zusätzlich über einen eigenen, uneingeschränkten
+   leichten Aufruf, damit er wirklich in Echtzeit stimmt. */
+function fallbackSeries(cutoffT){
+  const fx = RX.currency.get() === 'EUR' ? 0.92 : 1;
+  const anchors = [
+    ['2013-01-01', 12], ['2014-01-01', 700], ['2015-01-01', 250],
+    ['2016-01-01', 380], ['2017-01-01', 900], ['2017-12-17', 17500],
+    ['2018-12-15', 3300], ['2019-06-26', 11000], ['2020-03-13', 4600],
+    ['2020-12-31', 26000], ['2021-04-14', 61000], ['2021-11-10', 61500],
+    ['2022-06-18', 18000], ['2022-11-21', 15800], ['2023-12-31', 40000],
+    ['2024-03-14', 68000], ['2024-11-10', 76000], ['2025-06-01', 100000],
+    ['2025-10-06', 126000], ['2025-12-01', 92000], ['2026-08-01', 64000]
+  ].map(a => ({ t:new Date(a[0]+'T00:00:00Z').getTime(), p:a[1]*fx }));
+  const out = [];
+  for(let i=0;i<anchors.length-1;i++){
+    // Taegliche Staffelung statt alle 30 Tage, damit die Kurve auch als
+    // alleiniger Notfall-Ersatz nicht blockig/grob aussieht.
+    const a=anchors[i], b=anchors[i+1], steps=Math.max(1, Math.round((b.t-a.t)/86400000));
+    for(let s=0;s<steps;s++){
+      const f = s/steps, t = a.t + f*(b.t-a.t);
+      const p = Math.exp(Math.log(a.p) + f*(Math.log(b.p)-Math.log(a.p)));
+      out.push({t:t, p:p});
+    }
+  }
+  out.push({t:anchors[anchors.length-1].t, p:anchors[anchors.length-1].p});
+  return cutoffT == null ? out : out.filter(d => d.t < cutoffT);
+}
+
+/* ---------- State ----------
+   isDemo: weder aktueller Kurs noch die letzten 365 Tage kamen durch —
+   alles auf dieser Seite ist Näherung.
+   historyApprox: der aktuelle Kurs oben stimmt live, aber die 365-Tage-
+   Historie kam nicht durch — nur der ältere Kurvenverlauf ist genähert. */
+const state = { series:[], isDemo:false, historyApprox:false, A:0, B:0, sigma:0.3, r2:0 };
+
+/* ---------- Daten laden ---------- */
+async function loadPrices(){
+  const cur = RX.currency.get().toLowerCase();
+
+  // Aktueller Kurs: eigener, leichter Aufruf ohne Zeitraum — davon ist
+  // CoinGeckos 365-Tage-Grenze nicht betroffen, das ist immer erreichbar.
+  let livePrice = null;
+  try{
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies='+cur, {cache:'no-store'});
+    if(r.ok){
+      const j = await r.json();
+      if(j && j.bitcoin && typeof j.bitcoin[cur] === 'number') livePrice = j.bitcoin[cur];
+    }
+  }catch(e){}
+
+  // Die letzten 365 Tage als echte Tagesdaten — das Maximum, das die
+  // kostenlose API ohne Schluessel noch zulaesst.
+  let recent = null;
+  try{
+    const r = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency='+cur+'&days=365&interval=daily', {cache:'no-store'});
+    if(r.ok){
+      const j = await r.json();
+      if(j.prices && j.prices.length > 200) recent = j.prices.map(([ts,p]) => ({ t:ts, p:p })).filter(d => d.p > 0);
+    }
+  }catch(e){}
+
+  state.isDemo = !livePrice && !recent;
+  state.historyApprox = !!livePrice && !recent;
+
+  const cutoff = recent ? recent[0].t : Date.now();
+  let series = fallbackSeries(cutoff).concat(recent || []);
+
+  if(livePrice){
+    const lastT = series.length ? series[series.length-1].t : 0;
+    // Liegt der letzte bekannte Punkt schon eine Weile zurueck, den
+    // Live-Kurs als neuen, aktuellsten Punkt anhaengen — sonst den
+    // letzten Punkt direkt durch den frisch geladenen Live-Kurs ersetzen.
+    if(Date.now() - lastT > 6*3600000){ series.push({ t: Date.now(), p: livePrice }); }
+    else{ series[series.length-1] = { t: series[series.length-1].t, p: livePrice }; }
+  }
+
+  return series.length ? series : fallbackSeries(null);
+}
+
+/* ---------- Regression ---------- */
+function fitModel(series){
+  let n=0, sx=0, sy=0, sxx=0, sxy=0;
+  const pts = series.map(d => ({ x: Math.log10(daysSince(d.t)), y: Math.log10(d.p) }));
+  pts.forEach(p => { n++; sx+=p.x; sy+=p.y; sxx+=p.x*p.x; sxy+=p.x*p.y; });
+  const B = (n*sxy - sx*sy) / (n*sxx - sx*sx);
+  const A = (sy - B*sx) / n;
+  const ybar = sy/n;
+  let ssRes=0, ssTot=0;
+  pts.forEach(p => {
+    const pred = A + B*p.x;
+    ssRes += (p.y-pred)*(p.y-pred);
+    ssTot += (p.y-ybar)*(p.y-ybar);
+  });
+  const sigma = Math.sqrt(ssRes/n);
+  const r2 = 1 - ssRes/ssTot;
+  return { A, B, sigma, r2 };
+}
+function fairLogAt(t){ return state.A + state.B * Math.log10(daysSince(t)); }
+function fairPriceAt(t){ return Math.pow(10, fairLogAt(t)); }
+function zScoreAt(t, price){ return (Math.log10(price) - fairLogAt(t)) / state.sigma; }
+function priceAtSigma(t, k){ return Math.pow(10, fairLogAt(t) + k*state.sigma); }
+
+/* ---------- Hero ---------- */
+function renderHero(){
+  const s = state.series, last = s[s.length-1];
+  const price = last.p, t = last.t;
+  const z = zScoreAt(t, price);
+  const zone = zoneOfZ(z);
+  const fair = fairPriceAt(t);
+  const pct = (v) => Math.round(v*100);
+
+  document.documentElement.style.setProperty('--rc', zone.hex);
+  $('bigVal').style.color = zone.hex;
+  $('bigVal').textContent = eur(price);
+
+  $('vLabel').textContent = zone.de; $('vLabel').style.color = zone.hex;
+  $('prDot').style.background = zone.hex;
+  $('brandDot') && ($('brandDot').style.background = zone.hex);
+  $('pillVal').textContent = eur(price);
+  $('pillLbl').textContent = zone.de;
+  $('pillDot').style.background = zone.hex;
+
+  const ratio = price/fair;
+  $('vDelta').innerHTML = ratio >= 1
+    ? `<b>+${pct(ratio-1)} %</b> über dem Fair Value`
+    : `<b>−${pct(1-ratio)} %</b> unter dem Fair Value`;
+
+  if(state.isDemo){
+    $('updatedAt').textContent = 'Demo-Daten — Live-Quelle nicht erreichbar';
+    $('srcNote').textContent = 'Hinweis: Die Live-API war nicht erreichbar, angezeigt werden grob angenäherte Beispieldaten.';
+  } else if(state.historyApprox){
+    $('updatedAt').textContent = 'Aktueller Kurs live · ältere Historie angenähert';
+    $('srcNote').textContent = 'Hinweis: CoinGecko begrenzt den kostenlosen API-Zugriff auf die letzten 365 Tage. Der oben gezeigte Kurs ist live, der Verlauf davor basiert auf bekannten historischen Eckwerten.';
+  } else {
+    $('updatedAt').textContent = 'Stand ' + dfmt(new Date(t)) + ' · Modell live berechnet';
+    $('srcNote').textContent = 'Quelle: CoinGecko · Regression wird bei jedem Laden neu berechnet';
+  }
+
+  $('sFair').textContent = eur(fair);
+  $('sRatio').textContent = ratio.toFixed(2).replace('.',',') + '×';
+  $('sR2').textContent = (state.r2*100).toFixed(1).replace('.',',') + ' %';
+  $('sSigma').textContent = (z>=0?'+':'') + z.toFixed(2);
+}
+
+/* ---------- Chart (TradingView Lightweight Charts — echtes Ziehen/Zoomen, Log-Skala) ---------- */
+function cssVar(name){ return getComputedStyle($('chart')).getPropertyValue(name).trim(); }
+const toLwTime = t => new Date(t).toISOString().slice(0,10);
+const HALVINGS = [
+  Date.UTC(2012,10,28), Date.UTC(2016,6,9), Date.UTC(2020,4,11), Date.UTC(2024,3,20)
+];
+let showHalvings = true;
+const KEDGE = 2.5;
+const BAND_ORDER = [6,5,4,3,2,1,0]; // ZONES-Index von Blase (oben) bis Kapitulation (unten)
+const BAND_KTOP  = [KEDGE, 1.5, 0.9, 0.3, -0.3, -0.9, -1.5]; // jeweils obere Sigma-Grenze der Zone
+
+let lwChart = null, lwLine = null, lwFair = null, lwBands = [];
+
+/* Monatliche Stuetzpunkte in die Zukunft, ab dem letzten echten Kurstag —
+   damit Baender und Fair-Value-Linie wie beim klassischen Rainbow Chart
+   als Projektion sichtbar bleiben, statt abrupt bei "heute" abzuschneiden. */
+function futureMonthlyDates(fromT, years){
+  const out = [];
+  const start = new Date(fromT);
+  let cursor = Date.UTC(start.getUTCFullYear(), start.getUTCMonth()+1, 1);
+  const end = fromT + years*365*86400000;
+  while(cursor <= end){ out.push(cursor); const d = new Date(cursor); cursor = Date.UTC(d.getUTCFullYear(), d.getUTCMonth()+1, 1); }
+  return out;
+}
+
+/* ================================================================
+   Chart-Aufbau: bewusst KEIN "erst erstellen, dann nachtraeglich
+   zoomen" (fitContent/setVisibleRange/setVisibleLogicalRange nach der
+   Erstellung griffen in Tests unzuverlaessig nicht). Stattdessen wird
+   die Balkenbreite passend zur gewuenschten Balkenzahl direkt bei der
+   Chart-ERSTELLUNG gesetzt — das wird zuverlaessig respektiert — und
+   der Chart bei jedem Zeitraum-Wechsel komplett neu aufgebaut.
+   ================================================================ */
+let roSetup = false;
+
+function desiredBarsFor(histPoints, future){
+  return histPoints.length + future.length;
+}
+
+function buildChart(desiredBars){
+  if(lwChart){ lwChart.remove(); lwChart = null; }
+  lwBands = [];
+  const box = $('chart').getBoundingClientRect();
+  const width = Math.round(box.width) || 600, height = Math.round(box.height) || 480;
+  const barSpacing = Math.max(0.02, width / Math.max(1, desiredBars));
+
+  lwChart = LightweightCharts.createChart($('chart'), {
+    width, height,
+    layout: { background:{color:'transparent'}, textColor:cssVar('--muted-2'), fontFamily:'IBM Plex Mono, monospace', fontSize:11.5 },
+    // Achsenbeschriftung rechts als Euro/Dollar statt Rohzahl — eur()
+    // liest die aktuell gewaehlte Waehrung live, folgt also automatisch
+    // dem Umschalter oben im Header.
+    localization: { priceFormatter: v => eur(v) },
+    grid: { vertLines:{color:cssVar('--line')}, horzLines:{color:cssVar('--line')} },
+    rightPriceScale: { borderColor:cssVar('--line-soft'), mode: LightweightCharts.PriceScaleMode.Logarithmic },
+    timeScale: { borderColor:cssVar('--line-soft'), barSpacing, minBarSpacing:0.01, rightOffset:2 },
+    crosshair: {
+      mode: LightweightCharts.CrosshairMode.Magnet,
+      vertLine:{ color:cssVar('--text'), width:1, labelBackgroundColor:cssVar('--text') },
+      horzLine:{ visible:false, labelVisible:false }
+    },
+    handleScroll:true, handleScale:true
+  });
+
+  BAND_ORDER.forEach((zi, idx)=>{
+    const z = ZONES[zi];
+    // Unterste Zone (Kapitulation, kein echtes lo — reicht bis -Infinity):
+    // lief vorher farbig bis ganz nach unten durch. Statt mit einer
+    // zweiten Flaeche in Kartenfarbe abzudecken (das gab beim Umschalten
+    // von Theme/Waehrung zeitweise die falsche Farbe), blendet sie hier
+    // stattdessen weich zu transparent aus — einfacher und immer korrekt,
+    // unabhaengig vom aktuellen Theme.
+    const isLast = idx === BAND_ORDER.length - 1;
+    lwBands.push({ series: lwChart.addAreaSeries({
+      topColor:z.hex+'E6', bottomColor: isLast ? z.hex+'00' : z.hex+'B8', lineColor:'transparent',
+      priceLineVisible:false, lastValueVisible:false, crosshairMarkerVisible:false,
+      // Flächen fuellen technisch "bis zum unteren Rand" — auf einer LOG-Skala
+      // ist das nicht definiert und liess die Achse sonst bis in Millionen
+      // explodieren. Darum tragen die Baender selbst nichts zur Skalierung
+      // bei; das macht allein die Kurslinie unten.
+      autoscaleInfoProvider: () => null
+    })});
+  });
+
+  // Gestrichelte Modell-Mittellinie (Fair Value) — reicht wie die Baender
+  // auch in die Zukunft, dient nur als visuelle Orientierung und darf
+  // die Y-Achsen-Skalierung nicht mitbestimmen (siehe Baender oben).
+  // Feste dunkle Navy statt --muted-2 (grau) — grau ging auf den bunten
+  // Baendern optisch unter und wirkte wie eine zweite, blasse Kurslinie.
+  lwFair = lwChart.addLineSeries({
+    color:'#0B1638', lineWidth:2, lineStyle:LightweightCharts.LineStyle.Dashed,
+    priceLineVisible:false, lastValueVisible:false, crosshairMarkerVisible:false,
+    autoscaleInfoProvider: () => null
+  });
+
+  lwLine = lwChart.addLineSeries({
+    // Feste, immer gut sichtbare Farbe (weiss) statt an die aktuelle Zone
+    // angepasst — sonst verschwindet die Linie im gleichfarbigen Band darunter.
+    // priceLineVisible:false — die zusaetzliche volle Referenzlinie beim
+    // letzten Wert wirkte wie eine zweite, verwirrende Linie neben der
+    // Kurslinie selbst; die endet ja ohnehin sichtbar an ihrem letzten Punkt.
+    color:'#FFFFFF', lineWidth:2.6, priceLineVisible:false, lastValueVisible:true,
+    crosshairMarkerVisible:true, crosshairMarkerRadius:5,
+    priceFormat:{ type:'custom', formatter: v => eur(v), minMove:1 }
+  });
+
+  const tip = $('tip');
+  lwChart.subscribeCrosshairMove(param=>{
+    const d = param.seriesData && param.seriesData.get(lwLine);
+    if(!param.point || !d){ tip.style.opacity = 0; return; }
+    const t = new Date(param.time+'T00:00:00Z').getTime();
+    const z = zoneOfZ(zScoreAt(t, d.value));
+    tip.innerHTML = `<div class="tv" style="color:${z.hex}">${eur(d.value)} · ${z.de}</div><div class="td">${dfmt(new Date(t))}</div>`;
+    tip.style.left = param.point.x + 'px';
+    tip.style.top  = param.point.y + 'px';
+    tip.style.opacity = 1;
+  });
+
+  // Nur EINMAL einrichten (bezieht sich ueber die geschlossene Variable
+  // "lwChart" immer auf die jeweils aktuelle Instanz, auch nach einem
+  // Neuaufbau) — sonst haeufen sich bei jedem Zeitraum-Wechsel weitere
+  // Observer auf demselben Element an.
+  if(!roSetup){
+    roSetup = true;
+    const ro = new ResizeObserver(entries=>{
+      const cr = entries[0].contentRect;
+      if(lwChart && cr.width>0 && cr.height>0) lwChart.resize(Math.round(cr.width), Math.round(cr.height));
+    });
+    ro.observe($('chart'));
+    window.addEventListener('resize', ()=>{
+      if(!lwChart) return;
+      const b = $('chart').getBoundingClientRect();
+      if(b.width>0 && b.height>0) lwChart.resize(Math.round(b.width), Math.round(b.height));
+    });
+  }
+}
+
+function updateHalvingMarkers(){
+  if(!lwLine) return;
+  if(!showHalvings){ lwLine.setMarkers([]); return; }
+  const earliest = state.series[0].t, latest = state.series[state.series.length-1].t;
+  // Weiß wie die Kurslinie — nicht Gold: Gold ging in den warmen Zonen
+  // (Koralle/Pink/Weinrot) unter. Weiß ist gegen alle sieben Zonenfarben
+  // zuverlässig lesbar, aus demselben Grund wie bei der Kurslinie selbst.
+  const marks = HALVINGS
+    .filter(t => t >= earliest && t <= latest)
+    .map(t => ({ time:toLwTime(t), position:'aboveBar', color:'#FFFFFF', shape:'arrowDown', text:'Halving', size:1.8 }));
+  lwLine.setMarkers(marks);
+}
+
+// Baut den Chart neu auf und zeichnet alle Serien. Immer die komplette
+// Historie + Projektion — es gibt keine Zeitraum-Auswahl mehr, weniger
+// Bedienelemente, dafür ist der Kontext immer sofort komplett sichtbar.
+function rebuildAndDraw(){
+  const { histPoints, future, bandTimes } = state;
+  if(!histPoints) return;
+  buildChart(desiredBarsFor(histPoints, future));
+
+  // Die Kurslinie bekommt "Whitespace"-Punkte (Zeit ohne Wert) für die
+  // Zukunft dazu — sonst kannte nur sie kein Datum jenseits von "heute".
+  lwLine.setData(
+    histPoints.map(d => ({ time:toLwTime(d.t), value:d.p }))
+      .concat(future.map(t => ({ time:toLwTime(t) })))
+  );
+  lwFair.setData(bandTimes.map(t => ({ time:toLwTime(t), value:fairPriceAt(t) })));
+  lwBands.forEach((b, idx) => {
+    const k = BAND_KTOP[idx];
+    b.series.setData(bandTimes.map(t => ({ time:toLwTime(t), value:priceAtSigma(t, k) })));
+  });
+  updateHalvingMarkers();
+}
+
+function renderChart(){
+  const full = state.series;
+  const lastT = full[full.length-1].t;
+  // ~2 Jahre Projektion nach vorn — reine Modellrechnung (dasselbe A/B/Sigma
+  // einfach fuer zukuenftige Tage ausgewertet), klar erkennbar an Baendern
+  // + gestrichelter Linie statt einer durchgezogenen "Kurslinie".
+  const future = futureMonthlyDates(lastT, 2);
+  // ~4.900 taegliche Punkte seit 2013 waren fuer die Gesamtansicht nicht
+  // handhabbar. Fuer die Chart-Darstellung deshalb ausgeduennt (jeder 5.
+  // Tag reicht fuer eine glatte Kurve locker); die Rechner/Zonen nutzen
+  // weiterhin "full" mit voller Tagesaufloesung.
+  const histPoints = full.filter((d,i) => i % 5 === 0 || i === full.length-1);
+  const bandTimes = histPoints.map(d=>d.t).concat(future);
+  state.histPoints = histPoints;
+  state.future = future;
+  state.bandTimes = bandTimes;
+  state.futureEndT = future.length ? future[future.length-1] : lastT;
+
+  rebuildAndDraw();
+}
+
+/* ---------- Zonen-Farbstreifen unter dem Chart ---------- */
+function renderZoneStrip(){
+  $('zoneStrip').innerHTML = ZONES.map(z =>
+    `<a href="#zonen" style="background:${z.hex}">${z.de}</a>`).join('');
+}
+
+/* ---------- Zonen-Liste (gleiches Muster wie beim Fear & Greed Index) ---------- */
+function renderZones(){
+  const host = $('zoneList'); host.innerHTML = '';
+  const last = state.series[state.series.length-1];
+  const cur = zoneOfZ(zScoreAt(last.t, last.p));
+  ZONES.forEach(z=>{
+    const lo = z.lo===-Infinity ? null : priceAtSigma(last.t, z.lo);
+    const hi = z.hi===Infinity ? null : priceAtSigma(last.t, z.hi);
+    const rngTxt = lo===null ? `bis ${eur(hi)}` : hi===null ? `ab ${eur(lo)}` : `${eur(lo)} – ${eur(hi)}`;
+    const isCur = z.key===cur.key;
+
+    const btn = document.createElement('button');
+    btn.className = 'zone'; btn.style.setProperty('--zc', z.hex);
+    btn.setAttribute('aria-expanded','false');
+    btn.dataset.active = isCur;
+    btn.innerHTML = `
+      <div class="rngbox"><div class="rng">${rngTxt}</div></div>
+      <div><div class="ttl">${z.de}${isCur?'<span class="now">Aktuell</span>':''}</div><div class="mini">${z.short}</div></div>
+      <div class="mult">${z.mult===0?'Keine Käufe':fmtMult(z.mult)+' Sparplan'}</div>`;
+
+    const det = document.createElement('div');
+    det.className = 'zone-detail'; det.style.setProperty('--zc', z.hex);
+    det.innerHTML = `<p style="margin:0 0 10px">${z.long}</p><p style="margin:0"><b>Vorgehen:</b> ${z.act}</p>`;
+
+    btn.addEventListener('click', ()=>{
+      const open = det.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+    });
+    if(isCur) det.classList.add('open');
+    host.appendChild(btn); host.appendChild(det);
+  });
+}
+
+/* ---------- Rechner 1: DCA ---------- */
+function calc(){
+  const base = Math.max(0, parseFloat($('baseAmt').value) || 0);
+  const zv = parseInt($('zSlider').value,10) / 100;
+  const zone = zoneOfZ(zv);
+  const amt = Math.round(base * zone.mult);
+  const diff = amt - base;
+
+  document.documentElement.style.setProperty('--rc', zone.hex);
+  $('slVal').textContent = (zv>=0?'+':'') + zv.toFixed(2); $('slVal').style.color = zone.hex;
+  $('slLbl').textContent = zone.de; $('slLbl').style.color = zone.hex;
+  $('outAmt').textContent = eur(amt);
+  $('outSub').textContent = zone.mult===0 ? 'Keine Neukäufe in dieser Zone' : `Statt ${eur(base)} Standardbetrag`;
+  $('outMult').textContent = fmtMult(zone.mult);
+  $('outDiff').textContent = (diff>0?'+':'') + eur(diff);
+  $('outDiff').style.color = diff>0 ? zone.hex : (diff<0 ? 'var(--muted)' : 'var(--text)');
+  $('outReserve').textContent = eur(Math.max(0, Math.round(base*1.5*6)));
+  $('outYear').textContent = eur(Math.round(base*12*1.15));
+  $('outAdvice').textContent = zone.long;
+  runBacktest(base);
+}
+
+function runBacktest(base){
+  const s = state.series; if(!s || s.length < 30) return;
+  const days = [];
+  const now = new Date(s[s.length-1].t);
+  for(let k=12;k>=0;k--){ days.push(new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth()-k, 1)).getTime()); }
+  const findPrice = (target) => {
+    let best=null, bestDiff=Infinity;
+    s.forEach(d=>{ const diff=Math.abs(d.t-target); if(diff<bestDiff){bestDiff=diff; best=d;} });
+    return (best && bestDiff < 5*86400000) ? best : null;
+  };
+  let aInv=0,aBtc=0,bInv=0,bBtc=0,used=0;
+  days.forEach(target=>{
+    const d = findPrice(target); if(!d) return;
+    used++;
+    aInv += base; aBtc += base/d.p;
+    const z = zScoreAt(d.t, d.p), m = zoneOfZ(z).mult;
+    bInv += base*m; bBtc += (base*m)/d.p;
+  });
+  if(used < 6){ $('btBox').hidden = true; return; }
+  const spot = s[s.length-1].p;
+  const aVal = aBtc*spot, bVal = bBtc*spot;
+  const aRoi = aInv? (aVal/aInv-1)*100 : 0, bRoi = bInv? (bVal/bInv-1)*100 : 0;
+  const btc = n => n.toFixed(5).replace('.',',') + ' BTC';
+  const pct = n => (n>=0?'+':'') + n.toFixed(1).replace('.',',') + ' %';
+  $('btAInv').textContent = eur(aInv); $('btAAvg').textContent = aBtc? eur(aInv/aBtc):'—';
+  $('btABtc').textContent = btc(aBtc); $('btAVal').textContent = eur(aVal);
+  $('btARoi').textContent = pct(aRoi); $('btARoi').style.color = aRoi>=0?'var(--z4)':'var(--z0)';
+  $('btBInv').textContent = eur(bInv); $('btBAvg').textContent = bBtc? eur(bInv/bBtc):'—';
+  $('btBBtc').textContent = btc(bBtc); $('btBVal').textContent = eur(bVal);
+  $('btBRoi').textContent = pct(bRoi); $('btBRoi').style.color = bRoi>=0?'var(--z4)':'var(--z0)';
+  $('btA').classList.toggle('win', aRoi>bRoi); $('btB').classList.toggle('win', bRoi>=aRoi);
+  const better = bRoi>=aRoi ? 'Zonen-DCA' : 'stures DCA';
+  $('btNote').textContent = `${used} Kaufzeitpunkte simuliert · Vorteil in diesem Zeitraum: ${better} (${Math.abs(bRoi-aRoi).toFixed(1).replace('.',',')} Prozentpunkte). Ohne Gebühren und Steuern. Ein anderer Zeitraum kann zu einem anderen Ergebnis führen.`;
+  $('btBox').hidden = false;
+}
+
+/* ---------- Rechner 2: Zukunfts-Simulator ---------- */
+let futZoneKey = 'f';
+function renderZoneBtns(){
+  $('zoneBtns').innerHTML = ZONES.map(z => `<button data-k="${z.key}" style="--zc:${z.hex}">${z.de}</button>`).join('');
+  [...$('zoneBtns').children].forEach(b=>{
+    b.style.borderColor = b.dataset.k===futZoneKey ? 'var(--zc)' : '';
+    b.addEventListener('click', ()=>{ futZoneKey=b.dataset.k; renderZoneBtns(); calcFuture(); });
+  });
+}
+function calcFuture(){
+  const year = parseInt($('yearSlider').value,10);
+  $('yearOut').textContent = year;
+  const t = Date.UTC(year,5,15);
+  const zone = ZONES.find(z=>z.key===futZoneKey);
+  const lo = zone.lo===-Infinity ? null : priceAtSigma(t, zone.lo);
+  const hi = zone.hi===Infinity ? null : priceAtSigma(t, zone.hi);
+  const kLo = zone.lo===-Infinity ? -2.4 : zone.lo;
+  const kHi = zone.hi===Infinity ? 2.4 : zone.hi;
+  const mid = priceAtSigma(t, (kLo+kHi)/2);
+  $('futZoneLbl').textContent = `Fair-Value-Range für „${zone.de}" Mitte ${year}`;
+  $('futZoneLbl').style.color = zone.hex;
+  $('futRange').textContent = (lo===null?'bis ':'') + (lo?eur(lo):'') + (lo&&hi?' – ':'') + (hi?eur(hi):'') + (hi===null?' und mehr':'');
+  $('futRange').style.color = zone.hex;
+  $('futMid').textContent = 'Modell-Mittelwert der Zone: ' + eur(mid);
+}
+
+/* ---------- Formel-Fakten ---------- */
+function renderFacts(){
+  const items = [
+    ['Achsenabschnitt A', state.A.toFixed(3)],
+    ['Steigung B', state.B.toFixed(3)],
+    ['Streuung σ', state.sigma.toFixed(3)],
+    ['Modellgüte R²', (state.r2*100).toFixed(1) + ' %'],
+    ['Datenpunkte', state.series.length.toLocaleString('de-DE')]
+  ];
+  $('modelFacts').innerHTML = items.map(([k,v]) => `
+    <div class="row"><span>${k}</span><b>${v}</b></div>`).join('');
+}
+
+/* ---------- Historie ---------- */
+const HIST = [
+  {d:"Dez. 2018", t:Date.UTC(2018,11,15), p:3300},
+  {d:"März 2020",  t:Date.UTC(2020,2,13),  p:4600},
+  {d:"Okt. 2020",  t:Date.UTC(2020,9,15),  p:11000},
+  {d:"Nov. 2021",  t:Date.UTC(2021,10,10), p:57000},
+  {d:"Nov. 2022",  t:Date.UTC(2022,10,21), p:15800},
+  {d:"März 2024",  t:Date.UTC(2024,2,14),  p:62000},
+  {d:"Nov. 2024",  t:Date.UTC(2024,10,10), p:76000}
+];
+function renderTimeline(){
+  $('timeline').innerHTML = HIST.map(h=>{
+    const z = zoneOfZ(zScoreAt(h.t, h.p));
+    const z2 = zScoreAt(h.t,h.p);
+    return `<div class="tl-item" style="--tc:${z.hex}">
+      <div class="d">${h.d}</div>
+      <div class="btc">BTC ≈ ${eur(h.p)}</div>
+      <div class="val">${z.de}</div>
+      <div class="txt">${z2>=0?'+':''}${z2.toFixed(2)} Standardabweichungen vom Fair Value entfernt</div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- FAQ ---------- */
+const FAQ = [
+  {q:"Ist Heatzone Chart eine Kaufempfehlung?", a:"Nein. Er ordnet den Kurs in ein statistisches Modell ein und macht keine Vorhersage über künftige Kurse."},
+  {q:"Warum verändern sich die Zonen-Grenzen leicht von Tag zu Tag?", a:"Weil A, B und σ bei jedem Laden neu aus den aktuellen Kursdaten berechnet werden. Neue Kurstage verschieben die Regression minimal."},
+  {q:"Ist das dasselbe Modell wie andere Rainbow-Charts?", a:"Die Grundidee (logarithmische Regression) ist dieselbe verbreitete Community-Idee. Die konkreten Zahlen unterscheiden sich, weil jede Umsetzung eigene Zeiträume, Zonen-Breiten und Berechnungswege verwendet."},
+  {q:"Kann das Modell falsch liegen?", a:"Ja. Es beschreibt die Vergangenheit und setzt voraus, dass sich das Wachstumsmuster fortsetzt. Strukturelle Veränderungen — etwa durch Regulierung oder institutionelle Nachfrage — bildet es nicht automatisch ab."},
+  {q:"Woher kommen die Kursdaten?", a:"Von der öffentlichen API von CoinGecko, täglich abgerufen direkt im Browser."}
+];
+function renderFaq(){
+  $('faqList').innerHTML = FAQ.map(f=>`
+    <details><summary>${f.q}<span class="plus">+</span></summary><div class="body">${f.a}</div></details>`).join('');
+}
+
+/* ---------- Einstellungen speichern (nur lokal im Browser) ---------- */
+const LS_KEY = 'renditex_fvr_settings_v1';
+let storageOK = true;
+function loadSettings(){
+  try{ const raw = localStorage.getItem(LS_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ storageOK=false; return null; }
+}
+function saveSettings(){
+  if(!storageOK) return;
+  try{ localStorage.setItem(LS_KEY, JSON.stringify({ base: parseFloat($('baseAmt').value)||200, mults: ZONES.map(z=>z.mult) })); }
+  catch(e){ storageOK=false; updateStorageStatus(); }
+}
+function applySettings(){
+  const s = loadSettings(); if(!s) return;
+  if(typeof s.base==='number' && s.base>0) $('baseAmt').value = s.base;
+  if(Array.isArray(s.mults) && s.mults.length===ZONES.length){
+    ZONES.forEach((z,i)=>{ const v=parseFloat(s.mults[i]); if(!isNaN(v)&&v>=0&&v<=10) z.mult=v; });
+  }
+}
+function clearSettings(){
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  $('baseAmt').value = 200; setMults(DEFAULT_MULTS); updateStorageStatus('Einstellungen gelöscht.');
+}
+function updateStorageStatus(msg){
+  const e = $('meStatus'); if(!e) return;
+  if(msg){ e.innerHTML = msg; return; }
+  e.innerHTML = storageOK
+    ? 'Wird auf diesem Gerät gespeichert · <button type="button" id="meClear" class="linky">löschen</button>'
+    : 'Speichern in diesem Browser nicht möglich — Einstellungen gelten nur für diese Sitzung.';
+}
+const DEFAULT_MULTS = ZONES.map(z=>z.mult);
+const CAREFUL_MULTS = [1.75,1.5,1.25,1,0.75,0.5,0.25];
+function renderMultiEditor(){
+  $('meRows').innerHTML = ZONES.map((z,i)=>`
+    <div class="me-row" style="--mc:${z.hex}">
+      <div class="lbl"><i></i>${z.de}</div>
+      <input type="number" min="0" max="10" step="0.25" value="${z.mult}" data-zi="${i}" aria-label="Multiplikator für ${z.de}">
+    </div>`).join('');
+  $('meRows').querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      let v = parseFloat(inp.value); if(isNaN(v)||v<0) v=0; if(v>10) v=10;
+      ZONES[+inp.dataset.zi].mult = v; renderZones(); calc(); saveSettings();
+    });
+  });
+}
+function setMults(arr){
+  ZONES.forEach((z,i)=>{ z.mult = arr[i]; });
+  $('meRows').querySelectorAll('input').forEach(inp=>{ inp.value = ZONES[+inp.dataset.zi].mult; });
+  renderZones(); calc(); saveSettings();
+}
+
+/* ---------- Kursdaten laden, Modell fitten, alles Preisabhaengige neu zeichnen ----------
+   Wird beim Start UND jedes Mal aufgerufen, wenn im Header die Waehrung
+   umgeschaltet wird — echte $-Kurse statt einer blossen Umrechnung. */
+async function loadAndRender(){
+  state.series = await loadPrices();
+  const fit = fitModel(state.series);
+  state.A = fit.A; state.B = fit.B; state.sigma = fit.sigma; state.r2 = fit.r2;
+  renderHero(); renderChart(); renderZoneStrip(); renderZones(); renderFacts(); renderTimeline(); renderZoneBtns();
+  refreshCurrencyLabels();
+  calc(); calcFuture();
+}
+
+/* ---------- Init ---------- */
+async function init(){
+  renderFaq();
+  RX.reveal();
+  RX.stickyPill('.pr-ticker');
+
+  await loadAndRender();
+
+  applySettings();
+  renderMultiEditor();
+  updateStorageStatus();
+  $('zSlider').value = Math.round(zScoreAt(state.series[state.series.length-1].t, state.series[state.series.length-1].p) * 100);
+  calc();
+  calcFuture();
+
+  $('baseAmt').addEventListener('input', ()=>{ calc(); saveSettings(); });
+  $('zSlider').addEventListener('input', calc);
+  $('resetLive').addEventListener('click', ()=>{
+    const last = state.series[state.series.length-1];
+    $('zSlider').value = Math.round(zScoreAt(last.t, last.p) * 100); calc();
+  });
+  $('meReset').addEventListener('click', ()=>setMults(DEFAULT_MULTS));
+  $('meFlat').addEventListener('click', ()=>setMults(CAREFUL_MULTS));
+  $('multiEdit').addEventListener('click', e=>{ if(e.target.id==='meClear') clearSettings(); });
+  $('quickAmts').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    $('baseAmt').value = b.dataset.a; calc(); saveSettings();
+  });
+  $('yearSlider').addEventListener('input', calcFuture);
+
+  // Waehrung im Header umgeschaltet: Kurse in $ oder € neu laden, Modell
+  // neu fitten und Chart/Zonen/Rechner/Zukunfts-Simulator neu anzeigen.
+  window.addEventListener('rx-currency', loadAndRender);
+
+  // Chart-Einstellungen (Zahnrad-Popover)
+  const gearBtn = $('chartSettingsBtn'), panel = $('chartSettingsPanel');
+  gearBtn.addEventListener('click', e=>{
+    e.stopPropagation();
+    const open = panel.hidden;
+    panel.hidden = !open;
+    gearBtn.setAttribute('aria-expanded', String(open));
+  });
+  document.addEventListener('click', e=>{
+    if(!panel.hidden && !panel.contains(e.target) && e.target!==gearBtn){
+      panel.hidden = true; gearBtn.setAttribute('aria-expanded','false');
+    }
+  });
+  $('axisToggle').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b || !lwChart) return;
+    [...$('axisToggle').children].forEach(x=>x.setAttribute('aria-pressed', x===b));
+    lwChart.priceScale('right').applyOptions({
+      mode: b.dataset.mode==='log' ? LightweightCharts.PriceScaleMode.Logarithmic : LightweightCharts.PriceScaleMode.Normal
+    });
+  });
+  const halvingSwitch = $('halvingToggle');
+  halvingSwitch.addEventListener('click', ()=>{
+    showHalvings = !showHalvings;
+    halvingSwitch.classList.toggle('on', showHalvings);
+    halvingSwitch.setAttribute('aria-checked', String(showHalvings));
+    updateHalvingMarkers();
+  });
+}
+init().catch(function(err){
+  console.error('Fehler beim Initialisieren:', err);
+  document.querySelectorAll('.reveal:not(.in)').forEach(function(n){ n.classList.add('in'); });
+});
+})();
+</script>
+</body>
+</html>
