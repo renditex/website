@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitcoin Halving-Countdown live — wann ist das nächste Halving? | RenditeX</title>
+<meta name="description" content="Live-Countdown zum nächsten Bitcoin-Halving, berechnet aus dem aktuellen Blockstand. Plus verständlich erklärt: was ein Halving ist, warum es das gibt, was in den Zyklen davor passiert ist — und was das für dich bedeutet.">
+<meta property="og:title" content="Bitcoin Halving-Countdown live">
+<meta property="og:description" content="Live berechnet aus dem aktuellen Blockstand: wie lange noch bis zum nächsten Bitcoin-Halving. Mit Erklärung, Geschichte und ehrlicher Einordnung.">
+<meta property="og:type" content="website">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=18">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top" class="pg-halving">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span><span id="updatedAt">Live-Blockstand wird geladen</span></div>
+  <h1>Bis zum nächsten Bitcoin-<em>Halving</em></h1>
+  <p class="hero-sub">Alle rund vier Jahre halbiert sich, wie viele neue Bitcoin pro Block entstehen. Der Countdown unten rechnet live aus dem aktuellen Blockstand — je nachdem, wie schnell gerade Blöcke gefunden werden, verschiebt er sich leicht.</p>
+
+  <div class="gauge-card">
+    <div class="gauge-top">
+      <div class="bignum">
+        <div class="v" id="bigVal">—</div>
+        <div class="of">Tage</div>
+      </div>
+      <div class="verdict">
+        <div class="label" id="vLabel">Wird berechnet</div>
+        <div class="en mono" id="vEn">—</div>
+        <p id="vText">Der Live-Blockstand wird gerade abgerufen.</p>
+      </div>
+    </div>
+    <div class="fbar" style="height:8px; margin-top:18px"><i id="epochBar"></i></div>
+    <div class="src-note" id="epochLabel">Fortschritt in der aktuellen Halving-Periode</div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Aktueller Blockstand</div><div class="n" id="sHeight">—</div><div class="s">Bitcoin-Blockchain</div></div>
+      <div class="stat"><div class="k">Nächstes Halving bei</div><div class="n">Block 1.050.000</div><div class="s">5. Halving</div></div>
+      <div class="stat"><div class="k">Blöcke verbleibend</div><div class="n" id="sBlocks">—</div><div class="s">bei ~10 Min. pro Block</div></div>
+      <div class="stat"><div class="k">Voraussichtliches Datum</div><div class="n" id="sDate">—</div><div class="s">Schätzung, kein Fixtermin</div></div>
+    </div>
+    <div class="src-note" id="srcNote">Quelle: mempool.space · Blockstand live, Datum auf Basis von durchschnittlich 10 Minuten pro Block geschätzt</div>
+  </div>
+</div>
+
+<!-- ============ WAS IST ============ -->
+<section id="was-ist">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was ist ein Bitcoin-Halving überhaupt?</h2>
+      <div class="intro">
+        <p>Wer einen neuen Bitcoin-Block findet, bekommt dafür neue Bitcoin — die sogenannte Blocksubvention. Das ist der einzige Weg, wie neue Bitcoin überhaupt entstehen. Alle 210.000 Blöcke, also etwa alle vier Jahre, halbiert sich diese Belohnung. Genau dieses Ereignis heißt Halving.</p>
+        <p>Am Anfang, 2009, gab es 50 Bitcoin pro Block. Nach vier Halvings sind wir jetzt bei 3,125 Bitcoin pro Block. Nach dem nächsten Halving sind es nur noch 1,5625. Das setzt sich fort, bis die Belohnung rechnerisch bei null ankommt — voraussichtlich um das Jahr 2140 herum. Insgesamt werden nie mehr als 21 Millionen Bitcoin existieren.</p>
+      </div>
+    </div>
+    <div class="princ reveal">
+      <div class="card">
+        <div class="tag">Gerade jetzt</div>
+        <h3>3,125 BTC pro Block</h3>
+        <p>Seit dem vierten Halving am 20. April 2024 (Block 840.000) ist das die aktuelle Blocksubvention.</p>
+      </div>
+      <div class="card accent">
+        <div class="tag">Nach dem nächsten Halving</div>
+        <h3>1,5625 BTC pro Block</h3>
+        <p>Ab Block 1.050.000 halbiert sich die Menge erneut — die Rate, mit der neue Bitcoin entstehen, sinkt weiter.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ IDEE ============ -->
+<section id="idee" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Die Idee dahinter: Knappheit nach festem Plan</h2>
+      <div class="intro">
+        <p>Bei normalem Geld entscheiden Zentralbanken, wie viel neu gedruckt wird. Bei Bitcoin steht die gesamte Ausgabemenge von Anfang an im Code fest, und niemand kann sie im Nachhinein ändern, ohne dass sich praktisch das gesamte Netzwerk einig sein müsste. Das Halving ist der Mechanismus, der diese Regel technisch durchsetzt.</p>
+        <p>Die Idee dahinter erinnert an Gold: Je mehr davon schon gefördert wurde, desto schwerer und aufwendiger wird es, neues zu finden. Bei Bitcoin ist das nicht nur ähnlich, sondern exakt vorherbestimmt — jeder weiß heute schon, wie viele neue Bitcoin es in zehn Jahren geben wird. Diese Vorhersagbarkeit, nicht ein bestimmter Kurs, war Satoshi Nakamotos eigentliches Ziel: ein Geldsystem, dessen Angebot niemand nach Belieben verändern kann.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GESCHICHTE ============ -->
+<section id="geschichte">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Die Halvings bisher</h2>
+      <p>Vier liegen hinter uns, das fünfte steht noch aus.</p>
+    </div>
+    <div class="tl reveal">
+      <div class="tl-item" style="--tc:#0052FF">
+        <div class="d">Halving #1 · 28.11.2012</div>
+        <div class="btc">Block 210.000</div>
+        <div class="val">50 → 25 BTC</div>
+        <div class="txt">Das erste Halving überhaupt, zu einer Zeit, als Bitcoin noch ein Nischenthema war.</div>
+      </div>
+      <div class="tl-item" style="--tc:#6A3FC9">
+        <div class="d">Halving #2 · 09.07.2016</div>
+        <div class="btc">Block 420.000</div>
+        <div class="val">25 → 12,5 BTC</div>
+        <div class="txt">Das Netzwerk war deutlich gewachsen, Bitcoin aber immer noch überwiegend ein Nischenmarkt.</div>
+      </div>
+      <div class="tl-item" style="--tc:#A22E9E">
+        <div class="d">Halving #3 · 11.05.2020</div>
+        <div class="btc">Block 630.000</div>
+        <div class="val">12,5 → 6,25 BTC</div>
+        <div class="txt">Mitten in der Corona-Pandemie, kurz nachdem viele Notenbanken ihre eigene Geldmenge stark ausgeweitet hatten.</div>
+      </div>
+      <div class="tl-item" style="--tc:#C92E68">
+        <div class="d">Halving #4 · 20.04.2024</div>
+        <div class="btc">Block 840.000</div>
+        <div class="val">6,25 → 3,125 BTC</div>
+        <div class="txt">Das bisher letzte Halving, wenige Monate nach dem Start der ersten Bitcoin-Spot-ETFs in den USA.</div>
+      </div>
+      <div class="tl-item next-halving" style="--tc:#D91B26">
+        <div class="d">Halving #5 · noch offen</div>
+        <div class="btc">Block 1.050.000</div>
+        <div class="val">3,125 → 1,5625 BTC</div>
+        <div class="txt">Live-Schätzung oben auf dieser Seite — der genaue Tag steht erst fest, wenn der Block tatsächlich gefunden wird.</div>
+      </div>
+    </div>
+    <div class="callout reveal">
+      Was hier bewusst fehlt: eine Spalte mit dem Bitcoin-Kurs zu jedem Halving. Alle vier bisherigen Halvings fielen zeitlich in Phasen, in denen der Kurs im Jahr danach deutlich gestiegen ist — aber vier Wiederholungen sind statistisch viel zu wenig, um daraus ein verlässliches Muster für die Zukunft abzuleiten. Mehr dazu im nächsten Abschnitt.
+    </div>
+  </div>
+</section>
+
+<!-- ============ BEDEUTUNG ============ -->
+<section id="bedeutung" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was das für den Markt bedeuten könnte — und was nicht</h2>
+      <div class="intro">
+        <p>Rein mechanisch ist die Sache klar: Nach jedem Halving kommen weniger neue Bitcoin auf den Markt als vorher. Wenn die Nachfrage gleich bleibt oder steigt, während weniger neue Coins entstehen, ist das rechnerisch ein Argument für einen steigenden Kurs. Diese Überlegung steckt hinter dem bekannten „Stock-to-Flow"-Modell und ähnlichen Knappheits-Narrativen.</p>
+        <p>Trotzdem: Das ist eine Theorie, kein Naturgesetz. Der Kurs hängt von sehr viel mehr ab als nur vom Angebot — Nachfrage, Regulierung, Zinsumfeld, Marktstimmung, um nur einiges zu nennen. Das Stock-to-Flow-Modell selbst hat seine eigenen Vorhersagen in den Jahren nach 2021 deutlich verfehlt. Ein Halving ist außerdem seit Jahren öffentlich bekannt und exakt vorhersehbar — die Theorie, dass rein bekannte Information den Kurs verlässlich bewegt, widerspricht eigentlich der Grundidee effizienter Märkte.</p>
+      </div>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Weniger neue Coins auf den Markt</h3><p>Das ist die einzige gesicherte, mechanische Folge: Die Menge an neu geschöpften Bitcoin pro Tag halbiert sich schlagartig.</p></div>
+      <div class="limit"><h3>Weniger Einnahmen für Miner</h3><p>Miner verdienen pro gefundenem Block plötzlich nur noch die Hälfte an Block-Belohnung. Wer nicht effizient genug arbeitet, wird nach einem Halving oft unrentabel und muss abschalten.</p></div>
+      <div class="limit"><h3>Kurzfristig oft mehr Volatilität</h3><p>Weniger effiziente Miner geben auf, die Netzwerk-Schwierigkeit passt sich an, und die öffentliche Aufmerksamkeit rund um das Ereignis kann kurzfristig für stärkere Kursausschläge sorgen — in beide Richtungen.</p></div>
+      <div class="limit"><h3>Keine Garantie für einen steigenden Kurs</h3><p>Die vier bisherigen Halvings fielen zwar in Aufwärtsphasen — aber mit vier Datenpunkten lässt sich statistisch kein verlässliches Muster belegen, und die Vergangenheit ist keine Zusicherung für die Zukunft.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRENZEN ============ -->
+<section id="grenzen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Grenzen dieser Seite</h2>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Das Datum ist eine Schätzung</h3><p>Blöcke werden im Schnitt alle zehn Minuten gefunden, aber nicht auf die Sekunde genau. Steigt oder fällt die weltweite Rechenleistung im Bitcoin-Netzwerk, verschiebt sich die Schätzung entsprechend nach vorn oder hinten.</p></div>
+      <div class="limit"><h3>Keine Kurs- oder Anlageempfehlung</h3><p>Diese Seite erklärt den Mechanismus und ordnet die verbreiteten Knappheits-Theorien ein — sie sagt nichts darüber voraus, wie sich der Kurs tatsächlich entwickeln wird.</p></div>
+      <div class="limit"><h3>Live-Daten von einem externen Dienst</h3><p>Der Blockstand kommt von der öffentlichen API von mempool.space. Ist der Dienst kurzzeitig nicht erreichbar, zeigt diese Seite eine grob hochgerechnete Schätzung statt des echten Live-Werts — das ist dann gekennzeichnet.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Häufige Fragen</h2>
+    </div>
+    <div class="acc" id="faqList"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Was ist ein Bitcoin-Halving?","acceptedAnswer":{"@type":"Answer","text":"Alle 210.000 Blöcke, etwa alle vier Jahre, halbiert sich die Menge an neuen Bitcoin, die Miner für einen gefundenen Block bekommen. Das ist der einzige Weg, wie neue Bitcoin entstehen."}},
+{"@type":"Question","name":"Wann ist das nächste Bitcoin-Halving genau?","acceptedAnswer":{"@type":"Answer","text":"Es findet bei Block 1.050.000 statt. Der genaue Tag steht erst fest, wenn dieser Block tatsächlich gefunden wird — die Schätzung auf dieser Seite wird live aus dem aktuellen Blockstand berechnet und kann sich noch verschieben."}},
+{"@type":"Question","name":"Steigt der Bitcoin-Kurs nach einem Halving immer?","acceptedAnswer":{"@type":"Answer","text":"In allen vier bisherigen Fällen ist der Kurs im Jahr nach dem Halving gestiegen — aber vier Wiederholungen sind statistisch zu wenig, um daraus eine verlässliche Regel für die Zukunft abzuleiten. Es ist keine Garantie."}},
+{"@type":"Question","name":"Warum gibt es das Halving überhaupt?","acceptedAnswer":{"@type":"Answer","text":"Es setzt die von Anfang an festgelegte, begrenzte Gesamtmenge von 21 Millionen Bitcoin durch. Anders als bei staatlichem Geld steht die Ausgabemenge bei Bitcoin von vornherein fest und kann von niemandem einseitig geändert werden."}},
+{"@type":"Question","name":"Was passiert mit den Minern nach einem Halving?","acceptedAnswer":{"@type":"Answer","text":"Ihre Einnahmen aus der Block-Belohnung halbieren sich. Weniger effiziente Miner werden dadurch oft unrentabel und schalten ab, bis sich die Netzwerk-Schwierigkeit an die verbleibende Rechenleistung anpasst."}}
+]}
+</script>
+
+<script src="/assets/site.js?v=18"></script>
+<script>
+RX.header();
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Tools', href:'/#tools'},
+    {label:'Halving-Countdown', current:true}
+  ],
+  pills: [
+    {label:'Fear & Greed Index', href:'/fear-greed/'},
+    {label:'Heatzone Chart', href:'/heatzone-chart/'},
+    {label:'Scam-Check', href:'/scam-check/'},
+    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/'},
+    {label:'Halving-Countdown', href:'/halving-countdown/', current:true},
+    {label:'Sparplan-Rechner', href:'/sparplan-rechner/'}
+  ]
+});
+RX.footer();
+</script>
+<script>
+(function(){
+"use strict";
+var $ = id => document.getElementById(id);
+
+var LAST_HALVING_BLOCK = 840000;
+var LAST_HALVING_TIME  = Date.UTC(2024,3,20,0,9,0);
+var NEXT_HALVING_BLOCK = 1050000;
+var EPOCH_BLOCKS = 210000;
+var SECONDS_PER_BLOCK = 600; // 10 Minuten Zielwert im Durchschnitt
+
+var state = { height:null, isEstimate:false, targetMs:null };
+
+function fmtInt(n){ return new Intl.NumberFormat('de-DE').format(Math.round(n)); }
+function fmtDate(ms){
+  return new Date(ms).toLocaleDateString('de-DE', { day:'numeric', month:'long', year:'numeric' });
+}
+
+function fallbackHeight(){
+  var elapsedDays = (Date.now() - LAST_HALVING_TIME) / 86400000;
+  return LAST_HALVING_BLOCK + Math.round(elapsedDays * (86400 / SECONDS_PER_BLOCK));
+}
+
+function applyHeight(height, isEstimate){
+  state.height = height;
+  state.isEstimate = isEstimate;
+  var blocksRemaining = Math.max(0, NEXT_HALVING_BLOCK - height);
+  var secondsRemaining = blocksRemaining * SECONDS_PER_BLOCK;
+  state.targetMs = Date.now() + secondsRemaining * 1000;
+
+  $('sHeight').textContent = fmtInt(height);
+  $('sBlocks').textContent = fmtInt(blocksRemaining);
+  $('sDate').textContent = '≈ ' + fmtDate(state.targetMs);
+
+  var epochProgress = Math.min(100, Math.max(0, (height - LAST_HALVING_BLOCK) / EPOCH_BLOCKS * 100));
+  $('epochBar').style.width = epochProgress.toFixed(1) + '%';
+  $('epochLabel').textContent = 'Fortschritt in der aktuellen Halving-Periode · ' + epochProgress.toFixed(1) + ' % von 210.000 Blöcken';
+
+  $('vLabel').textContent = isEstimate ? 'Grobe Schätzung' : 'Live berechnet';
+  $('vEn').textContent = isEstimate ? 'BLOCKSTAND NICHT LIVE ABRUFBAR' : 'AUS AKTUELLEM BLOCKSTAND';
+  $('vText').textContent = isEstimate
+    ? 'Der Live-Blockstand von mempool.space war gerade nicht erreichbar. Diese Zahl ist grob aus der Zeit seit dem letzten Halving hochgerechnet, keine echte Live-Messung.'
+    : 'Berechnet aus dem aktuellen Bitcoin-Blockstand plus durchschnittlich zehn Minuten pro Block bis zum Zielblock 1.050.000.';
+  $('updatedAt').textContent = isEstimate ? 'Geschätzter Blockstand' : 'Live-Blockstand aktiv';
+
+  tick();
+}
+
+function tick(){
+  if(state.targetMs == null) return;
+  var diff = Math.max(0, state.targetMs - Date.now());
+  var days = Math.floor(diff / 86400000);
+  $('bigVal').textContent = fmtInt(days);
+}
+
+function loadHeight(){
+  fetch('https://mempool.space/api/blocks/tip/height', { cache:'no-store' })
+    .then(function(r){ if(!r.ok) throw new Error('bad status'); return r.text(); })
+    .then(function(txt){
+      var h = parseInt(txt, 10);
+      if(!h || isNaN(h)) throw new Error('keine Zahl');
+      applyHeight(h, false);
+    })
+    .catch(function(){
+      applyHeight(fallbackHeight(), true);
+    });
+}
+
+var FAQ = [
+  {q:'Was ist ein Bitcoin-Halving?', a:'Alle 210.000 Blöcke, das sind ungefähr vier Jahre, halbiert sich die Menge an neuen Bitcoin, die ein Miner für einen gefundenen Block bekommt. Das ist der einzige Weg, wie überhaupt neue Bitcoin entstehen.'},
+  {q:'Wann ist das nächste Bitcoin-Halving genau?', a:'Es passiert bei Block 1.050.000. Der genaue Tag steht erst fest, sobald dieser Block wirklich gefunden wird. Die Schätzung oben auf dieser Seite wird live aus dem aktuellen Blockstand berechnet und kann sich noch etwas verschieben, je nachdem wie schnell Blöcke gerade gefunden werden.'},
+  {q:'Steigt der Bitcoin-Kurs nach einem Halving immer?', a:'In allen vier bisherigen Fällen ist der Kurs im Jahr danach gestiegen. Vier Wiederholungen sind aber statistisch viel zu wenig, um daraus eine verlässliche Regel für die Zukunft abzuleiten — das ist keine Garantie und keine Kaufempfehlung.'},
+  {q:'Warum gibt es das Halving überhaupt?', a:'Es setzt die von Anfang an festgelegte Gesamtmenge von maximal 21 Millionen Bitcoin technisch durch. Anders als bei staatlichem Geld steht die Ausgabemenge bei Bitcoin von vornherein fest und kann von niemandem im Nachhinein einseitig geändert werden.'},
+  {q:'Was passiert mit den Minern nach einem Halving?', a:'Ihre Einnahmen aus der Block-Belohnung halbieren sich sofort. Miner, die nicht effizient genug arbeiten, werden dadurch oft unrentabel und schalten ab, bis sich die Netzwerk-Schwierigkeit an die verbleibende Rechenleistung angepasst hat.'},
+  {q:'Woher kommt der Live-Blockstand auf dieser Seite?', a:'Von der öffentlichen API von mempool.space, direkt im Browser abgerufen. Ist der Dienst kurz nicht erreichbar, zeigt die Seite stattdessen eine grob hochgerechnete Schätzung und kennzeichnet das deutlich.'}
+];
+function renderFaq(){
+  $('faqList').innerHTML = FAQ.map(function(f){
+    return '<details><summary>' + f.q + '<span class="plus">+</span></summary><div class="body">' + f.a + '</div></details>';
+  }).join('');
+}
+
+renderFaq();
+RX.reveal();
+loadHeight();
+setInterval(tick, 1000);
+setInterval(loadHeight, 60000);
+})();
+</script>
+</body>
+</html>

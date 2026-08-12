@@ -22,6 +22,32 @@ var LINKS = {
   whatsapp: 'https://wa.me/+4915143373219'
 };
 
+/* ---------- Hauptnavigation ----------
+   Eine einzige, feste Struktur für den Header auf JEDER Seite — vorher
+   bekam jede Seite ihre eigene Anker-Navigation übergeben, was von Seite
+   zu Seite unterschiedlich aussah und verwirrend war. Jetzt: immer
+   dieselben vier Punkte, "Wissen" und "Tools" als Dropdown mit allen
+   Unterseiten. Neue Tools/Artikel einfach hier eintragen, wirkt sich
+   automatisch überall aus. */
+var NAV = [
+  { label:'Wissen', href:'/#wissen', items:[
+      {href:'/#wissen', label:'Krypto-Guide (kostenlos)'},
+      {href:'/wissen/die-einjahresfrist/', label:'Die Einjahresfrist'}
+    ]},
+  { label:'Tools', href:'/#tools', items:[
+      {href:'/fear-greed/', label:'Fear & Greed Index'},
+      {href:'/heatzone-chart/', label:'Heatzone Chart'},
+      {href:'/scam-check/', label:'Scam-Check'},
+      {href:'/haltefrist-tracker/', label:'Haltefrist-Tracker'},
+      {href:'/halving-countdown/', label:'Halving-Countdown'},
+      {href:'/sparplan-rechner/', label:'Sparplan-Rechner'}
+    ]},
+  { label:'Plattformen', href:'/#plattformen' },
+  { label:'Über mich', href:'/#ueber-mich' }
+];
+var CHEVRON = '<svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var BURGER = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+
 /* ---------- Währung: eine Einstellung für die ganze Seite ----------
    Wird im Browser gespeichert und gilt seitenübergreifend. Tool-Seiten
    hören auf das 'rx-currency'-Event und laden ihre Preisdaten dann
@@ -82,13 +108,27 @@ var THEME_ICON =
   '</svg>';
 
 /* ---------- Kopfzeile ---------- */
+function navItemHtml(n, i){
+  var here = (typeof location !== 'undefined') ? location.pathname : '';
+  if(!n.items){
+    var current = n.href.indexOf('#') === -1 && n.href === here;
+    return '<div class="nav-item"><a href="' + n.href + '"' + (current ? ' aria-current="page"' : '') + '>' + n.label + '</a></div>';
+  }
+  var sub = n.items.map(function(s){
+    var current = s.href.indexOf('#') === -1 && s.href === here;
+    return '<a href="' + s.href + '"' + (current ? ' aria-current="page"' : '') + '>' + s.label + '</a>';
+  }).join('');
+  return '<div class="nav-item" data-nav-i="' + i + '">' +
+      '<button type="button" class="dd-toggle" aria-haspopup="true" aria-expanded="false">' + n.label + CHEVRON + '</button>' +
+      '<div class="dd-panel">' + sub + '</div>' +
+    '</div>';
+}
+
 function header(opts){
   opts = opts || {};
   var host = document.getElementById('rx-top');
   if(!host) return;
-  var nav = (opts.nav || []).map(function(n){
-    return '<a href="' + n.href + '">' + n.label + '</a>';
-  }).join('');
+  var nav = NAV.map(navItemHtml).join('');
 
   host.className = 'top';
   host.innerHTML =
@@ -97,7 +137,7 @@ function header(opts){
         '<span class="wm">Rendite</span>' + LOGO +
         (opts.live ? '<span class="dot" id="brandDot"></span>' : '') +
       '</a>' +
-      '<nav class="top-nav">' + nav + '</nav>' +
+      '<nav class="top-nav" id="topNav">' + nav + '</nav>' +
       '<button type="button" class="theme-toggle" id="themeToggle" aria-pressed="' + (getTheme() === 'dark') + '" aria-label="Theme wechseln (hell oder dunkel)">' + THEME_ICON + '</button>' +
       '<button type="button" class="cur-toggle" id="curToggle" aria-label="Währung wechseln (Euro oder US-Dollar)">' + getCurrency() + '</button>' +
       (opts.live
@@ -109,6 +149,7 @@ function header(opts){
           'style="text-decoration:none;color:var(--text)">' +
             '<span style="width:7px;height:7px;border-radius:50%;background:var(--red)"></span>' +
             '<b>YouTube</b></a>') +
+      '<button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="topNav" aria-label="Navigation öffnen">' + BURGER + '</button>' +
     '</div>';
 
   var btn = document.getElementById('curToggle');
@@ -119,6 +160,37 @@ function header(opts){
   var themeBtn = document.getElementById('themeToggle');
   themeBtn.addEventListener('click', function(){
     setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+  });
+
+  /* Dropdowns: per Klick öffnen/schließen, nur eines gleichzeitig offen,
+     schließt bei Klick außerhalb oder Escape — funktioniert so gleich
+     auf Touch wie mit Maus/Tastatur. */
+  function closeAllDropdowns(){
+    host.querySelectorAll('.nav-item.open').forEach(function(el){
+      el.classList.remove('open');
+      var b = el.querySelector('.dd-toggle');
+      if(b) b.setAttribute('aria-expanded', 'false');
+    });
+  }
+  host.querySelectorAll('.dd-toggle').forEach(function(b){
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      var item = b.closest('.nav-item');
+      var wasOpen = item.classList.contains('open');
+      closeAllDropdowns();
+      if(!wasOpen){ item.classList.add('open'); b.setAttribute('aria-expanded', 'true'); }
+    });
+  });
+  document.addEventListener('click', closeAllDropdowns);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAllDropdowns(); });
+
+  /* Mobil: Hamburger blendet die komplette Navigation als Panel ein. */
+  var navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    var isOpen = host.classList.toggle('nav-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+    if(!isOpen) closeAllDropdowns();
   });
 }
 

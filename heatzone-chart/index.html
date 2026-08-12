@@ -16,7 +16,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<link rel="stylesheet" href="/assets/renditex.css?v=18">
 
 <script>
 /* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
@@ -323,15 +323,9 @@ window.addEventListener('error', rxShowAll);
 </script>
 
 <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
-<script src="/assets/site.js?v=13"></script>
+<script src="/assets/site.js?v=18"></script>
 <script>
-RX.header({ live:true, nav:[
-  {href:'#verlauf',  label:'Verlauf'},
-  {href:'#zonen',    label:'Zonen'},
-  {href:'#rechner',  label:'Rechner'},
-  {href:'#zukunft',  label:'Zukunft'},
-  {href:'/',         label:'Alle Tools'}
-]});
+RX.header({ live:true });
 RX.breadcrumb({
   trail: [
     {label:'Start', href:'/'},
@@ -342,7 +336,9 @@ RX.breadcrumb({
     {label:'Fear & Greed Index', href:'/fear-greed/'},
     {label:'Heatzone Chart', href:'/heatzone-chart/', current:true},
     {label:'Scam-Check', href:'/scam-check/'},
-    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/'}
+    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/'},
+    {label:'Halving-Countdown', href:'/halving-countdown/'},
+    {label:'Sparplan-Rechner', href:'/sparplan-rechner/'}
   ]
 });
 RX.footer();

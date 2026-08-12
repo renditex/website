@@ -19,7 +19,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<link rel="stylesheet" href="/assets/renditex.css?v=18">
 <script>
 /* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
    nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
@@ -93,21 +93,25 @@ window.addEventListener('error', rxShowAll);
 
     <div class="notes reveal">
       <div class="note soon feature">
+        <span class="badge soon">Bald</span>
         <div class="kicker">Strategie</div>
         <h3>Was ist DCA?</h3>
         <p>Warum regelmäßiges Kaufen für die meisten besser funktioniert als der Versuch, den perfekten Moment zu erwischen — und wo die Grenzen dieser Strategie liegen.</p>
       </div>
       <div class="note soon">
+        <span class="badge soon">Bald</span>
         <div class="kicker">Sicherheit</div>
         <h3>Wallets richtig nutzen</h3>
         <p>Der Unterschied zwischen Börse, Hot Wallet und Hardware Wallet. Was eine Seed Phrase ist, warum du sie nie eintippst und ab wann sich ein eigenes Gerät lohnt.</p>
       </div>
-      <div class="note soon">
+      <a class="note" href="/wissen/die-einjahresfrist/">
+        <span class="badge live">Live</span>
         <div class="kicker">Steuern</div>
         <h3>Die Einjahresfrist</h3>
         <p>Deutschlands wichtigste Krypto-Regel: Wann Gewinne steuerfrei bleiben, warum die Freigrenze keine Freibetrag ist und was du von Anfang an dokumentieren solltest.</p>
-      </div>
+      </a>
       <div class="note soon">
+        <span class="badge soon">Bald</span>
         <div class="kicker">Risiko</div>
         <h3>Scam erkennen</h3>
         <p>Feste Tagesrenditen, Empfehlungsdruck, anonyme Teams. Die Warnsignale in der Reihenfolge, in der sie meistens auftauchen — und was du prüfen kannst, bevor du einzahlst.</p>
@@ -165,15 +169,26 @@ window.addEventListener('error', rxShowAll);
         <span class="open">Jetzt öffnen und ausprobieren <span class="arr">→</span></span>
       </a>
 
+      <a class="tool" href="/halving-countdown/">
+        <span class="badge live">Live</span>
+        <h3>Halving-Countdown</h3>
+        <div class="live-val" id="hcLive">— <small id="hcLiveLbl">wird geladen</small></div>
+        <p>Wie viele Tage noch bis zum nächsten Bitcoin-Halving? Live aus dem aktuellen Blockstand berechnet, mit Erklärung, Geschichte und ehrlicher Einordnung.</p>
+        <span class="open">Jetzt öffnen und ausprobieren <span class="arr">→</span></span>
+      </a>
+
+      <a class="tool" href="/sparplan-rechner/">
+        <span class="badge live">Live</span>
+        <h3>Sparplan-Rechner</h3>
+        <p>Was wäre aus 100 Euro im Monat geworden? Rückrechnung mit echten Kursen für Bitcoin, Ethereum, Solana und XRP — samt Vergleich zum Einmalkauf.</p>
+        <span class="open">Jetzt öffnen und ausprobieren <span class="arr">→</span></span>
+      </a>
+
     </div>
 
     <div class="tools-soon reveal">
       <div class="soon-head">In Arbeit — als Nächstes geplant</div>
 
-      <div class="soon-row">
-        <h4>Sparplan-Rechner</h4><span class="tag">bald</span>
-        <p>Was wäre aus 100 Euro im Monat geworden? Rückrechnung mit echten Kursen für Bitcoin, Ethereum, Solana und XRP — samt Vergleich zum Einmalkauf.</p>
-      </div>
       <div class="soon-row">
         <h4>Altcoin Season Index</h4><span class="tag">bald</span>
         <p>Fließt das Geld gerade in Bitcoin oder in Altcoins? Der Indikator zeigt, in welcher Phase des Zyklus der Markt steht.</p>
@@ -181,10 +196,6 @@ window.addEventListener('error', rxShowAll);
       <div class="soon-row">
         <h4>Portfolio-Check</h4><span class="tag">bald</span>
         <p>Wie ist dein Depot wirklich aufgestellt? Klumpenrisiken und Gewichtung auf einen Blick, ohne dass du irgendwo ein Wallet verbinden musst.</p>
-      </div>
-      <div class="soon-row">
-        <h4>Halving-Countdown</h4><span class="tag">bald</span>
-        <p>Wie viele Blöcke noch bis zum nächsten Halving? Mit Einordnung, was in den Zyklen davor und danach passiert ist.</p>
       </div>
     </div>
   </div>
@@ -398,14 +409,9 @@ window.addEventListener('error', rxShowAll);
 
 <footer id="rx-foot"></footer>
 
-<script src="/assets/site.js?v=13"></script>
+<script src="/assets/site.js?v=18"></script>
 <script>
-RX.header({ nav:[
-  {href:'#wissen',      label:'Wissen'},
-  {href:'#tools',       label:'Tools'},
-  {href:'#plattformen', label:'Plattformen'},
-  {href:'#ueber-mich',  label:'Über mich'}
-]});
+RX.header();
 RX.footer();
 RX.reveal();
 
@@ -452,6 +458,23 @@ RX.reveal();
   }
   load();
   window.addEventListener('rx-currency', load);
+})();
+
+/* Live-Countdown in der Halving-Countdown-Karte */
+(function(){
+  var NEXT_HALVING_BLOCK = 1050000;
+  fetch('https://mempool.space/api/blocks/tip/height', {cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('bad status'); return r.text(); })
+    .then(function(txt){
+      var h = parseInt(txt, 10);
+      if(!h || isNaN(h)) throw new Error('keine Zahl');
+      var days = Math.floor(Math.max(0, NEXT_HALVING_BLOCK - h) * 600 / 86400);
+      document.getElementById('hcLive').innerHTML = days + ' <small style="color:var(--muted)">Tage (geschätzt)</small>';
+    })
+    .catch(function(){
+      document.getElementById('hcLive').innerHTML =
+        '<small style="color:var(--muted-2); margin-left:0">Live-Wert im Tool</small>';
+    });
 })();
 </script>
 </body>

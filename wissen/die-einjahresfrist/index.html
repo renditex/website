@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die Einjahresfrist bei Krypto — wann Gewinne steuerfrei sind | RenditeX</title>
+<meta name="description" content="Deutschlands wichtigste Krypto-Steuerregel einfach erklärt: die Einjahresfrist nach § 23 EStG, die 1.000-Euro-Freigrenze, das FIFO-Prinzip, was als Verkauf zählt — und der Staking-Mythos um die zehn Jahre.">
+<meta property="og:title" content="Die Einjahresfrist bei Krypto — wann Gewinne steuerfrei sind">
+<meta property="og:description" content="Die wichtigste Krypto-Steuerregel in Deutschland einfach erklärt — mit Beispiel und Verweis auf den kostenlosen Haltefrist-Tracker.">
+<meta property="og:type" content="article">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=18">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Wissen · Steuern</div>
+  <h1>Die Einjahresfrist: <em>Deutschlands wichtigste Krypto-Steuerregel</em></h1>
+  <p class="hero-sub">Ein Satz, von dem dein ganzer Gewinn abhängen kann: Verkaufst du nach mehr als einem Jahr, ist er steuerfrei. Hier erkläre ich in einfachen Worten, wie diese Frist funktioniert, was sie <em>nicht</em> abdeckt — und wo die typischen Denkfehler liegen.</p>
+</div>
+
+<!-- ============ GRUNDREGEL ============ -->
+<section id="grundregel">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Die Grundregel in einem Satz</h2>
+      <div class="intro">
+        <p>Kurz gesagt: Hältst du einen Coin <b style="color:var(--text)">länger als ein Jahr</b>, ist dein Gewinn beim Verkauf komplett steuerfrei. Egal wie hoch der Gewinn ist. Verkaufst du früher, musst du den Gewinn normalerweise versteuern. Das ist die Grundlage von allem, was in diesem Artikel kommt.</p>
+        <p>Ein Punkt verwirrt fast jeden am Anfang: Krypto wird <b style="color:var(--text)">anders</b> besteuert als Aktien. Bei Aktien kennst du vielleicht die pauschale Abgeltungsteuer von 25 %. Bei Krypto gibt es die nicht. Ein steuerpflichtiger Krypto-Gewinn wird einfach zu deinem normalen Einkommen dazugerechnet — und mit deinem persönlichen Steuersatz versteuert. Der kann höher oder niedriger als 25 % liegen, je nachdem, wie viel du insgesamt verdienst.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FRIST ============ -->
+<section id="frist" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Wann beginnt und endet die Frist genau?</h2>
+      <div class="intro">
+        <p>Die Frist zählt taggenau — nicht nach Kalenderjahr oder -monat. Sie startet am Tag, an dem du kaufst, und endet genau ein Jahr später. Ein Beispiel: Kaufst du am 11. August 2026, ist ein Verkauf ab dem 12. August 2027 steuerfrei. Verkaufst du schon am 11. August 2027 selbst, zählt das noch als innerhalb der Frist.</p>
+        <p>Und noch etwas Wichtiges: Jeder Kauf hat seine <b style="color:var(--text)">eigene</b> Frist. Hast du denselben Coin mehrmals gekauft, läuft für jeden Kauf eine eigene Ein-Jahres-Uhr. „Ich habe seit zwei Jahren Bitcoin" sagt also noch nichts darüber aus, ob ein bestimmter Verkauf steuerfrei ist.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FREIGRENZE ============ -->
+<section id="freigrenze">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Freigrenze statt Freibetrag — der Unterschied kostet bares Geld</h2>
+      <div class="intro">
+        <p>Auch innerhalb des ersten Jahres bleibt ein Gewinn steuerfrei, wenn er klein genug ist: Liegen alle deine Gewinne aus solchen Verkäufen im Jahr zusammen unter 1.000 Euro, zahlst du nichts. Diese Grenze gilt seit 2024 — vorher waren es 600 Euro. Aber Achtung: Das ist eine <b style="color:var(--text)">Freigrenze</b>, kein Freibetrag. Der Unterschied ist wichtig, wie du gleich siehst.</p>
+      </div>
+    </div>
+    <div class="princ reveal">
+      <div class="card">
+        <div class="tag">Freibetrag (gilt hier NICHT)</div>
+        <h3>Nur der Teil darüber wird besteuert</h3>
+        <p>Bei einem Freibetrag bleibt der Betrag bis zur Grenze immer steuerfrei. Nur was darüber liegt, wird versteuert. So funktioniert die Krypto-Regel aber nicht.</p>
+      </div>
+      <div class="card accent">
+        <div class="tag">Freigrenze (gilt hier)</div>
+        <h3>Über der Grenze wird ALLES steuerpflichtig</h3>
+        <p>Bei 999 € Gewinn zahlst du nichts. Bei 1.001 € wird nicht nur der eine Euro besteuert, sondern der komplette Betrag.</p>
+        <div class="formula">999 € Gewinn → <span>steuerfrei</span><br>1.001 € Gewinn → <span>1.001 € steuerpflichtig</span></div>
+      </div>
+    </div>
+    <div class="callout reveal">
+      <b>Wichtig:</b> In die 1.000-Euro-Grenze zählt nicht nur Krypto hinein. Alle privaten Verkaufsgeschäfte des Jahres werden zusammengerechnet — auch andere Dinge, die du innerhalb ihrer Frist verkauft hast. Verkaufst du mehrere Coins im selben Jahr, musst du die Gewinne addieren, nicht einzeln betrachten.
+    </div>
+  </div>
+</section>
+
+<!-- ============ FIFO ============ -->
+<section id="fifo" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Teilverkauf: Welche Coins gelten als verkauft?</h2>
+      <div class="intro">
+        <p>Hast du denselben Coin mehrmals gekauft und verkaufst nur einen Teil, stellt sich eine Frage: Welcher Kauf gilt jetzt als verkauft? Das ist wichtig, weil jeder Kauf sein eigenes Datum hat — und damit seine eigene Frist. In der Praxis gilt meist das <b style="color:var(--text)">FIFO-Prinzip</b> (First In, First Out): Die Coins, die du zuerst gekauft hast, gelten auch als zuerst verkauft.</p>
+      </div>
+    </div>
+    <div class="princ reveal">
+      <div class="card accent" style="grid-column:1/-1">
+        <div class="tag">Beispiel</div>
+        <h3>Drei Käufe, ein Teilverkauf</h3>
+        <p>Du kaufst 0,1 BTC im Januar 2025, 0,1 BTC im Juli 2025 und 0,1 BTC im März 2026. Im Februar 2026 verkaufst du 0,15 BTC.</p>
+        <div class="formula">
+          Verkauft nach FIFO: <span>0,1 BTC aus Januar 2025</span> + <span>0,05 BTC aus Juli 2025</span><br>
+          Januar-Kauf: <span>über ein Jahr gehalten → steuerfrei</span><br>
+          Anteil aus Juli-Kauf: <span>unter einem Jahr gehalten → steuerpflichtig</span>
+        </div>
+      </div>
+    </div>
+    <div class="intro" style="margin-top:18px">
+      <p>Deshalb lohnt es sich, jeden Kauf einzeln festzuhalten: Datum, Menge, Preis. Nur eine Gesamtsumme zu führen reicht nicht — im Nachhinein lässt sich sonst kaum noch sagen, welcher Teil schon steuerfrei war.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WAS ZÄHLT ALS VERKAUF ============ -->
+<section id="verkauf">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was zählt überhaupt als steuerlicher Verkauf?</h2>
+      <p>Der häufigste Denkfehler: „Verkauf" heißt hier nicht nur Krypto gegen Euro.</p>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Krypto gegen Euro oder Fremdwährung</h3><p>Der klassische Fall: Du tauschst auf einer Börse Coins gegen Euro oder Dollar. Ganz klar ein Verkauf.</p></div>
+      <div class="limit"><h3>Krypto gegen Krypto (Swap)</h3><p>Wird oft übersehen: Tauschst du einen Coin gegen einen anderen — zum Beispiel Bitcoin gegen Ethereum —, zählt auch das als Verkauf. Die Frist für den Bitcoin endet in diesem Moment. Für den neuen Coin beginnt eine neue Frist.</p></div>
+      <div class="limit"><h3>Krypto gegen Ware oder Dienstleistung</h3><p>Zahlst du mit Krypto, zum Beispiel beim Einkaufen, zählt das steuerlich genauso wie ein Verkauf — zum Kurs im Moment der Zahlung.</p></div>
+      <div class="limit"><h3>Der Kauf selbst ist kein steuerpflichtiges Ereignis</h3><p>Krypto mit Euro zu kaufen, löst für sich allein keine Steuer aus. Erst der spätere Verkauf, Tausch oder das Ausgeben zählt.</p></div>
+      <div class="limit"><h3>Übertragung zwischen eigenen Wallets ist kein Verkauf</h3><p>Coins von einer Börse auf deine eigene Wallet zu bewegen, ändert nichts am Eigentum. Das zählt nicht als Verkauf — die Frist läuft einfach weiter.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VERLUSTE ============ -->
+<section id="verluste" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Verluste realisieren: verkaufen und direkt zurückkaufen</h2>
+      <div class="intro">
+        <p>Steht ein Coin bei dir im Minus, kannst du ihn verkaufen, solange du noch innerhalb der Einjahresfrist bist. Damit „realisierst" du den Verlust steuerlich. Willst du den Coin trotzdem weiter halten, kannst du ihn direkt danach wieder zurückkaufen. In Deutschland gibt es dafür keine Sperrfrist — anders als in den USA. Der Rückkauf startet einfach eine neue Frist, zum neuen Kurs. Der Verlust aus dem Verkauf bleibt dabei bestehen.</p>
+        <p>Wofür ist das gut? Einen Verlust kannst du mit Gewinnen aus <b style="color:var(--text)">anderen</b> Verkäufen im selben Jahr verrechnen — zum Beispiel, wenn du früher im Jahr bei einem anderen Coin schon Gewinn gemacht hast. Hattest du in dem Jahr keinen solchen Gewinn, kannst du den Verlust auch in andere Jahre mitnehmen.</p>
+      </div>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Funktioniert nur innerhalb der Frist</h3><p>Verkaufst du einen Coin mit Verlust, den du schon länger als ein Jahr hältst, passiert steuerlich nichts. Nach einem Jahr zählen weder Gewinn noch Verlust.</p></div>
+      <div class="limit"><h3>Verrechnung nur innerhalb derselben Kategorie</h3><p>Ein Verlust aus Krypto-Verkäufen mindert nur Gewinne aus ähnlichen Verkäufen. Nicht dein Gehalt, nicht Aktiengewinne, keine anderen Einkommensarten.</p></div>
+      <div class="limit"><h3>Handelskosten fressen einen Teil des Vorteils</h3><p>Gebühren beim Verkaufen und Zurückkaufen kosten echtes Geld. Bei kleinen Beträgen kann das den steuerlichen Vorteil komplett auffressen.</p></div>
+    </div>
+    <div class="callout reveal">
+      <b>Das ist Mechanik, keine Empfehlung:</b> Ob sich das für dich lohnt, hängt von deiner ganzen Steuersituation ab — von anderen Gewinnen, vom Timing, von den Kosten. Hier erkläre ich nur, wie es funktioniert. Nicht, ob du es machen solltest. Für die genaue Rechnung hilft ein Steuerberater oder eine geprüfte Krypto-Steuersoftware.
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAKING ============ -->
+<section id="staking">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Staking, Lending und der Zehn-Jahre-Mythos</h2>
+      <div class="intro">
+        <p>Es gibt eine Regel, nach der sich die Haltefrist bei manchen Dingen auf zehn Jahre verlängert — und zwar dann, wenn damit Einkünfte erzielt wurden. Weil Staking und Lending genau das tun, kursierte lange die Sorge: Müssen gestakte Coins jetzt zehn statt ein Jahr gehalten werden, um steuerfrei zu sein?</p>
+        <p>Die Antwort: <b style="color:var(--text)">Nein</b>. Das Bundesfinanzministerium hat das mit einem Schreiben vom Mai 2022 klargestellt. Egal ob du deine Coins gestakt, verliehen oder einfach nur gehalten hast — die normale Einjahresfrist bleibt bestehen.</p>
+        <p>Was du trotzdem wissen solltest: Die Staking- oder Lending-<b style="color:var(--text)">Erträge</b> selbst sind eigenes steuerpflichtiges Einkommen, und zwar in dem Moment, in dem du sie bekommst. Dafür gibt es eine eigene, viel kleinere Freigrenze von 256 Euro im Jahr. Das ist ein eigenes Thema für sich — hier zählt nur: Staking allein verändert nicht die Frist deines ursprünglichen Bestands.</p>
+      </div>
+    </div>
+    <div class="callout reveal">
+      <b>Stand und Einordnung:</b> Gesetze und Verwaltungsmeinungen können sich ändern. Was hier steht, ist der aktuell bekannte Stand — keine Garantie, dass das für immer so bleibt, und keine Steuerberatung für deinen Einzelfall.
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOKUMENTATION ============ -->
+<section id="dokumentation" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Warum sich Dokumentieren von Anfang an lohnt</h2>
+      <div class="intro">
+        <p>Am Ende läuft alles hier auf eins hinaus: Ohne saubere Aufzeichnung von Kaufdatum, Menge und Preis lässt sich später kaum noch belegen, welcher Teil deines Bestands schon steuerfrei ist. Bei ein paar Käufen merkst du dir das noch. Bei zehn oder zwanzig Käufen über mehrere Jahre nicht mehr.</p>
+      </div>
+    </div>
+    <div class="calc reveal" style="grid-template-columns:1fr; max-width:640px">
+      <div class="panel" style="display:flex; flex-direction:column; gap:14px; align-items:flex-start">
+        <span class="freebadge">Kostenlos · Ohne Anmeldung</span>
+        <h3 style="font-size:19px; font-weight:800">Haltefrist-Tracker</h3>
+        <p style="color:var(--muted); font-size:14.5px; line-height:1.65">Trag jeden Kauf einmal ein, und der Tracker zeigt dir pro Kauf, ab welchem Tag er steuerfrei wird — inklusive CSV-Export für deine Unterlagen. Alles bleibt in deinem Browser.</p>
+        <a class="btn primary" href="/haltefrist-tracker/">Zum Haltefrist-Tracker</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRENZEN ============ -->
+<section id="grenzen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Grenzen dieses Artikels</h2>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Keine Steuerberatung</h3><p>Dieser Artikel erklärt die Rechtslage verständlich. Er ersetzt aber keine individuelle Steuerberatung. Für deine echte Steuererklärung hilft nur ein Steuerberater oder eine geprüfte Krypto-Steuersoftware.</p></div>
+      <div class="limit"><h3>Vereinfachte Darstellung</h3><p>Sonderfälle wie gewerbliche Tätigkeit statt privater Vermögensverwaltung oder komplexe DeFi-Vorgänge deckt dieser Artikel bewusst nicht ab. Sie können die Einordnung verändern.</p></div>
+      <div class="limit"><h3>Stand kann veralten</h3><p>Steuerrecht ändert sich. Prüf bei wichtigen Entscheidungen, ob sich seit Veröffentlichung dieses Artikels etwas geändert hat.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Häufige Fragen</h2>
+    </div>
+    <div class="acc" id="faqList"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Muss ich jeden Krypto-Gewinn versteuern?","acceptedAnswer":{"@type":"Answer","text":"Nein. Verkaufst du mehr als ein Jahr nach dem Kauf, ist der Gewinn komplett steuerfrei. Verkaufst du früher, ist er steuerpflichtig, wenn deine gesamten Gewinne aus solchen Verkäufen im Jahr über 1.000 Euro liegen."}},
+{"@type":"Question","name":"Zählt der Tausch von Bitcoin in einen anderen Coin als Verkauf?","acceptedAnswer":{"@type":"Answer","text":"Ja. Ein Krypto-zu-Krypto-Swap gilt steuerlich als Verkauf des einen Coins und Kauf des anderen — die Frist des ursprünglichen Coins endet dabei, für den neuen beginnt eine neue Frist."}},
+{"@type":"Question","name":"Verlängert Staking die Haltefrist auf zehn Jahre?","acceptedAnswer":{"@type":"Answer","text":"Nein. Das Bundesfinanzministerium hat im Mai 2022 klargestellt, dass Staking und Lending die Einjahresfrist nicht auf zehn Jahre verlängern. Die normale Ein-Jahres-Regel bleibt bestehen."}},
+{"@type":"Question","name":"Was ist der Unterschied zwischen Freigrenze und Freibetrag bei den 1.000 Euro?","acceptedAnswer":{"@type":"Answer","text":"Ein Freibetrag bleibt immer steuerfrei, nur der Rest wird besteuert. Bei einer Freigrenze wird beim Überschreiten der gesamte Betrag steuerpflichtig, nicht nur der übersteigende Teil. Die 1.000-Euro-Grenze bei Krypto ist eine Freigrenze."}},
+{"@type":"Question","name":"Muss ich wirklich jeden einzelnen Kauf dokumentieren?","acceptedAnswer":{"@type":"Answer","text":"Ja, wenn du denselben Coin mehrfach gekauft hast. Bei einem Teilverkauf entscheidet das Kaufdatum der jeweils ältesten Einheiten, ob der Gewinn steuerfrei ist — ohne Dokumentation lässt sich das später kaum belegen."}},
+{"@type":"Question","name":"Kann ich einen Coin im Minus verkaufen und direkt wieder zurückkaufen, um den Verlust steuerlich zu nutzen?","acceptedAnswer":{"@type":"Answer","text":"Mechanisch ja, solange der Coin noch innerhalb der Einjahresfrist gehalten wird. Deutschland kennt für private Verkäufe keine Wash-Sale-Regel, die einen sofortigen Rückkauf verbietet. Der Verlust lässt sich mit anderen Gewinnen desselben Jahres verrechnen. Ob sich das für dich konkret lohnt, hängt von deiner gesamten Steuersituation ab."}}
+]}
+</script>
+
+<script src="/assets/site.js?v=18"></script>
+<script>
+RX.header();
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Wissen', href:'/#wissen'},
+    {label:'Die Einjahresfrist', current:true}
+  ]
+});
+RX.footer();
+</script>
+<script>
+(function(){
+"use strict";
+var $ = id => document.getElementById(id);
+
+var FAQ = [
+  {q:'Muss ich jeden Krypto-Gewinn versteuern?', a:'Nein. Verkaufst du mehr als ein Jahr nach dem Kauf, ist der Gewinn komplett steuerfrei. Verkaufst du früher, ist er steuerpflichtig, wenn deine gesamten Gewinne aus solchen Verkäufen im Jahr über 1.000 Euro liegen. Darunter bleibt alles steuerfrei.'},
+  {q:'Zählt der Tausch von Bitcoin in einen anderen Coin als Verkauf?', a:'Ja, und das wird häufig übersehen. Ein Krypto-zu-Krypto-Swap gilt steuerlich als Verkauf des einen Coins und Kauf des anderen. Die Frist des ursprünglichen Coins endet in diesem Moment, für den neu erhaltenen Coin beginnt eine neue Ein-Jahres-Frist.'},
+  {q:'Verlängert Staking die Haltefrist auf zehn Jahre?', a:'Nein. Das Bundesfinanzministerium hat mit Schreiben vom Mai 2022 klargestellt, dass die Zehn-Jahres-Verlängerung, die für andere Wirtschaftsgüter gilt, bei Krypto-Staking und -Lending nicht greift. Die normale Einjahresfrist bleibt bestehen — die Staking-Erträge selbst müssen aber separat als eigenes Einkommen versteuert werden.'},
+  {q:'Was ist der Unterschied zwischen Freigrenze und Freibetrag bei den 1.000 Euro?', a:'Ein Freibetrag bleibt immer steuerfrei, nur der übersteigende Rest wird besteuert. Bei einer Freigrenze wird beim Überschreiten der gesamte Betrag steuerpflichtig, nicht nur der Teil darüber. Die 1.000-Euro-Grenze bei Krypto ist eine Freigrenze — bei 1.001 Euro Gewinn ist der volle Betrag steuerpflichtig, nicht nur der eine Euro.'},
+  {q:'Muss ich wirklich jeden einzelnen Kauf dokumentieren?', a:'Ja, sobald du denselben Coin mehr als einmal gekauft hast. Bei einem Teilverkauf entscheidet das FIFO-Prinzip: Das Kaufdatum der jeweils ältesten noch vorhandenen Einheiten bestimmt, ob der Gewinn steuerfrei ist. Ohne Datum, Menge und Preis pro Kauf lässt sich das im Nachhinein kaum sauber belegen.'},
+  {q:'Kann ich einen Coin im Minus verkaufen und direkt wieder zurückkaufen, um den Verlust steuerlich zu nutzen?', a:'Mechanisch ja, solange der Coin noch innerhalb der Einjahresfrist gehalten wird. Deutschland kennt für private Verkäufe keine Wash-Sale-Regel, die einen sofortigen Rückkauf verbietet. Der Verlust lässt sich mit anderen Gewinnen desselben Jahres verrechnen oder in andere Jahre mitnehmen. Ob und wann sich das für dich konkret lohnt, hängt von deiner gesamten Steuersituation ab — das ist eine Frage für deinen Steuerberater, keine allgemeine Empfehlung.'},
+  {q:'Gilt die Einjahresfrist auch, wenn ich mit Krypto bezahlt habe statt sie zu verkaufen?', a:'Ja. Zahlst du mit Krypto für einen Einkauf oder eine Dienstleistung, gilt das steuerlich wie ein Verkauf zum aktuellen Kurs im Zahlungsmoment — dieselbe Einjahresfrist entscheidet, ob dabei ein steuerpflichtiger Gewinn entsteht.'}
+];
+function renderFaq(){
+  $('faqList').innerHTML = FAQ.map(function(f){
+    return '<details><summary>' + f.q + '<span class="plus">+</span></summary><div class="body">' + f.a + '</div></details>';
+  }).join('');
+}
+
+renderFaq();
+RX.reveal();
+})();
+</script>
+</body>
+</html>

@@ -19,7 +19,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=13">
+<link rel="stylesheet" href="/assets/renditex.css?v=18">
 <script>
 /* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
    nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
@@ -131,7 +131,7 @@ window.addEventListener('error', rxShowAll);
       </div>
     </div>
     <div class="callout reveal">
-      <b>Stand und Einordnung:</b> Die 1.000-€-Freigrenze gilt seit dem Steuerjahr 2024. Steuerrecht kann sich ändern, und dein persönlicher Fall kann Besonderheiten haben, die eine allgemeine Erklärung nicht abdeckt — das hier ersetzt keine Steuerberatung.
+      <b>Stand und Einordnung:</b> Die 1.000-€-Freigrenze gilt seit dem Steuerjahr 2024. Steuerrecht kann sich ändern, und dein persönlicher Fall kann Besonderheiten haben, die eine allgemeine Erklärung nicht abdeckt — das hier ersetzt keine Steuerberatung. Ausführlicher, inklusive Beispielrechnung und dem Staking-Mythos um die zehn Jahre: <a href="/wissen/die-einjahresfrist/">Die Einjahresfrist im Detail</a>.
     </div>
   </div>
 </section>
@@ -172,14 +172,9 @@ window.addEventListener('error', rxShowAll);
 ]}
 </script>
 
-<script src="/assets/site.js?v=13"></script>
+<script src="/assets/site.js?v=18"></script>
 <script>
-RX.header({ nav:[
-  {href:'#eintragen',  label:'Eintragen'},
-  {href:'#uebersicht', label:'Übersicht'},
-  {href:'#regel',      label:'Die Regel'},
-  {href:'/',           label:'Alle Tools'}
-]});
+RX.header();
 RX.breadcrumb({
   trail: [
     {label:'Start', href:'/'},
@@ -190,7 +185,9 @@ RX.breadcrumb({
     {label:'Fear & Greed Index', href:'/fear-greed/'},
     {label:'Heatzone Chart', href:'/heatzone-chart/'},
     {label:'Scam-Check', href:'/scam-check/'},
-    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/', current:true}
+    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/', current:true},
+    {label:'Halving-Countdown', href:'/halving-countdown/'},
+    {label:'Sparplan-Rechner', href:'/sparplan-rechner/'}
   ]
 });
 RX.footer();

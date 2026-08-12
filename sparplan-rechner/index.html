@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sparplan-Rechner — Was wäre aus deinem DCA geworden? | RenditeX</title>
+<meta name="description" content="Rückrechnung mit echten Kursdaten: Was wäre aus einem Sparplan in Bitcoin, Ethereum, Solana oder XRP geworden? Mit Gebühren, Vergleich zum Einmalkauf und einem separaten, klar gekennzeichneten Zukunftsszenario.">
+<meta property="og:title" content="Sparplan-Rechner — Was wäre aus deinem DCA geworden?">
+<meta property="og:description" content="Rückrechnung mit echten Kursdaten für Bitcoin, Ethereum, Solana und XRP, samt Vergleich zum Einmalkauf. Kostenlos, ohne Anmeldung.">
+<meta property="og:type" content="website">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=18">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Live · Rückrechnung mit echten Kursen</div>
+  <h1>Was wäre aus deinem <em>Sparplan</em> geworden?</h1>
+  <p class="hero-sub">Sparrate, Coin, Intervall, Gebühren — stell deinen Sparplan zusammen, der Rechner holt sich echte Tageskurse der letzten 12 Monate und zeigt dir, was daraus geworden wäre. Weiter unten außerdem ein separates, klar gekennzeichnetes Zukunftsszenario zum Durchspielen.</p>
+</div>
+
+<!-- ============ RECHNER ============ -->
+<section id="rechner">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Deinen Sparplan durchrechnen</h2>
+      <div class="intro">
+        <p>Alle Kurse kommen live von CoinGecko, nichts ist erfunden. Die Rechnung berücksichtigt jetzt auch Börsengebühren und eine optionale Einmalanlage — ohne Steuern, die hängen von deinem persönlichen Fall ab (dazu mehr im Haltefrist-Tracker).</p>
+      </div>
+    </div>
+
+    <div class="coinpicker reveal" id="coinBar" role="group" aria-label="Coin wählen">
+      <button type="button" data-coin="bitcoin" aria-pressed="true"><span class="ic" style="background:#F7931A">B</span>Bitcoin <span class="mono" style="color:var(--muted-2)">BTC</span></button>
+      <button type="button" data-coin="ethereum" aria-pressed="false"><span class="ic" style="background:#627EEA">E</span>Ethereum <span class="mono" style="color:var(--muted-2)">ETH</span></button>
+      <button type="button" data-coin="solana" aria-pressed="false"><span class="ic" style="background:#9945FF">S</span>Solana <span class="mono" style="color:var(--muted-2)">SOL</span></button>
+      <button type="button" data-coin="ripple" aria-pressed="false"><span class="ic" style="background:#23292F">X</span>XRP <span class="mono" style="color:var(--muted-2)">XRP</span></button>
+    </div>
+
+    <div class="sp-layout reveal">
+      <!-- ---- LINKS: Eingaben ---- -->
+      <div class="sp-side">
+        <div class="panel">
+          <div class="sp-field">
+            <label class="fl">Intervall</label>
+            <div class="seg" id="intervalSeg" role="group" aria-label="Kaufintervall">
+              <button type="button" data-iv="monthly" aria-pressed="true">Monatlich</button>
+              <button type="button" data-iv="weekly" aria-pressed="false">Wöchentlich</button>
+            </div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-head"><label class="fl" for="spAmt" style="margin:0">Sparrate (pro Monat)</label><b id="spAmtOut">100 €</b></div>
+            <input id="spAmt" type="range" min="10" max="1000" step="10" value="100" class="track-brand">
+            <div class="quick" id="quickAmts">
+              <button data-a="50">50 €</button><button data-a="100">100 €</button>
+              <button data-a="250">250 €</button><button data-a="500">500 €</button>
+            </div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-head"><label class="fl" for="spMonths" style="margin:0">Zeitraum</label><b id="spMonthsOut">12 Monate</b></div>
+            <input id="spMonths" type="range" min="1" max="12" step="1" value="12" class="track-brand">
+            <div class="rangelabels"><span>1 Monat</span><span>12 Monate (Maximum)</span></div>
+            <div class="hintbox">Mehr als 12 Monate geht hier bewusst nicht: Kostenlose Live-Kurse reichen nur etwa ein Jahr zurück. Für längere Zeiträume gibt es weiter unten das <a href="#zukunft">Zukunftsszenario</a> mit einer angenommenen Rendite statt echten Kursen.</div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-head"><label class="fl" for="spLump" style="margin:0">Einmalanlage <span class="opt">(optional)</span></label><b id="spLumpOut">0 €</b></div>
+            <input id="spLump" type="range" min="0" max="10000" step="100" value="0" class="track-brand">
+            <div class="rangelabels"><span>0 €</span><span>10.000 €</span></div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-head"><label class="fl" style="margin:0">Börsengebühr</label><b id="spFeeOut">0,10 %</b></div>
+            <div class="exchbtns" id="exchBtns">
+              <button type="button" data-fee="0.10" aria-pressed="true"><b>Binance</b>0,10 %</button>
+              <button type="button" data-fee="0.25" aria-pressed="false"><b>Bitvavo</b>0,25 %</button>
+            </div>
+            <input id="spFee" type="range" min="0" max="2" step="0.01" value="0.10" class="track-brand" style="margin-top:10px" aria-label="Eigene Gebühr in Prozent">
+            <p style="color:var(--muted-2); font-family:var(--font-mono); font-size:11px; margin-top:6px">Richtwerte, keine aktuellen Gebührenlisten der Börsen — schwanken je nach Kontostufe und Zahlungsart.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- RECHTS: Ergebnis ---- -->
+      <div class="sp-main">
+        <div class="sp-hero-result" id="resultBox">
+          <div class="sp-hero-top">
+            <div class="sp-hero-left">
+              <span class="ic" id="resIcon" style="background:#F7931A">B</span>
+              <div>
+                <div class="num" id="outValue">—</div>
+                <div class="sub" id="outSub">wird geladen</div>
+              </div>
+            </div>
+            <span class="delta-pill up" id="deltaPill">—</span>
+          </div>
+        </div>
+
+        <div class="sp-stats">
+          <div class="stat"><div class="k">Eingezahlt</div><div class="n" id="outInvested">—</div></div>
+          <div class="stat"><div class="k">Menge im Depot</div><div class="n" id="outUnits">—</div></div>
+          <div class="stat"><div class="k">Ø Einstiegskurs</div><div class="n" id="outAvg">—</div></div>
+          <div class="stat"><div class="k">Gebühren gezahlt</div><div class="n" id="outFees">—</div></div>
+        </div>
+        <p class="sp-explain">„Depotwert" = deine bis dahin gekaufte Menge × den Kurs an diesem Tag. „Eingezahlt" = die Summe deiner Käufe bis dahin, ohne Kursänderung. Ist der Kurs seit deinen Käufen gefallen, liegt der Depotwert unter dem eingezahlten Betrag — das ist ein realer Buchverlust zum aktuellen Kurs, kein Rechenfehler.</p>
+
+        <div class="chart-card">
+          <div class="chart-bar">
+            <div class="chart-legend">
+              <span><i style="background:var(--brand)"></i>Depotwert — Kurswert deiner Coins an dem Tag</span>
+              <span><i style="background:var(--muted-2)"></i>Eingezahlt — Summe deiner Käufe (gestrichelt)</span>
+              <span><i style="background:#0E9488"></i>S&amp;P 500 (SPY)</span>
+              <span><i style="background:#C9962C"></i>Gold (GLD)</span>
+            </div>
+          </div>
+          <div class="chart-host" id="chartHost">
+            <div id="chart" role="img" aria-label="Verlauf von Depotwert, Einzahlungen und Vergleichswerten"></div>
+            <div class="tip" id="spTip"></div>
+          </div>
+          <p class="chart-hint">Maus über den Chart bewegen zeigt alle Werte für jeden Kauftag. S&amp;P 500 und Gold zeigen, was derselbe Sparplan über die ETFs SPY und GLD gebracht hätte.</p>
+        </div>
+
+        <div class="sp-stats">
+          <div class="stat"><div class="k">Dein Sparplan</div><div class="n" id="cmpCrypto">—</div></div>
+          <div class="stat"><div class="k">S&amp;P 500 (SPY)</div><div class="n" id="cmpSpy">—</div></div>
+          <div class="stat"><div class="k">Gold (GLD)</div><div class="n" id="cmpGld">—</div></div>
+          <div class="stat"><div class="k">Eingezahlt</div><div class="n" id="cmpInvested">—</div></div>
+        </div>
+        <p class="sp-explain" id="cmpNote">S&amp;P-500- und Gold-Daten über die ETFs SPY und GLD (Alpha Vantage, Wochenkurse). USD grob zu € umgerechnet — keine tagesaktuelle FX-Rate.</p>
+
+        <div class="sp-row2">
+          <div class="sp-callout">
+            <div class="k">Steuerstatus (§ 23 EStG)</div>
+            <div class="v" id="taxStatus">—</div>
+            <p id="taxNote">Wird berechnet, sobald die Käufe geladen sind.</p>
+          </div>
+          <div class="sp-callout">
+            <div class="k">Vergleich zum Einmalkauf</div>
+            <div class="v" id="compareValue">—</div>
+            <p id="compareNote">—</p>
+          </div>
+        </div>
+
+        <div class="sp-cta">
+          <p>Käufe sauber dokumentieren, damit du bei echten Verkäufen genau weißt, ab wann welcher Kauf steuerfrei ist: <b>Haltefrist-Tracker</b>.</p>
+          <a class="btn primary" href="/haltefrist-tracker/">Zum Haltefrist-Tracker</a>
+        </div>
+
+        <div class="panel" style="padding:0; overflow:hidden">
+          <div class="table-scroll">
+            <table class="holdings-table" id="spTable">
+              <thead>
+                <tr><th>Datum</th><th>Kurs</th><th>Gekauft</th><th>Depotwert kumuliert</th></tr>
+              </thead>
+              <tbody id="spBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="disclaimer" id="srcNote">Quelle: CoinGecko · Keine Anlageberatung, keine Kaufempfehlung. Krypto-Anlagen können vollständig an Wert verlieren.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ZUKUNFT ============ -->
+<section id="zukunft" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Zukunftsszenario — reine Annahme, keine Prognose</h2>
+      <div class="intro">
+        <p>Das hier ist etwas grundlegend anderes als der Rechner oben: keine echten Kurse, sondern reine Zinseszins-Mathematik mit einer <b style="color:var(--text)">angenommenen</b> jährlichen Wachstumsrate. Die Prozentsätze unten sind Beispielwerte zum Durchspielen — keine Vorhersage, wie sich Bitcoin, Ethereum oder ein anderer Coin tatsächlich entwickeln wird. Die Rückrechnung oben mit echten Kursen zeigt, wie stark die tatsächliche Entwicklung davon abweichen kann, in beide Richtungen.</p>
+      </div>
+    </div>
+
+    <div class="sp-layout reveal">
+      <!-- ---- LINKS: Eingaben ---- -->
+      <div class="sp-side">
+        <div class="panel">
+          <div class="sp-field">
+            <div class="sp-field-head"><label class="fl" for="futAmt" style="margin:0">Monatliche Sparrate</label><b id="futAmtOut">100 €</b></div>
+            <input id="futAmt" type="range" min="10" max="1000" step="10" value="100" class="track-brand">
+            <div class="quick" id="futQuickAmts">
+              <button data-a="50">50 €</button><button data-a="100">100 €</button>
+              <button data-a="250">250 €</button><button data-a="500">500 €</button>
+            </div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-head"><label class="fl" for="futInitial" style="margin:0">Startkapital <span class="opt">(optional)</span></label><b id="futInitialOut">0 €</b></div>
+            <input id="futInitial" type="range" min="0" max="50000" step="500" value="0" class="track-brand">
+            <div class="rangelabels"><span>0 €</span><span>50.000 €</span></div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-head"><label class="fl" for="futMonths" style="margin:0">Anlagezeitraum</label><b id="futMonthsOut">10 Jahre</b></div>
+            <input id="futMonths" type="range" min="1" max="30" step="1" value="10" class="track-brand">
+            <div class="rangelabels"><span>1 Jahr</span><span>30 Jahre</span></div>
+          </div>
+
+          <div class="sp-field">
+            <label class="fl">Angenommene jährliche Rendite</label>
+            <div class="scenbtns" id="scenBtns">
+              <button type="button" data-r="0" aria-pressed="false"><span class="t">Nur Einzahlungen</span><span class="p">0 % p. a.</span></button>
+              <button type="button" data-r="4" aria-pressed="false"><span class="t">Zurückhaltend</span><span class="p">4 % p. a.</span></button>
+              <button type="button" data-r="8" aria-pressed="true"><span class="t">Aktienmarkt-Ø</span><span class="p">8 % p. a.</span></button>
+              <button type="button" data-r="15" aria-pressed="false"><span class="t">Ambitioniert</span><span class="p">15 % p. a.</span></button>
+            </div>
+            <div class="sp-field-head" style="margin-top:14px"><label class="fl" for="futRate" style="margin:0">Eigener Wert</label><b id="futRateOut">8 % p. a.</b></div>
+            <input id="futRate" type="range" min="-20" max="40" step="1" value="8" class="track-brand" aria-label="Eigene angenommene jährliche Rendite">
+            <div class="rangelabels"><span>−20 %</span><span>+40 %</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- RECHTS: Ergebnis ---- -->
+      <div class="sp-main">
+        <div class="sp-hero-result">
+          <div class="sp-hero-top">
+            <div class="sp-hero-left">
+              <span class="ic" style="background:var(--brand)">Z</span>
+              <div>
+                <div class="num" id="futValue">—</div>
+                <div class="sub" id="futSub">wird berechnet</div>
+              </div>
+            </div>
+            <span class="delta-pill up" id="futDeltaPill">—</span>
+          </div>
+        </div>
+
+        <div class="sp-stats">
+          <div class="stat"><div class="k">Eingezahlt</div><div class="n" id="futInvested">—</div></div>
+          <div class="stat"><div class="k">Zinsgewinn</div><div class="n" id="futGain">—</div></div>
+          <div class="stat"><div class="k">Verdopplungszeit</div><div class="n" id="futDouble">—</div></div>
+          <div class="stat"><div class="k">Vervielfachung</div><div class="n" id="futMultiple">—</div></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-bar">
+            <div class="chart-legend">
+              <span><i style="background:var(--brand)"></i>Dein Szenario</span>
+              <span><i style="background:var(--muted-2)"></i>Eingezahlt (ohne Zinseszins)</span>
+              <span><i style="background:#0E9488"></i>S&amp;P 500 (10 % Ø, geschätzt)</span>
+              <span><i style="background:#C9962C"></i>Gold (7 % Ø, geschätzt)</span>
+            </div>
+          </div>
+          <div class="chart-host" id="futChartHost">
+            <div id="futChart" role="img" aria-label="Verlauf von Endkapital, Einzahlungen und Vergleichswerten über die Jahre"></div>
+            <div class="tip" id="futTip"></div>
+          </div>
+          <p class="chart-hint">Maus über den Chart bewegen zeigt alle Werte für jedes Jahr. S&amp;P 500 und Gold laufen mit langjährigen, geschätzten Durchschnittsrenditen (10 % bzw. 7 % p. a.) zum Vergleich mit — nicht mit echten Kursdaten wie im Rechner oben, sondern derselben Zinseszins-Rechnung wie dein Szenario.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout reveal">
+      <b>Das ist ein Modell, kein Versprechen:</b> Weder 0 %, 4 %, 8 % noch 15 % pro Jahr sind für irgendeine Kryptowährung garantiert oder auch nur wahrscheinlich in genau dieser Höhe. Auch die S&amp;P-500- und Gold-Linien im Chart sind nur grobe, geschätzte Langzeit-Durchschnitte, keine verlässliche Prognose — Gold etwa lag von 1980 bis etwa 2000 über zwei Jahrzehnte real im Minus. Kryptomärkte waren historisch deutlich schwankungsanfälliger als in dieser Rechnung unterstellt — auch mehrjährige Verlustphasen sind vorgekommen und können wieder vorkommen. Nutz das hier zum Verstehen von Zinseszins, nicht zur Finanzplanung.
+    </div>
+  </div>
+</section>
+
+<!-- ============ METHODE ============ -->
+<section id="methode">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Wie die Rückrechnung oben zustande kommt</h2>
+      <div class="intro">
+        <p>Für jeden Kauftermin im gewählten Zeitraum sucht sich der Rechner den echten Tageskurs und „kauft" damit rechnerisch Anteile für deinen eingestellten Betrag, abzüglich der gewählten Börsengebühr. Bei wöchentlichem Intervall wird die Monatsrate anteilig auf mehr, kleinere Käufe verteilt, damit die Gesamtsumme über ein Jahr vergleichbar bleibt. Eine optionale Einmalanlage wird als zusätzlicher Kauf am ersten Tag des Zeitraums simuliert.</p>
+        <p>Der Vergleich zum Einmalkauf rechnet dieselbe Gesamtsumme (inklusive Einmalanlage), aber komplett am ersten Tag investiert. So siehst du, ob regelmäßiges Kaufen oder ein einziger großer Kauf am Anfang in diesem konkreten Zeitraum besser abgeschnitten hätte.</p>
+      </div>
+    </div>
+    <div class="callout reveal">
+      <b>Wichtige Einschränkung:</b> Frei zugängliche Live-Kursdaten reichen ohne kostenpflichtigen API-Zugang zuverlässig nur etwa 365 Tage zurück. Deshalb ist die Rückrechnung mit echten Kursen auf maximal 12 Monate begrenzt — lieber kurz mit echten Kursen als lang mit geschätzten Werten. Für längere Zeiträume gibt es stattdessen das Zukunftsszenario weiter oben, klar als Annahme gekennzeichnet.
+    </div>
+  </div>
+</section>
+
+<!-- ============ VERGLEICH ============ -->
+<section id="vergleich" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Sparplan oder auf einmal investieren?</h2>
+      <p>Beides hat Vor- und Nachteile — welcher Weg besser war, weißt du immer erst hinterher.</p>
+    </div>
+    <div class="princ reveal">
+      <div class="card">
+        <div class="tag">Sparplan (DCA)</div>
+        <h3>Regelmäßig, unabhängig vom Kurs</h3>
+        <p>Du kaufst regelmäßig denselben Betrag, egal ob der Kurs gerade hoch oder tief steht. Das verteilt dein Risiko über die Zeit und du musst nicht raten, wann der „richtige" Einstiegspunkt ist. Nachteil: In einem Markt, der die meiste Zeit steigt, verpasst du im Schnitt die günstigeren frühen Kurse.</p>
+      </div>
+      <div class="card accent">
+        <div class="tag">Einmalkauf (Lump Sum)</div>
+        <h3>Alles auf einmal, am Anfang</h3>
+        <p>Historisch hat ein sofortiger Einmalkauf einen über die Zeit gestreckten Sparplan öfter geschlagen als umgekehrt — einfach weil Märkte öfter steigen als fallen und das Geld dadurch länger investiert ist. Nachteil: Trifft der Einstieg einen ungünstigen Zeitpunkt kurz vor einem Rückgang, tut das sofort und in voller Höhe weh.</p>
+      </div>
+    </div>
+    <div class="callout reveal">
+      Für die meisten Menschen ist der eigentliche Vorteil eines Sparplans nicht die bessere Rendite, sondern dass er überhaupt durchgehalten wird — ohne die Notwendigkeit, den Markt zu timen oder eine große Summe auf einmal aufzubringen. Was du dabei zusätzlich verdienen könntest, etwa durch Staking oder Zinsangebote, hängt stark vom jeweiligen Anbieter und Marktumfeld ab und ist nirgendwo garantiert — das rechnet dieses Tool bewusst nicht mit ein.
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRENZEN ============ -->
+<section id="grenzen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Grenzen dieser Seite</h2>
+    </div>
+    <div class="limits reveal">
+      <div class="limit"><h3>Maximal 12 Monate mit echten Kursen</h3><p>Frei zugängliche Live-Kursdaten reichen ohne kostenpflichtigen API-Zugang zuverlässig nur etwa ein Jahr zurück. Das Zukunftsszenario ist deshalb bewusst als separate, klar gekennzeichnete Annahme aufgebaut statt als vermeintlich echte Langzeit-Rückrechnung.</p></div>
+      <div class="limit"><h3>Gebühren sind Richtwerte</h3><p>Die hinterlegten Prozentsätze für Binance und Bitvavo sind grobe Orientierungswerte, keine aktuellen, verbindlichen Gebührenlisten. Reale Gebühren hängen von Kontostufe, Zahlungsart und Zeitpunkt ab.</p></div>
+      <div class="limit"><h3>S&amp;P 500 und Gold sind ein Schnappschuss</h3><p>Die Vergleichswerte über die ETFs SPY und GLD kommen nicht live, sondern aus einem einmaligen Abruf (Alpha Vantage), der von Zeit zu Zeit manuell aktualisiert wird — der kostenlose API-Zugang lässt keinen Live-Abruf bei jedem Seitenbesuch zu. Die USD-Umrechnung in Euro ist zudem nur eine grobe Näherung, keine tagesaktuelle Rate.</p></div>
+      <div class="limit"><h3>Keine Steuern in der Rückrechnung</h3><p>Der Steuerstatus-Hinweis zeigt nur, welche simulierten Käufe rechnerisch älter als ein Jahr sind — er ersetzt keine Steuerberatung und keine echte Berechnung deiner Steuerlast.</p></div>
+      <div class="limit"><h3>Keine Anlageberatung</h3><p>Beide Rechner zeigen Modelle — eine Rückrechnung der Vergangenheit und eine Annahme für die Zukunft. Keins von beidem ist eine Prognose oder Empfehlung.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Häufige Fragen</h2>
+    </div>
+    <div class="acc" id="faqList"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Warum geht die Rückrechnung mit echten Kursen nur 12 Monate zurück?","acceptedAnswer":{"@type":"Answer","text":"Frei zugängliche Live-Kursdaten ohne kostenpflichtigen API-Zugang reichen zuverlässig nur etwa ein Jahr zurück. Für längere Zeiträume gibt es stattdessen das separate Zukunftsszenario mit einer klar gekennzeichneten angenommenen Rendite."}},
+{"@type":"Question","name":"Ist das Zukunftsszenario eine Prognose für Bitcoin oder andere Coins?","acceptedAnswer":{"@type":"Answer","text":"Nein. Es ist reine Zinseszins-Mathematik mit einer frei wählbaren, angenommenen jährlichen Rendite. Keiner der Prozentsätze ist für irgendeine Kryptowährung garantiert oder vorhergesagt."}},
+{"@type":"Question","name":"Sind Gebühren und Steuern in der Rechnung enthalten?","acceptedAnswer":{"@type":"Answer","text":"Börsengebühren werden bei der Rückrechnung mit echten Kursen berücksichtigt. Steuern nicht — dafür zeigt die Seite nur, welche simulierten Käufe rechnerisch bereits älter als ein Jahr wären."}},
+{"@type":"Question","name":"Ist ein Sparplan besser als ein Einmalkauf?","acceptedAnswer":{"@type":"Answer","text":"Das lässt sich pauschal nicht sagen. Historisch schlägt ein sofortiger Einmalkauf einen gestreckten Sparplan im Durchschnitt etwas häufiger, weil Märkte öfter steigen als fallen. Ein Sparplan senkt dafür das Risiko, ausgerechnet zum ungünstigsten Zeitpunkt alles auf einmal zu investieren."}},
+{"@type":"Question","name":"Sind die S&P-500- und Gold-Vergleichswerte live?","acceptedAnswer":{"@type":"Answer","text":"Nein. Sie kommen aus einem einmaligen Abruf über die ETFs SPY und GLD, der von Zeit zu Zeit manuell aktualisiert wird, kein Live-Abruf bei jedem Seitenbesuch. Die USD-Umrechnung in Euro ist zudem nur eine grobe Näherung."}}
+]}
+</script>
+
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="/assets/site.js?v=18"></script>
+<script>
+RX.header();
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Tools', href:'/#tools'},
+    {label:'Sparplan-Rechner', current:true}
+  ],
+  pills: [
+    {label:'Fear & Greed Index', href:'/fear-greed/'},
+    {label:'Heatzone Chart', href:'/heatzone-chart/'},
+    {label:'Scam-Check', href:'/scam-check/'},
+    {label:'Haltefrist-Tracker', href:'/haltefrist-tracker/'},
+    {label:'Halving-Countdown', href:'/halving-countdown/'},
+    {label:'Sparplan-Rechner', href:'/sparplan-rechner/', current:true}
+  ]
+});
+RX.footer();
+</script>
+<script>
+(function(){
+"use strict";
+var $ = id => document.getElementById(id);
+
+var COINS = {
+  bitcoin:  {label:'Bitcoin',  sym:'BTC', color:'#F7931A', fallback:64000},
+  ethereum: {label:'Ethereum', sym:'ETH', color:'#627EEA', fallback:2500},
+  solana:   {label:'Solana',   sym:'SOL', color:'#9945FF', fallback:150},
+  ripple:   {label:'XRP',      sym:'XRP', color:'#23292F', fallback:0.55}
+};
+
+var state = { coin:'bitcoin', amount:100, months:12, lump:0, feePct:0.10, interval:'monthly', cache:{}, isDemo:false };
+
+/* ---------- Vergleichsdaten: S&P 500 (SPY) und Gold (GLD) ----------
+   Einmalig per Alpha-Vantage-Key abgerufene, echte Wochenkurse (kein
+   Live-Fetch bei jedem Seitenaufruf): Alpha Vantages kostenloses
+   Kontingent ist auf 25 Anfragen/Tag begrenzt und der Key liegt hier im
+   öffentlichen Quelltext — bei echtem Traffic wäre das Kontingent nach
+   wenigen Besuchern aufgebraucht. Stattdessen ein Schnappschuss, der von
+   Zeit zu Zeit manuell aktualisiert wird. Stand: 11.08.2026. */
+var SPY_SNAPSHOT_DATE = '11.08.2026';
+var SPY_WEEKLY = [{t:1754006400000,p:621.72},{t:1754611200000,p:637.18},{t:1755216000000,p:643.44},{t:1755820800000,p:645.31},{t:1756425600000,p:645.05},{t:1757030400000,p:647.24},{t:1757635200000,p:657.41},{t:1758240000000,p:663.7},{t:1758844800000,p:661.82},{t:1759449600000,p:669.21},{t:1760054400000,p:653.02},{t:1760659200000,p:664.39},{t:1761264000000,p:677.25},{t:1761868800000,p:682.06},{t:1762473600000,p:670.97},{t:1763078400000,p:671.93},{t:1763683200000,p:659.03},{t:1764288000000,p:683.39},{t:1764892800000,p:685.69},{t:1765497600000,p:681.76},{t:1766102400000,p:680.59},{t:1766707200000,p:690.31},{t:1767312000000,p:683.17},{t:1767916800000,p:694.07},{t:1768521600000,p:691.66},{t:1769126400000,p:689.23},{t:1769731200000,p:691.97},{t:1770336000000,p:690.62},{t:1770940800000,p:681.75},{t:1771545600000,p:689.43},{t:1772150400000,p:685.99},{t:1772755200000,p:672.38},{t:1773360000000,p:662.29},{t:1773964800000,p:648.57},{t:1774569600000,p:634.09},{t:1775088000000,p:655.83},{t:1775779200000,p:679.46},{t:1776384000000,p:710.14},{t:1776988800000,p:713.94},{t:1777593600000,p:720.65},{t:1778198400000,p:737.62},{t:1778803200000,p:739.17},{t:1779408000000,p:745.64},{t:1780012800000,p:756.48},{t:1780617600000,p:737.55},{t:1781222400000,p:741.75},{t:1781740800000,p:746.74},{t:1782432000000,p:728.99},{t:1782950400000,p:744.78},{t:1783641600000,p:754.95},{t:1784246400000,p:743.29},{t:1784851200000,p:738.93},{t:1785456000000,p:747.03},{t:1786060800000,p:773.26},{t:1786406400000,p:770.56}];
+var GLD_WEEKLY = [{t:1754006400000,p:309.11},{t:1754611200000,p:313.05},{t:1755216000000,p:307.43},{t:1755820800000,p:310.58},{t:1756425600000,p:318.07},{t:1757030400000,p:331.05},{t:1757635200000,p:335.42},{t:1758240000000,p:339.18},{t:1758844800000,p:346.74},{t:1759449600000,p:357.64},{t:1760054400000,p:369.12},{t:1760659200000,p:388.99},{t:1761264000000,p:377.52},{t:1761868800000,p:368.12},{t:1762473600000,p:368.31},{t:1763078400000,p:375.96},{t:1763683200000,p:374.27},{t:1764288000000,p:387.88},{t:1764892800000,p:386.44},{t:1765497600000,p:395.44},{t:1766102400000,p:399.02},{t:1766707200000,p:416.74},{t:1767312000000,p:398.28},{t:1767916800000,p:414.47},{t:1768521600000,p:421.29},{t:1769126400000,p:458},{t:1769731200000,p:444.95},{t:1770336000000,p:455.46},{t:1770940800000,p:462.62},{t:1771545600000,p:468.62},{t:1772150400000,p:483.75},{t:1772755200000,p:473.51},{t:1773360000000,p:460.84},{t:1773964800000,p:413.38},{t:1774569600000,p:414.7},{t:1775088000000,p:429.41},{t:1775779200000,p:437.13},{t:1776384000000,p:445.93},{t:1776988800000,p:433.25},{t:1777593600000,p:423.18},{t:1778198400000,p:433.77},{t:1778803200000,p:417.29},{t:1779408000000,p:413.82},{t:1780012800000,p:417.12},{t:1780617600000,p:396.24},{t:1781222400000,p:386.54},{t:1781740800000,p:387.12},{t:1782432000000,p:373.63},{t:1782950400000,p:378.13},{t:1783641600000,p:377.01},{t:1784246400000,p:368.41},{t:1784851200000,p:371.9},{t:1785456000000,p:371.54},{t:1786060800000,p:398.47},{t:1786406400000,p:400.96}];
+
+function eur(n, maxFrac){ return RX.currency.format(n, maxFrac==null?0:maxFrac); }
+function fmtNum(n, maxFrac){ return new Intl.NumberFormat('de-DE', {maximumFractionDigits:(maxFrac==null?6:maxFrac)}).format(n); }
+function fmtDate(t){ return new Date(t).toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'}); }
+
+/* ---------- Regler mit Fuellstand ---------- */
+function paintRange(el){
+  var min = parseFloat(el.min), max = parseFloat(el.max), v = parseFloat(el.value);
+  var pct = ((v - min) / (max - min)) * 100;
+  el.style.background = 'linear-gradient(90deg, var(--brand) 0%, var(--brand) ' + pct + '%, var(--line-soft) ' + pct + '%, var(--line-soft) 100%)';
+}
+function initRange(el, onInput){
+  paintRange(el);
+  el.addEventListener('input', function(){ paintRange(el); onInput(); });
+}
+
+/* ---------- Daten laden ---------- */
+function fallbackSeries(coinId){
+  var fx = RX.currency.get() === 'EUR' ? 0.92 : 1;
+  var now = COINS[coinId].fallback * fx;
+  var past = now * 0.62;
+  var out = [], days = 365, start = Date.now() - days*86400000;
+  for(var i=0;i<=days;i++){
+    var f = i/days;
+    var p = Math.exp(Math.log(past) + f*(Math.log(now)-Math.log(past)));
+    out.push({ t:start + i*86400000, p:p });
+  }
+  return out;
+}
+
+async function fetchSeries(coinId){
+  var cur = RX.currency.get().toLowerCase();
+  var key = coinId + ':' + cur;
+  if(state.cache[key]) return state.cache[key];
+  try{
+    var r = await fetch('https://api.coingecko.com/api/v3/coins/' + coinId + '/market_chart?vs_currency=' + cur + '&days=365&interval=daily', {cache:'no-store'});
+    if(!r.ok) throw new Error('http ' + r.status);
+    var j = await r.json();
+    if(!j.prices || j.prices.length < 100) throw new Error('zu wenig Daten');
+    var series = j.prices.map(function(p){ return {t:p[0], p:p[1]}; }).filter(function(d){ return d.p > 0; });
+    state.isDemo = false;
+    state.cache[key] = series;
+    return series;
+  }catch(e){
+    state.isDemo = true;
+    var fb = fallbackSeries(coinId);
+    state.cache[key] = fb;
+    return fb;
+  }
+}
+
+/* ---------- Backtest ---------- */
+function priceOnOrBefore(series, ts){
+  var best = series[0];
+  for(var i=0;i<series.length;i++){
+    if(series[i].t <= ts) best = series[i]; else break;
+  }
+  return best;
+}
+
+function purchaseDates(months){
+  var last = new Date();
+  var start = new Date(Date.UTC(last.getUTCFullYear(), last.getUTCMonth() - months + 1, 1));
+  var dates = [];
+  if(state.interval === 'weekly'){
+    var d = new Date(start);
+    while(d.getTime() <= last.getTime()){ dates.push(d.getTime()); d = new Date(d.getTime() + 7*86400000); }
+  } else {
+    for(var i=0;i<months;i++){
+      dates.push(Date.UTC(start.getUTCFullYear(), start.getUTCMonth()+i, 1));
+    }
+  }
+  return dates;
+}
+
+function runBacktest(series, amount, months, lump, feePct){
+  var last = series[series.length-1];
+  var dates = purchaseDates(months);
+  var perBuyAmount = state.interval === 'weekly' ? (amount * 12 / 52) : amount;
+  var fee = feePct / 100;
+  var totalFees = 0;
+
+  var purchases = dates.map(function(t, i){
+    var pt = priceOnOrBefore(series, t);
+    var gross = perBuyAmount + (i === 0 ? lump : 0);
+    var feeAmt = gross * fee;
+    totalFees += feeAmt;
+    var net = gross - feeAmt;
+    return { t: pt.t, price: pt.p, gross: gross, units: net / pt.p };
+  });
+
+  var totalInvested = perBuyAmount * dates.length + lump;
+  var cumUnits = 0, cumInvested = 0;
+  var chartPoints = purchases.map(function(p){
+    cumUnits += p.units; cumInvested += p.gross;
+    return { t:p.t, invested:cumInvested, value:cumUnits * p.price, units:p.units, price:p.price };
+  });
+  var totalUnits = cumUnits;
+  var currentValue = totalUnits * last.p;
+  var firstPrice = purchases[0].price;
+  var lumpTotal = totalInvested; // gleiche Summe, komplett am ersten Tag
+  var lumpUnits = (lumpTotal * (1-fee)) / firstPrice;
+  var lumpValue = lumpUnits * last.p;
+
+  var taxFreeCount = purchases.filter(function(p){ return (last.t - p.t) / 86400000 >= 365; }).length;
+
+  return {
+    purchases:chartPoints, totalInvested:totalInvested, totalUnits:totalUnits, currentValue:currentValue,
+    lumpValue:lumpValue, nowPrice:last.p, avgPrice: totalInvested/totalUnits, totalFees:totalFees,
+    taxFreeCount:taxFreeCount, purchaseCount:purchases.length
+  };
+}
+
+/* ---------- Vergleich: derselbe Sparplan in SPY/GLD statt Crypto ----------
+   Nutzt denselben Kaufrhythmus (purchaseDates) wie der Crypto-Rechner,
+   damit der Vergleich fair ist — nur die Kursquelle ist eine andere. */
+var FX_USD_EUR = 0.92; // grobe Näherung, keine Live-Rate
+function runComparisonSeries(usdSeries, amount, months){
+  var fx = RX.currency.get() === 'EUR' ? FX_USD_EUR : 1;
+  var dates = purchaseDates(months);
+  var perBuyAmount = state.interval === 'weekly' ? (amount * 12 / 52) : amount;
+  var last = usdSeries[usdSeries.length - 1];
+  var cumUnits = 0, cumInvested = 0;
+  var points = dates.map(function(t){
+    var pt = priceOnOrBefore(usdSeries, t);
+    var priceLocal = pt.p * fx;
+    var units = perBuyAmount / priceLocal;
+    cumUnits += units; cumInvested += perBuyAmount;
+    return { t: pt.t, value: cumUnits * priceLocal, invested: cumInvested };
+  });
+  return { points: points, endValue: cumUnits * last.p * fx, invested: cumInvested };
+}
+
+/* ---------- Chart (Rückrechnung) ---------- */
+var lwChart = null;
+function cssVar(name, host){ return getComputedStyle(host).getPropertyValue(name).trim(); }
+function buildChart(points, spyPoints, gldPoints){
+  var host = $('chart');
+  host.innerHTML = '';
+  if(lwChart){ lwChart.remove(); lwChart = null; }
+  var box = host.getBoundingClientRect();
+  var width = Math.round(box.width) || 600, height = Math.round(box.height) || 320;
+
+  lwChart = LightweightCharts.createChart(host, {
+    width:width, height:height,
+    layout:{ background:{color:'transparent'}, textColor:cssVar('--muted-2', host), fontFamily:'IBM Plex Mono, monospace', fontSize:11.5 },
+    localization:{ priceFormatter: function(v){ return eur(v); } },
+    grid:{ vertLines:{color:cssVar('--line', host)}, horzLines:{color:cssVar('--line', host)} },
+    rightPriceScale:{ borderColor:cssVar('--line-soft', host) },
+    timeScale:{ borderColor:cssVar('--line-soft', host), rightOffset:1 },
+    crosshair:{ mode: LightweightCharts.CrosshairMode.Magnet },
+    handleScroll:false, handleScale:false
+  });
+
+  var valueSeries = lwChart.addLineSeries({ color:cssVar('--brand', host), lineWidth:2.5, priceLineVisible:false });
+  var investedSeries = lwChart.addLineSeries({ color:cssVar('--muted-2', host), lineWidth:1.5, lineStyle:LightweightCharts.LineStyle.Dashed, priceLineVisible:false });
+  var spySeries = lwChart.addLineSeries({ color:'#0E9488', lineWidth:1.75, priceLineVisible:false });
+  var gldSeries = lwChart.addLineSeries({ color:'#C9962C', lineWidth:1.75, priceLineVisible:false });
+
+  var toLwTime = function(t){ return new Date(t).toISOString().slice(0,10); };
+  function toSeriesData(list, field){
+    var seen = {}, out = [];
+    (list || []).forEach(function(p){
+      var key = toLwTime(p.t);
+      if(seen[key]) return; seen[key] = true;
+      out.push({time:key, value:p[field]});
+    });
+    return out;
+  }
+  valueSeries.setData(toSeriesData(points, 'value'));
+  investedSeries.setData(toSeriesData(points, 'invested'));
+  spySeries.setData(toSeriesData(spyPoints, 'value'));
+  gldSeries.setData(toSeriesData(gldPoints, 'value'));
+  lwChart.timeScale().fitContent();
+
+  var tip = $('spTip');
+  lwChart.subscribeCrosshairMove(function(param){
+    var v = param.seriesData && param.seriesData.get(valueSeries);
+    var inv = param.seriesData && param.seriesData.get(investedSeries);
+    var spy = param.seriesData && param.seriesData.get(spySeries);
+    var gld = param.seriesData && param.seriesData.get(gldSeries);
+    if(!param.point || !v || !inv){ tip.style.opacity = 0; return; }
+    tip.innerHTML = '<div class="tv" style="color:' + cssVar('--brand', host) + '">Depotwert: ' + eur(v.value) + '</div>' +
+      '<div class="td">Eingezahlt: ' + eur(inv.value) + '</div>' +
+      (spy ? '<div class="td" style="color:#0E9488">S&amp;P 500: ' + eur(spy.value) + '</div>' : '') +
+      (gld ? '<div class="td" style="color:#C9962C">Gold: ' + eur(gld.value) + '</div>' : '') +
+      '<div class="td">' + fmtDate(new Date(param.time + 'T00:00:00Z').getTime()) + '</div>';
+    tip.style.left = param.point.x + 'px';
+    tip.style.top = param.point.y + 'px';
+    tip.style.opacity = 1;
+  });
+}
+window.addEventListener('resize', function(){ if(state.lastPoints) buildChart(state.lastPoints, state.lastSpy, state.lastGld); });
+
+/* ---------- Rendern ---------- */
+function renderTable(points){
+  $('spBody').innerHTML = points.map(function(p){
+    return '<tr>' +
+      '<td>' + fmtDate(p.t) + '</td>' +
+      '<td class="mono">' + eur(p.price, p.price < 10 ? 4 : 2) + '</td>' +
+      '<td class="mono">' + fmtNum(p.units, 6) + ' ' + COINS[state.coin].sym + '</td>' +
+      '<td class="mono">' + eur(p.value) + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function renderResult(bt){
+  var gain = bt.currentValue - bt.totalInvested;
+  var gainPct = (gain / bt.totalInvested) * 100;
+  var up = gain >= 0;
+
+  var coin = COINS[state.coin];
+  $('resIcon').style.background = coin.color;
+  $('resIcon').textContent = coin.sym[0];
+  $('outValue').textContent = eur(bt.currentValue);
+  $('outSub').textContent = (state.isDemo ? 'Demo-Daten, Live-Kurse gerade nicht erreichbar · ' : '') +
+    'Aktueller ' + coin.sym + '-Kurs: ' + eur(bt.nowPrice, bt.nowPrice < 10 ? 4 : 0);
+  $('deltaPill').className = 'delta-pill ' + (up ? 'up' : 'down');
+  $('deltaPill').textContent = (up ? '↑ +' : '↓ ') + gainPct.toFixed(1) + ' %';
+
+  $('outInvested').textContent = eur(bt.totalInvested);
+  $('outUnits').textContent = fmtNum(bt.totalUnits, 6) + ' ' + coin.sym;
+  $('outAvg').textContent = eur(bt.avgPrice, bt.avgPrice < 10 ? 4 : 0);
+  $('outFees').textContent = eur(bt.totalFees, 2);
+
+  var lumpGain = bt.lumpValue - bt.totalInvested;
+  var better = bt.currentValue >= bt.lumpValue ? 'Sparplan' : 'Einmalkauf';
+  $('compareValue').textContent = eur(bt.lumpValue);
+  $('compareNote').innerHTML = 'Bei Einmalkauf am ersten Tag: ' + (lumpGain>=0?'+':'') + eur(lumpGain) + '. Hier besser: <b style="color:var(--text)">' + better + '</b>.';
+
+  if(bt.taxFreeCount === 0){
+    $('taxStatus').textContent = 'Noch keiner steuerfrei';
+    $('taxNote').textContent = 'Keiner deiner ' + bt.purchaseCount + ' simulierten Käufe ist rechnerisch älter als ein Jahr.';
+  } else {
+    $('taxStatus').textContent = bt.taxFreeCount + ' von ' + bt.purchaseCount + ' steuerfrei';
+    $('taxNote').textContent = 'So viele simulierte Käufe wären heute rechnerisch älter als 365 Tage (§ 23 EStG).';
+  }
+}
+
+async function update(){
+  $('outSub').textContent = 'wird geladen';
+  var series = await fetchSeries(state.coin);
+  var bt = runBacktest(series, state.amount, state.months, state.lump, state.feePct);
+  state.lastPoints = bt.purchases;
+  renderResult(bt);
+  renderTable(bt.purchases);
+
+  var spyCmp = runComparisonSeries(SPY_WEEKLY, state.amount, state.months);
+  var gldCmp = runComparisonSeries(GLD_WEEKLY, state.amount, state.months);
+  state.lastSpy = spyCmp.points;
+  state.lastGld = gldCmp.points;
+  buildChart(bt.purchases, spyCmp.points, gldCmp.points);
+  renderComparison(bt, spyCmp, gldCmp);
+}
+
+function renderComparison(bt, spyCmp, gldCmp){
+  $('cmpCrypto').textContent = eur(bt.currentValue);
+  $('cmpCrypto').style.color = bt.currentValue >= bt.totalInvested ? 'var(--z3)' : 'var(--red)';
+  $('cmpSpy').textContent = eur(spyCmp.endValue);
+  $('cmpSpy').style.color = spyCmp.endValue >= spyCmp.invested ? 'var(--z3)' : 'var(--red)';
+  $('cmpGld').textContent = eur(gldCmp.endValue);
+  $('cmpGld').style.color = gldCmp.endValue >= gldCmp.invested ? 'var(--z3)' : 'var(--red)';
+  $('cmpInvested').textContent = eur(bt.totalInvested);
+  $('cmpNote').innerHTML = 'S&amp;P-500- und Gold-Daten über die ETFs SPY und GLD (Alpha Vantage, Wochenkurse) — Schnappschuss vom ' + SPY_SNAPSHOT_DATE + ', kein Live-Abruf. USD grob zu € umgerechnet, keine tagesaktuelle FX-Rate.';
+}
+
+/* ---------- Zukunftsszenario (reine Annahme) ---------- */
+var futState = { initial:0, amount:100, years:10, rate:8 };
+var GOLD_LONGTERM_RATE = 7;   // grobe, langjährige nominale Ø-Rendite, keine Live-Daten
+var SPX_LONGTERM_RATE = 10;   // grobe, langjährige nominale Ø-Rendite, keine Live-Daten
+var futChart = null;
+function runFutureAt(rate){
+  var months = futState.years * 12;
+  var monthlyRate = Math.pow(1 + rate/100, 1/12) - 1;
+  var balance = futState.initial, invested = futState.initial;
+  var points = [];
+  var start = Date.now();
+  if(futState.initial > 0){
+    points.push({ t: start, value: balance, invested: invested });
+  }
+  for(var i=1;i<=months;i++){
+    invested += futState.amount;
+    balance = (balance + futState.amount) * (1 + monthlyRate);
+    points.push({ t: start + i*30*86400000, value: balance, invested: invested });
+  }
+  return { points:points, end:balance, invested:invested };
+}
+function runFuture(){ return runFutureAt(futState.rate); }
+
+function buildFutureChart(points, goldPoints, spxPoints){
+  var host = $('futChart');
+  host.innerHTML = '';
+  if(futChart){ futChart.remove(); futChart = null; }
+  var box = host.getBoundingClientRect();
+  var width = Math.round(box.width) || 600, height = Math.round(box.height) || 320;
+  futChart = LightweightCharts.createChart(host, {
+    width:width, height:height,
+    layout:{ background:{color:'transparent'}, textColor:cssVar('--muted-2', host), fontFamily:'IBM Plex Mono, monospace', fontSize:11.5 },
+    localization:{ priceFormatter: function(v){ return eur(v); } },
+    grid:{ vertLines:{color:cssVar('--line', host)}, horzLines:{color:cssVar('--line', host)} },
+    rightPriceScale:{ borderColor:cssVar('--line-soft', host) },
+    timeScale:{ borderColor:cssVar('--line-soft', host), rightOffset:1 },
+    crosshair:{ mode: LightweightCharts.CrosshairMode.Magnet },
+    handleScroll:false, handleScale:false
+  });
+  var valueSeries = futChart.addAreaSeries({ topColor:'rgba(0,82,255,.28)', bottomColor:'rgba(0,82,255,.02)', lineColor:cssVar('--brand', host), lineWidth:2.5, priceLineVisible:false });
+  var investedSeries = futChart.addLineSeries({ color:cssVar('--muted-2', host), lineWidth:1.5, lineStyle:LightweightCharts.LineStyle.Dashed, priceLineVisible:false });
+  var spxSeries = futChart.addLineSeries({ color:'#0E9488', lineWidth:1.75, priceLineVisible:false });
+  var goldSeries = futChart.addLineSeries({ color:'#C9962C', lineWidth:1.75, priceLineVisible:false });
+
+  var toLwTime = function(t){ return new Date(t).toISOString().slice(0,10); };
+  function toSeriesData(list, field){
+    var seen = {}, out = [];
+    (list || []).forEach(function(p){
+      var key = toLwTime(p.t);
+      if(seen[key]) return; seen[key] = true;
+      out.push({time:key, value:Math.round(p[field])});
+    });
+    return out;
+  }
+  valueSeries.setData(toSeriesData(points, 'value'));
+  investedSeries.setData(toSeriesData(points, 'invested'));
+  spxSeries.setData(toSeriesData(spxPoints, 'value'));
+  goldSeries.setData(toSeriesData(goldPoints, 'value'));
+  futChart.timeScale().fitContent();
+
+  var tip = $('futTip');
+  futChart.subscribeCrosshairMove(function(param){
+    var v = param.seriesData && param.seriesData.get(valueSeries);
+    var inv = param.seriesData && param.seriesData.get(investedSeries);
+    var spx = param.seriesData && param.seriesData.get(spxSeries);
+    var gold = param.seriesData && param.seriesData.get(goldSeries);
+    if(!param.point || !v || !inv){ tip.style.opacity = 0; return; }
+    tip.innerHTML = '<div class="tv" style="color:' + cssVar('--brand', host) + '">Dein Szenario: ' + eur(v.value) + '</div>' +
+      (spx ? '<div class="td" style="color:#0E9488">S&amp;P 500 (' + SPX_LONGTERM_RATE + '% Ø): ' + eur(spx.value) + '</div>' : '') +
+      (gold ? '<div class="td" style="color:#C9962C">Gold (' + GOLD_LONGTERM_RATE + '% Ø): ' + eur(gold.value) + '</div>' : '') +
+      '<div class="td">Eingezahlt: ' + eur(inv.value) + '</div>' +
+      '<div class="td">' + fmtDate(new Date(param.time + 'T00:00:00Z').getTime()) + '</div>';
+    tip.style.left = param.point.x + 'px';
+    tip.style.top = param.point.y + 'px';
+    tip.style.opacity = 1;
+  });
+}
+function updateFuture(){
+  var r = runFuture();
+  var gain = r.end - r.invested;
+  var up = gain >= 0;
+  var gainPct = r.invested > 0 ? (gain / r.invested) * 100 : 0;
+
+  $('futValue').textContent = eur(r.end);
+  $('futSub').textContent = futState.years + (futState.years===1?' Jahr':' Jahre') + ' · ' + futState.rate + ' % p. a. angenommen';
+  $('futDeltaPill').className = 'delta-pill ' + (up ? 'up' : 'down');
+  $('futDeltaPill').textContent = (up ? '↑ +' : '↓ ') + gainPct.toFixed(0) + ' %';
+
+  $('futInvested').textContent = eur(r.invested);
+  $('futGain').textContent = (gain>=0?'+':'') + eur(gain);
+  $('futGain').style.color = gain >= 0 ? 'var(--z3)' : 'var(--red)';
+
+  if(futState.rate > 0){
+    var years = Math.log(2) / Math.log(1 + futState.rate/100);
+    $('futDouble').textContent = years.toFixed(1) + ' Jahre';
+  } else {
+    $('futDouble').textContent = '—';
+  }
+  $('futMultiple').textContent = r.invested > 0 ? (r.end / r.invested).toFixed(2).replace('.', ',') + '×' : '—';
+
+  state.lastFutPoints = r.points;
+  state.lastGoldFut = runFutureAt(GOLD_LONGTERM_RATE).points;
+  state.lastSpxFut = runFutureAt(SPX_LONGTERM_RATE).points;
+  buildFutureChart(r.points, state.lastGoldFut, state.lastSpxFut);
+}
+window.addEventListener('resize', function(){ if(futState) updateFuture(); });
+
+/* ---------- Events ---------- */
+$('coinBar').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  [].forEach.call($('coinBar').children, function(x){ x.setAttribute('aria-pressed', x===b); });
+  state.coin = b.dataset.coin;
+  update();
+});
+$('intervalSeg').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  [].forEach.call($('intervalSeg').children, function(x){ x.setAttribute('aria-pressed', x===b); });
+  state.interval = b.dataset.iv;
+  update();
+});
+$('quickAmts').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  state.amount = parseFloat(b.dataset.a);
+  $('spAmt').value = state.amount; paintRange($('spAmt'));
+  $('spAmtOut').textContent = eur(state.amount);
+  update();
+});
+$('futQuickAmts').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  futState.amount = parseFloat(b.dataset.a);
+  $('futAmt').value = futState.amount; paintRange($('futAmt'));
+  $('futAmtOut').textContent = eur(futState.amount);
+  updateFuture();
+});
+$('exchBtns').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  [].forEach.call($('exchBtns').children, function(x){ x.setAttribute('aria-pressed', x===b); });
+  state.feePct = parseFloat(b.dataset.fee);
+  $('spFee').value = state.feePct; paintRange($('spFee'));
+  $('spFeeOut').textContent = state.feePct.toFixed(2).replace('.', ',') + ' %';
+  update();
+});
+$('scenBtns').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  [].forEach.call($('scenBtns').children, function(x){ x.setAttribute('aria-pressed', x===b); });
+  futState.rate = parseFloat(b.dataset.r);
+  $('futRate').value = futState.rate; paintRange($('futRate'));
+  $('futRateOut').textContent = futState.rate + ' % p. a.';
+  updateFuture();
+});
+
+initRange($('spAmt'), function(){
+  state.amount = parseFloat($('spAmt').value);
+  $('spAmtOut').textContent = eur(state.amount);
+  update();
+});
+initRange($('spMonths'), function(){
+  state.months = parseInt($('spMonths').value, 10);
+  $('spMonthsOut').textContent = state.months + (state.months === 1 ? ' Monat' : ' Monate');
+  update();
+});
+initRange($('spLump'), function(){
+  state.lump = parseFloat($('spLump').value);
+  $('spLumpOut').textContent = eur(state.lump);
+  update();
+});
+initRange($('spFee'), function(){
+  state.feePct = parseFloat($('spFee').value);
+  $('spFeeOut').textContent = state.feePct.toFixed(2).replace('.', ',') + ' %';
+  [].forEach.call($('exchBtns').children, function(x){ x.setAttribute('aria-pressed', 'false'); });
+  update();
+});
+initRange($('futInitial'), function(){
+  futState.initial = parseFloat($('futInitial').value);
+  $('futInitialOut').textContent = eur(futState.initial);
+  updateFuture();
+});
+initRange($('futAmt'), function(){
+  futState.amount = parseFloat($('futAmt').value);
+  $('futAmtOut').textContent = eur(futState.amount);
+  updateFuture();
+});
+initRange($('futMonths'), function(){
+  futState.years = parseInt($('futMonths').value, 10);
+  $('futMonthsOut').textContent = futState.years + (futState.years === 1 ? ' Jahr' : ' Jahre');
+  updateFuture();
+});
+initRange($('futRate'), function(){
+  futState.rate = parseFloat($('futRate').value);
+  $('futRateOut').textContent = futState.rate + ' % p. a.';
+  [].forEach.call($('scenBtns').children, function(x){ x.setAttribute('aria-pressed', 'false'); });
+  updateFuture();
+});
+
+window.addEventListener('rx-currency', function(){ state.cache = {}; update(); updateFuture(); });
+
+var FAQ = [
+  {q:'Warum geht die Rückrechnung mit echten Kursen nur 12 Monate zurück?', a:'Frei zugängliche Live-Kursdaten ohne kostenpflichtigen API-Zugang reichen zuverlässig nur etwa ein Jahr zurück. Für längere Zeiträume gibt es stattdessen das separate Zukunftsszenario mit einer klar gekennzeichneten angenommenen Rendite.'},
+  {q:'Ist das Zukunftsszenario eine Prognose für Bitcoin oder andere Coins?', a:'Nein. Es ist reine Zinseszins-Mathematik mit einer frei wählbaren, angenommenen jährlichen Rendite. Keiner der Prozentsätze ist für irgendeine Kryptowährung garantiert oder vorhergesagt — nutz es zum Verstehen von Zinseszins, nicht als Finanzplanung.'},
+  {q:'Sind Gebühren und Steuern in der Rechnung enthalten?', a:'Börsengebühren werden bei der Rückrechnung mit echten Kursen berücksichtigt, mit Richtwerten für Binance und Bitvavo. Steuern nicht direkt — dafür zeigt die Seite, welche simulierten Käufe rechnerisch bereits älter als ein Jahr wären.'},
+  {q:'Sind die S&P-500- und Gold-Vergleichswerte live?', a:'Nein. Sie kommen aus einem einmaligen Abruf über die ETFs SPY und GLD (Alpha Vantage), der von Zeit zu Zeit manuell aktualisiert wird, kein Live-Abruf bei jedem Seitenbesuch. Die USD-Umrechnung in Euro ist zudem nur eine grobe Näherung.'},
+  {q:'Ist ein Sparplan besser als ein Einmalkauf?', a:'Das lässt sich pauschal nicht sagen. Historisch schlägt ein sofortiger Einmalkauf einen gestreckten Sparplan im Durchschnitt etwas häufiger, weil Märkte öfter steigen als fallen. Ein Sparplan senkt dafür das Risiko, ausgerechnet zum ungünstigsten Zeitpunkt alles auf einmal zu investieren.'}
+];
+function renderFaq(){
+  $('faqList').innerHTML = FAQ.map(function(f){
+    return '<details><summary>' + f.q + '<span class="plus">+</span></summary><div class="body">' + f.a + '</div></details>';
+  }).join('');
+}
+
+renderFaq();
+RX.reveal();
+$('spAmtOut').textContent = eur(state.amount);
+$('spMonthsOut').textContent = state.months + ' Monate';
+$('spLumpOut').textContent = eur(state.lump);
+$('spFeeOut').textContent = state.feePct.toFixed(2).replace('.', ',') + ' %';
+$('futInitialOut').textContent = eur(futState.initial);
+$('futAmtOut').textContent = eur(futState.amount);
+$('futMonthsOut').textContent = futState.years + ' Jahre';
+$('futRateOut').textContent = futState.rate + ' % p. a.';
+update();
+updateFuture();
+})();
+</script>
+</body>
+</html>
