@@ -5,9 +5,9 @@
    alle dynamischen Bereiche. Neue Projektseite = Ordner kopieren,
    Datenobjekt austauschen, fertig — kein zweiter Code-Pfad nötig.
 
-   Grundsatz: keine Inhalte erfinden. Fehlt ein Datenfeld (leeres
-   Array, null), zeigt der jeweilige Bereich einen ehrlichen
-   Platzhalter statt erfundener Inhalte.
+   Grundsatz: keine Inhalte erfinden UND keine sichtbaren Platzhalter.
+   Fehlt ein Datenfeld, wird der jeweilige Bereich komplett
+   ausgeblendet statt einen "folgt in Kürze"-Hinweis zu zeigen.
    ============================================================ */
 (function(){
 "use strict";
@@ -18,6 +18,8 @@ function esc(s){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
   });
 }
+function hide(el){ if(el) el.hidden = true; }
+function show(el){ if(el) el.hidden = false; }
 
 var STATUS = {
   active:   { label:'Aktiv',       color:'var(--z3)' },
@@ -26,20 +28,22 @@ var STATUS = {
   ended:    { label:'Beendet',     color:'var(--z0)' }
 };
 
-var UPDATE_TYPE_COLOR = {
-  positive: 'var(--z3)',
-  neutral:  'var(--muted-2)',
-  change:   'var(--brand)',
-  risk:     'var(--z0)',
-  opinion:  'var(--z2)',
-  video:    'var(--brand)'
-};
-
 function fmtDate(iso){
   if(!iso) return '—';
   var d = new Date(iso.length <= 7 ? iso + '-01' : iso + 'T00:00:00');
   if(isNaN(d.getTime())) return iso;
   return d.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'});
+}
+function fmtMonthYear(iso){
+  if(!iso) return '—';
+  var d = new Date(iso + '-01T00:00:00');
+  if(isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('de-DE', {month:'long', year:'numeric'});
+}
+function fmtPct(v){
+  if(v == null || isNaN(v)) return '—';
+  var sign = v >= 0 ? '+' : '';
+  return sign + v.toFixed(2).replace('.', ',') + ' %';
 }
 
 function youtubeId(url){
@@ -53,70 +57,187 @@ function youtubeThumb(url, fallback){
 }
 var PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="rgba(11,22,56,.72)"/><path d="M10 8.2v7.6l6-3.8-6-3.8z" fill="#fff"/></svg>';
 
-/* ---------- Status-Pille (Hero + Statuskarte) ---------- */
 function statusPillHtml(status){
   var s = STATUS[status] || STATUS.active;
   return '<span class="proj-pill" style="--sc:' + s.color + '"><span class="dot"></span>Status: ' + esc(s.label) + '</span>';
 }
 
-/* ---------- Snapshot-Kennzahlen (nutzt .stats/.stat wieder) ---------- */
+/* ---------- Aktuellste Kennzahl je Serie, aus weeklyPerformance ---------- */
+function latestPerformance(data){
+  var pts = data.weeklyPerformance;
+  if(!pts || !pts.length) return null;
+  var sorted = pts.slice().sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+  return sorted[0];
+}
+
+/* ---------- Hero-Dashboard-Card ---------- */
+function renderHeroDashboard(host, data){
+  if(!host) return;
+  var latest = latestPerformance(data);
+  var rows =
+    '<div class="pdb-row"><span>Live-Test seit</span><b>' + esc(fmtMonthYear(data.testStartedAt)) + '</b></div>' +
+    '<div class="pdb-row"><span>Letztes Update</span><b>' + esc(fmtDate(data.updatedAt)) + '</b></div>';
+
+  var metrics = '';
+  if(latest && data.performanceSeries && data.performanceSeries.length){
+    metrics = '<div class="pdb-metrics">' + data.performanceSeries.map(function(s){
+      var v = latest[s.key];
+      var up = v >= 0;
+      return '<div class="pdb-metric"><span class="l">' + esc(s.label) + '</span>' +
+        '<span class="v" style="color:' + (up ? 'var(--z3)' : 'var(--red)') + '">' + fmtPct(v) + '</span></div>';
+    }).join('') + '</div>';
+  }
+
+  host.innerHTML =
+    '<div class="pdb-head"><span class="pdb-name">' + esc(data.name) + '</span><span class="pdb-sub">Mein Praxistest</span></div>' +
+    statusPillHtml(data.status) +
+    '<div class="pdb-rows">' + rows + '</div>' +
+    metrics;
+}
+
+/* ---------- Statuskarte "Mein aktueller Stand" ---------- */
 function renderStats(host, stats){
   if(!host) return;
-  if(!stats || !stats.length){ host.hidden = true; return; }
-  host.hidden = false;
+  if(!stats || !stats.length){ hide(host); return; }
+  show(host);
   host.innerHTML = stats.map(function(s){
     return '<div class="stat"><div class="k">' + esc(s.k) + '</div><div class="n">' + esc(s.v) + '</div></div>';
   }).join('');
 }
 
-/* ---------- Updates-Timeline ---------- */
-function renderUpdates(host, updates, projectName){
-  if(!host) return;
-  if(!updates || !updates.length){
-    host.innerHTML = '<div class="proj-empty">Hier sammle ich laufend Updates zu ' + esc(projectName) + ' — der erste Eintrag folgt, sobald es etwas Neues zu berichten gibt.</div>';
-    return;
+/* ---------- Wochenperformance: Karten + Chart + Liste ---------- */
+var perfChart = null;
+function cssVar(name, host){ return getComputedStyle(host).getPropertyValue(name).trim(); }
+
+function renderPerformanceSection(section, data){
+  if(!section) return;
+  var series = data.performanceSeries;
+  var pts = data.weeklyPerformance;
+  if(!series || !series.length || !pts || !pts.length){ hide(section); return; }
+  show(section);
+
+  var sortedDesc = pts.slice().sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+  var latest = sortedDesc[0];
+
+  // Zwei (oder mehr) hervorgehobene Karten mit dem jeweils neuesten Wert
+  var cardsHost = $('projPerfCards');
+  if(cardsHost){
+    cardsHost.innerHTML = series.map(function(s){
+      var v = latest[s.key];
+      var up = v >= 0;
+      return '<div class="pcard" style="--pc:' + s.color + '">' +
+        '<div class="pcard-k">' + esc(s.label) + '</div>' +
+        '<div class="pcard-v" style="color:' + (up ? 'var(--z3)' : 'var(--red)') + '">' + fmtPct(v) + '</div>' +
+        '<div class="pcard-d">Letztes Update: ' + esc(fmtDate(latest.date)) + '</div>' +
+      '</div>';
+    }).join('');
   }
-  var sorted = updates.slice().sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
-  host.innerHTML = sorted.map(function(u){
-    var color = UPDATE_TYPE_COLOR[u.type] || 'var(--brand)';
-    return '<div class="proj-update" style="--uc:' + color + '">' +
-      '<div class="proj-update-date">' + fmtDate(u.date) + '</div>' +
+
+  // Chart
+  var chartHost = $('projPerfChart');
+  if(chartHost && window.LightweightCharts){
+    chartHost.innerHTML = '';
+    if(perfChart){ perfChart.remove(); perfChart = null; }
+    var box = chartHost.getBoundingClientRect();
+    var width = Math.round(box.width) || 600, height = Math.round(box.height) || 300;
+    perfChart = LightweightCharts.createChart(chartHost, {
+      width: width, height: height,
+      layout: { background:{color:'transparent'}, textColor:cssVar('--muted-2', chartHost), fontFamily:'IBM Plex Mono, monospace', fontSize:11.5 },
+      localization: { priceFormatter: fmtPct },
+      grid: { vertLines:{color:cssVar('--line', chartHost)}, horzLines:{color:cssVar('--line', chartHost)} },
+      rightPriceScale: { borderColor:cssVar('--line-soft', chartHost) },
+      timeScale: { borderColor:cssVar('--line-soft', chartHost), rightOffset:1 },
+      crosshair: { mode: LightweightCharts.CrosshairMode.Magnet },
+      handleScroll:false, handleScale:false
+    });
+    var sortedAsc = pts.slice().sort(function(a,b){ return new Date(a.date) - new Date(b.date); });
+    var toLwTime = function(t){ return new Date(t + 'T00:00:00').toISOString().slice(0,10); };
+    var lwSeries = series.map(function(s){
+      var line = perfChart.addLineSeries({ color:s.color, lineWidth:2.25, priceLineVisible:false });
+      line.setData(sortedAsc.map(function(p){ return { time:toLwTime(p.date), value:p[s.key] }; }));
+      return line;
+    });
+    perfChart.timeScale().fitContent();
+
+    var tip = $('projPerfTip');
+    if(tip){
+      perfChart.subscribeCrosshairMove(function(param){
+        if(!param.point){ tip.style.opacity = 0; return; }
+        var lines = series.map(function(s, i){
+          var d = param.seriesData && param.seriesData.get(lwSeries[i]);
+          return d ? '<div class="td" style="color:' + s.color + '">' + esc(s.label) + ': ' + fmtPct(d.value) + '</div>' : '';
+        }).join('');
+        if(!lines){ tip.style.opacity = 0; return; }
+        tip.innerHTML = lines + '<div class="td">' + fmtDate(param.time) + '</div>';
+        tip.style.left = param.point.x + 'px';
+        tip.style.top = param.point.y + 'px';
+        tip.style.opacity = 1;
+      });
+    }
+  }
+
+  // Vollständige Liste, neueste zuerst
+  var listHost = $('projPerfList');
+  if(listHost){
+    listHost.innerHTML = sortedDesc.map(function(p){
+      return '<div class="prow"><div class="prow-d">' + esc(fmtDate(p.date)) + '</div>' +
+        '<div class="prow-vals">' + series.map(function(s){
+          var v = p[s.key], up = v >= 0;
+          return '<span><b style="color:' + (up?'var(--z3)':'var(--red)') + '">' + fmtPct(v) + '</b> <i>' + esc(s.label) + '</i></span>';
+        }).join('') + '</div></div>';
+    }).join('');
+  }
+}
+
+/* ---------- Timeline (fester Verlauf + automatischer letzter Punkt) ---------- */
+function renderTimeline(host, data){
+  if(!host) return;
+  var items = (data.timeline || []).slice();
+  var latest = latestPerformance(data);
+  if(latest && data.performanceSeries && data.performanceSeries.length){
+    var text = data.performanceSeries.map(function(s){ return s.label + ': ' + fmtPct(latest[s.key]); }).join(' · ');
+    items.push({ date: latest.date, title:'Aktueller Stand', text: text, dynamic:true });
+  }
+  if(!items.length){ hide(host.closest('section')); return; }
+  host.innerHTML = items.map(function(u){
+    return '<div class="proj-update">' +
+      '<div class="proj-update-date">' + esc(u.dateLabel || fmtDate(u.date)) + '</div>' +
       '<h3>' + esc(u.title) + '</h3>' +
       (u.text ? '<p>' + esc(u.text) + '</p>' : '') +
-      (u.tags && u.tags.length ? '<div class="proj-tags">' + u.tags.map(function(t){ return '<span class="proj-tag">' + esc(t) + '</span>'; }).join('') + '</div>' : '') +
     '</div>';
   }).join('');
 }
 
-/* ---------- Videos: Featured (klick-to-embed) + Grid (Link raus) ---------- */
-function renderVideos(hostFeatured, hostGrid, videos, channelUrl, projectName){
-  if(!hostFeatured) return;
-  if(!videos || !videos.length){
-    hostFeatured.innerHTML = '<div class="proj-empty">Videos zu ' + esc(projectName) + ' erscheinen hier, sobald sie veröffentlicht sind. Bis dahin: <a href="' + esc(channelUrl) + '" target="_blank" rel="noopener">mein YouTube-Kanal</a>.</div>';
-    if(hostGrid) hostGrid.innerHTML = '';
-    return;
-  }
+/* ---------- Video (Featured, Klick-zu-Embed) ---------- */
+function renderVideoSection(section, videos){
+  if(!section) return;
+  if(!videos || !videos.length){ hide(section); return; }
+  show(section);
   var sorted = videos.slice().sort(function(a,b){ return new Date(b.publishedAt) - new Date(a.publishedAt); });
   var featured = sorted.filter(function(v){ return v.featured; })[0] || sorted[0];
-  var rest = sorted.filter(function(v){ return v !== featured; }).slice(0, 4);
+  var rest = sorted.filter(function(v){ return v !== featured; }).slice(0, 3);
   var fId = youtubeId(featured.youtubeUrl);
   var fThumb = featured.thumbnail || youtubeThumb(featured.youtubeUrl);
 
-  hostFeatured.innerHTML =
-    '<button type="button" class="proj-video-thumb" data-yt="' + esc(fId || '') + '" aria-label="Video abspielen: ' + esc(featured.title) + '">' +
-      (fThumb ? '<img src="' + esc(fThumb) + '" alt="" loading="lazy">' : '') +
-      '<span class="play">' + PLAY_ICON + '</span>' +
-    '</button>' +
-    '<div>' +
-      '<div class="kicker">Aktuellstes Video</div>' +
-      '<h3>' + esc(featured.title) + '</h3>' +
-      '<div class="date">' + fmtDate(featured.publishedAt) + '</div>' +
-      (featured.description ? '<p>' + esc(featured.description) + '</p>' : '') +
-      '<div style="margin-top:16px"><a class="btn primary" href="' + esc(featured.youtubeUrl) + '" target="_blank" rel="noopener">Video ansehen</a></div>' +
-    '</div>';
-
-  if(hostGrid){
-    hostGrid.innerHTML = rest.map(function(v){
+  var featuredHost = $('projVideoFeatured');
+  if(featuredHost){
+    featuredHost.innerHTML =
+      '<button type="button" class="proj-video-thumb" data-yt="' + esc(fId || '') + '" aria-label="Video abspielen: ' + esc(featured.title) + '">' +
+        (fThumb ? '<img src="' + esc(fThumb) + '" alt="" loading="lazy">' : '') +
+        '<span class="play">' + PLAY_ICON + '</span>' +
+      '</button>' +
+      '<div>' +
+        '<div class="kicker">Aktuellstes Video</div>' +
+        '<h3>' + esc(featured.title) + '</h3>' +
+        '<div class="date">' + fmtDate(featured.publishedAt) + '</div>' +
+        (featured.description ? '<p>' + esc(featured.description) + '</p>' : '') +
+        '<div style="margin-top:16px"><a class="btn primary" href="' + esc(featured.youtubeUrl) + '" target="_blank" rel="noopener">Video ansehen</a></div>' +
+      '</div>';
+  }
+  var gridHost = $('projVideoGrid');
+  if(gridHost){
+    gridHost.hidden = !rest.length;
+    gridHost.innerHTML = rest.map(function(v){
       var thumb = v.thumbnail || youtubeThumb(v.youtubeUrl);
       return '<a class="proj-video-card" href="' + esc(v.youtubeUrl) + '" target="_blank" rel="noopener">' +
         '<span class="proj-video-thumb">' + (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '') + '<span class="play">' + PLAY_ICON + '</span></span>' +
@@ -126,8 +247,6 @@ function renderVideos(hostFeatured, hostGrid, videos, channelUrl, projectName){
   }
 }
 
-/* Klick auf das große Vorschaubild: erst dann laedt das eingebettete
-   Video (youtube-nocookie) — spart Ladezeit fuer alle, die nicht klicken. */
 document.addEventListener('click', function(e){
   var btn = e.target.closest('.proj-video-thumb[data-yt]');
   if(!btn) return;
@@ -140,20 +259,34 @@ document.addEventListener('click', function(e){
   btn.replaceWith(wrap);
 });
 
-/* ---------- Pro-Punkte / Was man wissen sollte ---------- */
-function renderPoints(host, items, icon, color, emptyText){
-  if(!host) return;
-  if(!items || !items.length){
-    host.innerHTML = '<div class="proj-empty">' + esc(emptyText) + '</div>';
-    return;
+/* ---------- Interview (eigener, kleiner Block, nur wenn echter Link vorhanden) ---------- */
+function renderInterview(section, interview){
+  if(!section) return;
+  if(!interview || !interview.youtubeUrl){ hide(section); return; }
+  show(section);
+  var thumb = interview.thumbnail || youtubeThumb(interview.youtubeUrl);
+  var host = $('projInterview');
+  if(host){
+    host.innerHTML =
+      '<a class="proj-video-card" href="' + esc(interview.youtubeUrl) + '" target="_blank" rel="noopener" style="max-width:420px">' +
+        '<span class="proj-video-thumb">' + (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '') + '<span class="play">' + PLAY_ICON + '</span></span>' +
+        '<div class="body"><h4>' + esc(interview.title || 'Im Gespräch mit Bitopex') + '</h4></div>' +
+      '</a>';
   }
+}
+
+/* ---------- Punkte (Einschätzung: was interessant / was wissen) ---------- */
+function renderPoints(host, items, icon, color){
+  if(!host) return;
+  if(!items || !items.length){ hide(host); return; }
+  show(host);
   host.innerHTML = items.map(function(it){
     return '<div class="proj-point"><span class="ic" style="--pc:' + color + '">' + icon + '</span>' +
       '<div><h4>' + esc(it.title) + '</h4><p>' + esc(it.text) + '</p></div></div>';
   }).join('');
 }
 
-/* ---------- Risiken (nutzt .limits/.limit wieder) ---------- */
+/* ---------- Risiken ---------- */
 function renderRisks(host, risks){
   if(!host) return;
   host.innerHTML = (risks || []).map(function(r){
@@ -161,13 +294,7 @@ function renderRisks(host, risks){
   }).join('');
 }
 
-/* ---------- Zielgruppe ---------- */
-function renderList(host, items){
-  if(!host) return;
-  host.innerHTML = (items || []).map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('');
-}
-
-/* ---------- FAQ (nutzt .acc wieder) ---------- */
+/* ---------- FAQ ---------- */
 function renderFaq(host, faq){
   if(!host) return;
   host.innerHTML = (faq || []).map(function(f){
@@ -175,7 +302,7 @@ function renderFaq(host, faq){
   }).join('');
 }
 
-/* ---------- Weiterführende Inhalte (nutzt .note wieder) ---------- */
+/* ---------- Weiterführende Inhalte ---------- */
 function renderRelated(host, items){
   if(!host) return;
   host.innerHTML = (items || []).map(function(r){
@@ -187,50 +314,43 @@ function renderRelated(host, items){
 
 /* ---------- Master-Init ---------- */
 function init(data){
-  // Hero-Status + zuletzt aktualisiert — eine Quelle (data.updatedAt), nicht mehrfach pflegen
-  if($('projStatusHero')) $('projStatusHero').innerHTML = statusPillHtml(data.status);
-  if($('projUpdatedHero')) $('projUpdatedHero').textContent = 'Zuletzt aktualisiert: ' + fmtDate(data.updatedAt);
+  if($('projUpdatedHero')) $('projUpdatedHero').textContent = 'Stand: ' + fmtDate(data.updatedAt);
+  renderHeroDashboard($('projHeroDashboard'), data);
 
   renderStats($('projSnapshot'), data.stats);
+  if($('projAssessText')) $('projAssessText').textContent = data.currentAssessment || '';
 
-  // Statuskarte "Mein aktueller Stand"
-  if($('projAssessSummary')) $('projAssessSummary').textContent = data.summary || '';
-  if($('projStatusCard')) $('projStatusCard').innerHTML = statusPillHtml(data.status);
-  if($('projAssessText')) $('projAssessText').textContent = data.currentAssessment || 'Ich sammle hier laufend weitere Erfahrungen und ergänze diese Einschätzung, sobald sich der Stand ändert.';
-  if($('projAssessUpdated')) $('projAssessUpdated').textContent = fmtDate(data.updatedAt);
-  var nextCheckRow = $('projNextCheckRow');
-  if(nextCheckRow){
-    if(data.nextCheck){ nextCheckRow.hidden = false; $('projNextCheck').textContent = fmtDate(data.nextCheck); }
-    else { nextCheckRow.hidden = true; }
+  renderPerformanceSection($('projPerformance'), data);
+  renderTimeline($('projTimeline'), data);
+  renderVideoSection($('videos'), data.videos);
+  renderInterview($('interview'), data.interview);
+
+  renderPoints($('projPositives'), data.positives, '✓', 'var(--brand)');
+  renderPoints($('projConsiderations'), data.considerations, '!', 'var(--z2)');
+  var assessSection = $('einordnung');
+  if(assessSection){
+    var hasAny = (data.positives && data.positives.length) || (data.considerations && data.considerations.length);
+    assessSection.hidden = !hasAny;
   }
 
-  renderUpdates($('projUpdates'), data.updates, data.name);
-  renderVideos($('projVideoFeatured'), $('projVideoGrid'), data.videos, data.channelUrl, data.name);
-
-  renderPoints($('projPositives'), data.positives, '✓', 'var(--brand)', 'Wird ergänzt, sobald genug eigene Erfahrung mit ' + data.name + ' vorliegt.');
-  renderPoints($('projConsiderations'), data.considerations, '!', 'var(--z2)', 'Wird ergänzt, sobald es dazu Konkretes zu sagen gibt.');
-
-  var perfSection = $('entwicklung');
-  if(perfSection){ perfSection.hidden = !(data.performance && data.performance.length); }
-  renderStats($('projPerfStats'), data.performance);
-
   renderRisks($('projRisks'), data.risks);
-  renderList($('projAudienceFit'), data.audienceFit);
-  renderList($('projAudienceNotFit'), data.audienceNotFit);
   renderFaq($('projFaq'), data.faq);
   renderRelated($('projRelated'), data.related);
 
-  // CTA-Karte
   if($('projCtaName')) $('projCtaName').textContent = data.name;
-  var ctaBtn = $('projCtaBtn');
-  if(ctaBtn && data.websiteUrl){ ctaBtn.href = data.websiteUrl; }
-  var affTag = $('projAffiliateTag');
-  if(affTag) affTag.hidden = !data.affiliate;
+  var ctaSection = $('cta');
+  if(ctaSection){
+    if(data.websiteUrl){
+      show(ctaSection);
+      var ctaBtn = $('projCtaBtn');
+      if(ctaBtn) ctaBtn.href = data.websiteUrl;
+      var affTag = $('projAffiliateTag');
+      if(affTag) affTag.hidden = !data.affiliate;
+    } else {
+      hide(ctaSection);
+    }
+  }
 
-  // Sticky Mobile-CTA
-  if(document.getElementById('projSticky')) document.body.classList.add('has-proj-sticky');
-
-  // JSON-LD Datum konsistent nachziehen (kein zweites Pflegefeld im Head noetig)
   var ld = document.getElementById('projJsonLd');
   if(ld){
     try{
@@ -239,8 +359,10 @@ function init(data){
       ld.textContent = JSON.stringify(obj);
     }catch(e){}
   }
+
+  window.addEventListener('resize', function(){ renderPerformanceSection($('projPerformance'), data); });
 }
 
 window.RX = window.RX || {};
-window.RX.project = { init: init, STATUS: STATUS, fmtDate: fmtDate };
+window.RX.project = { init: init, STATUS: STATUS, fmtDate: fmtDate, fmtPct: fmtPct };
 })();
