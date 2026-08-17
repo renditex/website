@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projekte im Praxistest | RenditeX</title>
+<meta name="description" content="Plattformen und Projekte, die ich auch auf YouTube begleite — mit laufendem Stand, Updates, Videos und Risiken, transparent dokumentiert.">
+<link rel="canonical" href="https://renditex.netlify.app/projekte/">
+<meta property="og:title" content="Projekte im Praxistest — RenditeX">
+<meta property="og:description" content="Plattformen und Projekte, die ich auch auf YouTube begleite — mit laufendem Stand, Updates und Risiken.">
+<meta property="og:type" content="website">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=20">
+<script>
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Projekt-Tracker</div>
+  <h1>Projekte, die ich <em>laufend begleite</em></h1>
+  <p class="hero-sub">Zu manchen Plattformen und Projekten mache ich mehr als nur ein einzelnes Video — ich teste sie über längere Zeit und halte hier den jeweils aktuellen Stand fest. Wähl ein Projekt, um Updates, Videos und meine Einschätzung zu sehen.</p>
+</div>
+
+<!-- ============ LISTE ============ -->
+<section id="liste">
+  <div class="wrap">
+    <div class="proj-list reveal">
+      <a class="tool" href="/projekte/bitopex/">
+        <span class="badge live">Aktiv</span>
+        <h3>Bitopex</h3>
+        <p>Krypto-Optionshandel mit Copy-Trading-Ansatz. Laufender Praxistest seit 2024, mit Updates und Videos.</p>
+        <span class="open">Zum Projekt <span class="arr">→</span></span>
+      </a>
+    </div>
+    <div class="callout reveal" style="margin-top:22px">Weitere Projekte folgen hier, sobald ich sie über einen längeren Zeitraum begleite — nicht jede Plattform, die ich erwähne, bekommt automatisch eine eigene Tracker-Seite.</div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script src="/assets/site.js?v=20"></script>
+<script>
+RX.header();
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Projekte', current:true}
+  ]
+});
+RX.footer();
+RX.reveal();
+</script>
+</body>
+</html>

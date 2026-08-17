@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitopex Erfahrungen: Mein laufender Praxistest | RenditeX</title>
+<meta name="description" content="Ich teste Bitopex, einen Krypto-Optionshandel mit Copy-Trading-Ansatz, und dokumentiere hier laufend meine Erfahrungen, Updates und den aktuellen Stand — unabhängig davon, wann du mein Video gesehen hast.">
+<link rel="canonical" href="https://renditex.netlify.app/projekte/bitopex/">
+<meta property="og:title" content="Bitopex: Mein laufender Praxistest">
+<meta property="og:description" content="Laufender Praxistest von Bitopex — aktueller Stand, Updates, Videos und Risiken, transparent dokumentiert.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://renditex.netlify.app/projekte/bitopex/">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=20">
+<script>
+/* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
+   nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Projekt-Tracker</div>
+  <h1>Bitopex: <em>Mein laufender Praxistest</em></h1>
+  <p class="hero-sub">Ich begleite Bitopex bereits seit einiger Zeit und halte hier meine Erfahrungen, Updates und den aktuellen Stand fest — ohne Hochglanz-Versprechen, sondern so, wie sich das Projekt tatsächlich entwickelt.</p>
+
+  <div class="proj-statusrow">
+    <span id="projStatusHero"></span>
+    <span class="proj-updated" id="projUpdatedHero">—</span>
+  </div>
+
+  <div class="hub-cta" style="margin-top:22px">
+    <a class="btn primary" href="#videos"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right:7px; vertical-align:-3px"><path d="M8 5v14l11-7z"/></svg>Aktuelles Video ansehen</a>
+    <a class="btn" href="#stand">Zum aktuellen Stand</a>
+  </div>
+
+  <div class="stats" id="projSnapshot" style="margin-top:clamp(22px,3.5vw,32px)"></div>
+</div>
+
+<!-- ============ MEIN AKTUELLER STAND ============ -->
+<section id="stand">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Mein aktueller Stand</h2>
+      <div class="intro">
+        <p id="projAssessSummary">—</p>
+      </div>
+    </div>
+    <div class="panel proj-assess reveal">
+      <div class="proj-assess-head">
+        <span id="projStatusCard"></span>
+      </div>
+      <p id="projAssessText">—</p>
+      <div class="proj-assess-meta">
+        <div>Letztes Update<b id="projAssessUpdated">—</b></div>
+        <div id="projNextCheckRow" hidden>Nächster Check<b id="projNextCheck">—</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UPDATES ============ -->
+<section id="updates" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was hat sich seit meinem letzten Video geändert?</h2>
+      <p>Videos bilden immer den Stand zum Zeitpunkt der Veröffentlichung ab. Hier halte ich fest, was danach passiert ist.</p>
+    </div>
+    <div class="proj-timeline reveal" id="projUpdates"></div>
+  </div>
+</section>
+
+<!-- ============ VIDEOS ============ -->
+<section id="videos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Meine Videos zu Bitopex</h2>
+    </div>
+    <div class="proj-video-featured reveal" id="projVideoFeatured"></div>
+    <div class="proj-video-grid" id="projVideoGrid"></div>
+  </div>
+</section>
+
+<!-- ============ PERFORMANCE (nur sichtbar mit echten Daten) ============ -->
+<section id="entwicklung" class="tint" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Entwicklung meines Tests</h2>
+      <p>Eine verständliche Zusammenfassung, kein überladenes Trading-Dashboard.</p>
+    </div>
+    <div class="stats reveal" id="projPerfStats"></div>
+  </div>
+</section>
+
+<!-- ============ WAS MIR GEFÄLLT / WAS MAN WISSEN SOLLTE ============ -->
+<section id="einordnung">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was mir bisher gefällt</h2>
+    </div>
+    <div class="proj-points reveal" id="projPositives"></div>
+
+    <div class="sec-head reveal" style="margin-top:clamp(34px,5vw,50px)">
+      <h2>Was man unbedingt wissen sollte</h2>
+    </div>
+    <div class="proj-points reveal" id="projConsiderations"></div>
+  </div>
+</section>
+
+<!-- ============ RISIKEN ============ -->
+<section id="risiken" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Welche Risiken sehe ich?</h2>
+      <p>Ein ehrlicher Blick auf die Risiken ist mir wichtiger als ein möglichst glattes Bild.</p>
+    </div>
+    <div class="limits reveal" id="projRisks"></div>
+  </div>
+</section>
+
+<!-- ============ ZIELGRUPPE ============ -->
+<section id="zielgruppe">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Für wen könnte das interessant sein?</h2>
+    </div>
+    <div class="proj-audience reveal">
+      <div>
+        <h3>Könnte passen</h3>
+        <ul id="projAudienceFit"></ul>
+      </div>
+      <div>
+        <h3>Eher nicht</h3>
+        <ul id="projAudienceNotFit"></ul>
+      </div>
+    </div>
+    <div class="callout reveal">Keine Anlageberatung — das hier ist eine allgemeine Einordnung, keine Empfehlung für deine individuelle Situation.</div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Häufige Fragen</h2>
+    </div>
+    <div class="acc reveal" id="projFaq"></div>
+  </div>
+</section>
+
+<!-- ============ COMMUNITY-INPUT (vorbereitet, kein Backend) ============ -->
+<section id="community">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was möchtest du beim nächsten Update wissen?</h2>
+      <p>Gibt es etwas, das ich beim nächsten Bitopex-Update genauer anschauen soll?</p>
+    </div>
+    <div class="panel proj-community reveal">
+      <!-- Absichtlich ohne Formular-Backend: Eingabe ist deaktiviert,
+           damit hier nichts vorgetäuscht wird, das nirgends ankommt.
+           Sobald ein Form-Service angebunden ist, hier `disabled`
+           entfernen und ein echtes submit-Handling ergänzen. -->
+      <input type="text" placeholder="Formular folgt in Kürze …" disabled aria-disabled="true">
+      <div class="note">Noch nicht angebunden — bis dahin gerne direkt unter meinen Videos kommentieren:</div>
+      <div style="margin-top:12px"><a class="btn" href="https://www.youtube.com/@RenditeX" target="_blank" rel="noopener">Zu meinem YouTube-Kanal</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / PARTNERLINK ============ -->
+<section id="cta" class="tint">
+  <div class="wrap">
+    <div class="proj-cta-card reveal">
+      <div class="top">
+        <h2 style="font-size:clamp(20px,2.8vw,26px)"><span id="projCtaName">Bitopex</span> selbst ansehen</h2>
+        <span class="proj-affiliate-tag" id="projAffiliateTag">Partnerlink</span>
+      </div>
+      <p>Meine Einordnung ersetzt keine eigene Prüfung. Schau dir die Plattform in Ruhe selbst an, bevor du eine Entscheidung triffst.</p>
+      <div class="proj-cta-actions">
+        <a class="btn primary" id="projCtaBtn" href="#" target="_blank" rel="sponsored noopener">Bitopex öffnen</a>
+      </div>
+      <p style="margin-top:18px; font-size:13px">Wenn du dich über diesen Link registrierst, kann ich eine Vergütung erhalten. Für dich entstehen dadurch keine zusätzlichen Kosten.</p>
+      <div class="disclaimer">Keine Anlageberatung. Investments und Trading sind mit Risiken bis hin zum vollständigen Verlust des eingesetzten Kapitals verbunden.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEITERFÜHRENDE INHALTE ============ -->
+<section id="weiterfuehrend">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Das könnte dich auch interessieren</h2>
+    </div>
+    <div class="notes reveal" id="projRelated"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<!-- Dezente Sticky-CTA nur mobil — kein "JETZT REGISTRIEREN" -->
+<div class="proj-sticky" id="projSticky">
+  <a class="btn" href="#stand">Aktueller Stand</a>
+  <a class="btn primary" href="#videos">Video ansehen</a>
+</div>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"RenditeX","item":"https://renditex.netlify.app/"},
+{"@type":"ListItem","position":2,"name":"Projekte","item":"https://renditex.netlify.app/projekte/"},
+{"@type":"ListItem","position":3,"name":"Bitopex","item":"https://renditex.netlify.app/projekte/bitopex/"}
+]}
+</script>
+<script type="application/ld+json" id="projJsonLd">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Was ist Bitopex?","acceptedAnswer":{"@type":"Answer","text":"Bitopex ist eine Plattform für Krypto-Optionshandel mit Copy-Trading-Ansatz. Ich dokumentiere hier meinen laufenden Praxistest."}},
+{"@type":"Question","name":"Nutzt du Bitopex selbst?","acceptedAnswer":{"@type":"Answer","text":"Ja, ich teste Bitopex aktiv und beschreibe hier meinen eigenen, laufenden Stand."}},
+{"@type":"Question","name":"Sind die gezeigten Ergebnisse garantiert?","acceptedAnswer":{"@type":"Answer","text":"Nein. Vergangene Ergebnisse sind keine Garantie für zukünftige Ergebnisse. Trading und Investments sind mit Risiken bis zum Totalverlust verbunden."}},
+{"@type":"Question","name":"Ist der Link zu Bitopex ein Partnerlink?","acceptedAnswer":{"@type":"Answer","text":"Ja. Wenn du dich darüber registrierst, kann ich eine Vergütung erhalten. Für dich entstehen dadurch keine zusätzlichen Kosten."}}
+]}
+</script>
+
+<script src="/assets/site.js?v=20"></script>
+<script src="/assets/project.js?v=20"></script>
+<script>
+RX.header();
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Projekte', href:'/projekte/'},
+    {label:'Bitopex', current:true}
+  ]
+});
+RX.footer();
+</script>
+<script>
+/* ============================================================
+   Projektdaten Bitopex — einzige Stelle, die gepflegt werden muss.
+   Neue Werte hier eintragen, die Seite aktualisiert sich automatisch
+   (auch "zuletzt aktualisiert" oben im Hero und im JSON-LD).
+
+   Wichtig: Nur Felder befüllen, die wirklich stimmen. Leere Arrays
+   ([]) sind bewusst leer -> die Seite zeigt dann einen ehrlichen
+   Platzhalter statt erfundener Inhalte. Sobald es echte Updates,
+   Videos oder Kennzahlen gibt, hier einfach ergänzen.
+   ============================================================ */
+var BITOPEX = {
+  slug: 'bitopex',
+  name: 'Bitopex',
+  category: 'Copy Trading',
+  status: 'active', // active | watching | paused | ended
+  startedAt: '2024',
+  updatedAt: '2026-08-17', // einzige Quelle fuer "zuletzt aktualisiert"
+  nextCheck: null,
+
+  websiteUrl: 'https://bitopex.io/?ref=51dc337877d4',
+  channelUrl: 'https://www.youtube.com/@RenditeX',
+  affiliate: true,
+
+  summary: 'Ich teste Bitopex seit 2024 und dokumentiere hier meinen laufenden Stand — unabhängig davon, wann du eines meiner Videos dazu gesehen hast.',
+  currentAssessment: 'Ich nutze Bitopex weiterhin und beobachte die Entwicklung laufend. Eine ausführlichere Einschätzung ergänze ich hier, sobald ich über einen längeren Zeitraum genug eigene Erfahrung gesammelt habe.',
+
+  // TODO Viktor: hier die 4 Kacheln mit echten, aktuellen Werten pflegen
+  stats: [
+    { k:'Status', v:'Aktiv' },
+    { k:'Test seit', v:'2024' },
+    { k:'Kategorie', v:'Copy Trading' },
+    { k:'Letzter Check', v:'17.08.2026' }
+  ],
+
+  // TODO Viktor: chronologische Updates ergaenzen, neueste zuerst wird automatisch sortiert
+  // Beispiel: {date:'2026-08-23', title:'Neues Wochenupdate', text:'...', tags:['Performance'], type:'neutral'}
+  updates: [],
+
+  // TODO Viktor: echte YouTube-Links zu Bitopex-Videos ergaenzen
+  // Beispiel: {title:'...', youtubeUrl:'https://youtube.com/watch?v=...', publishedAt:'2026-08-01', featured:true, description:'...'}
+  videos: [],
+
+  // TODO Viktor: konkrete Kennzahlen ergaenzen (Einzahlung, Rendite, Laufzeit, ...) - Bereich bleibt ausgeblendet, bis hier etwas steht
+  performance: [],
+
+  // TODO Viktor: eigene, konkrete Erfahrungspunkte ergaenzen
+  positives: [],
+
+  // TODO Viktor: konkrete Punkte ergaenzen, die man vor dem Einstieg wissen sollte
+  considerations: [],
+
+  risks: [
+    { title:'Plattformrisiko', text:'Dein Kapital liegt bei einem Drittanbieter, nicht bei dir selbst — du bist von dessen Zuverlässigkeit und Sicherheit abhängig.' },
+    { title:'Strategierisiko', text:'Vergangene Ergebnisse einer Trading-Strategie sind keine Garantie für zukünftige Ergebnisse.' },
+    { title:'Markt- und Tradingrisiko', text:'Trading kann Verluste verursachen, auch bei automatisierten oder kopierten Strategien.' },
+    { title:'Liquiditäts- und Auszahlungsrisiko', text:'Je nach Plattformmodell können für Auszahlungen besondere Bedingungen oder Wartezeiten gelten.' },
+    { title:'Gegenparteirisiko', text:'Du bist von der Zuverlässigkeit des Unternehmens hinter der Plattform und beteiligter Dienstleister abhängig.' }
+  ],
+
+  audienceFit: [
+    'Menschen, die Copy Trading grundsätzlich verstehen möchten',
+    'Zuschauer, die meinen laufenden Test verfolgen',
+    'Personen, die sich mit automatisierten Trading-Ansätzen beschäftigen'
+  ],
+  audienceNotFit: [
+    'Wenn Verluste finanziell nicht verkraftbar wären',
+    'Wenn Produkt oder Risiken nicht verstanden werden',
+    'Wenn kurzfristig verfügbares Kapital benötigt wird'
+  ],
+
+  faq: [
+    { q:'Was ist Bitopex?', a:'Bitopex ist eine Plattform für Krypto-Optionshandel mit Copy-Trading-Ansatz — du kannst dabei Strategien anderer Trader nachbilden lassen, statt selbst jede Order manuell zu setzen.' },
+    { q:'Nutzt du Bitopex selbst?', a:'Ja, ich teste Bitopex aktiv und beschreibe hier meinen eigenen, laufenden Stand.' },
+    { q:'Seit wann testest du Bitopex?', a:'Seit 2024. Diese Seite fasst den aktuellen Stand meines laufenden Tests zusammen.' },
+    { q:'Wie häufig aktualisierst du diese Seite?', a:'Immer dann, wenn sich am Stand etwas Berichtenswertes ändert. Das genaue Datum der letzten Aktualisierung steht oben im Kopfbereich.' },
+    { q:'Sind die gezeigten Ergebnisse garantiert?', a:'Nein. Vergangene Ergebnisse sind keine Garantie für zukünftige Ergebnisse. Trading und Investments sind mit Risiken bis zum vollständigen Verlust des eingesetzten Kapitals verbunden.' },
+    { q:'Wo finde ich deine Bitopex-Videos?', a:'Im Abschnitt „Meine Videos zu Bitopex" weiter oben, sowie gesammelt auf meinem YouTube-Kanal.' },
+    { q:'Ist der Link zu Bitopex ein Partnerlink?', a:'Ja. Wenn du dich darüber registrierst, kann ich eine Vergütung erhalten. Für dich entstehen dadurch keine zusätzlichen Kosten.' }
+  ],
+
+  related: [
+    { kicker:'Tool', label:'Fear & Greed Index', href:'/fear-greed/', desc:'Zeigt, ob im Markt gerade Angst oder Gier herrscht.' },
+    { kicker:'Tool', label:'Heatzone Chart', href:'/heatzone-chart/', desc:'Ist Bitcoin gerade günstig oder teuer bewertet?' },
+    { kicker:'Tool', label:'Sparplan-Rechner', href:'/sparplan-rechner/', desc:'Was wäre aus einem Sparplan geworden? Mit echten Kursen.' },
+    { kicker:'Wissen', label:'Scam-Check', href:'/scam-check/', desc:'Zwölf Warnsignale für Krypto-Betrug zum Ankreuzen.' }
+  ]
+};
+
+RX.project.init(BITOPEX);
+RX.reveal();
+</script>
+</body>
+</html>

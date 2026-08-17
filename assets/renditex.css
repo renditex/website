@@ -1321,3 +1321,145 @@ a.note:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
   background:var(--surface-2); border:1px solid var(--line-soft); border-radius:9px; padding:10px 12px;
 }
 .sp-explain{color:var(--muted); font-size:13px; line-height:1.6; margin:-6px 0 0}
+
+/* ================================================================
+   PROJEKTSEITEN (Bitopex & Co.) — ein wiederverwendbares System für
+   YouTube-Companion-Seiten zu einzelnen Projekten/Plattformen. Nutzt
+   bewusst so viel wie möglich vom bestehenden Baukasten (.hero,
+   .stats/.stat, .limits/.limit, .princ, .acc, .note, .callout,
+   .disclaimer) statt ein zweites Designsystem aufzumachen — nur die
+   Bausteine, die es wirklich noch nicht gibt, kommen hier neu dazu.
+   ================================================================ */
+
+/* Status-Pille im Hero: Punkt + Label, Farbe je nach Projektstatus.
+   Bewusst dezent (kleiner Punkt + Text), keine ganze Karte in Ampelfarbe. */
+.proj-statusrow{display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin-top:18px}
+.proj-pill{
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:12.5px;
+  color:var(--text); background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:6px 13px;
+}
+.proj-pill .dot{width:8px; height:8px; border-radius:50%; background:var(--sc,var(--z3)); flex:none}
+.proj-updated{font-family:var(--font-mono); font-size:12.5px; color:var(--muted-2)}
+
+/* Statuskarte im "Mein aktueller Stand"-Bereich */
+.proj-assess{padding:var(--pad)}
+.proj-assess-head{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.proj-assess-head .proj-pill{margin:0}
+.proj-assess p{color:var(--muted); font-size:15px; line-height:1.7; margin-top:16px}
+.proj-assess-meta{display:flex; flex-wrap:wrap; gap:22px; margin-top:18px; padding-top:16px; border-top:1px solid var(--line-soft)}
+.proj-assess-meta div{font-family:var(--font-mono); font-size:11.5px; color:var(--muted-2)}
+.proj-assess-meta b{display:block; font-family:var(--font-body); font-size:14px; font-weight:700; color:var(--text); margin-top:4px}
+.proj-empty{
+  color:var(--muted); font-size:14.5px; font-style:normal; padding:20px; text-align:center;
+  background:var(--surface-2); border:1px dashed var(--line); border-radius:var(--radius);
+}
+
+/* Updates-Timeline: vertikale Linie mit Punkten statt Karten-Raster —
+   liest sich chronologisch, funktioniert auf Mobile ohne Umbau. */
+.proj-timeline{position:relative; display:flex; flex-direction:column; gap:0}
+.proj-update{position:relative; padding:0 0 28px 30px; border-left:2px solid var(--line-soft)}
+.proj-update:last-child{border-left-color:transparent; padding-bottom:0}
+.proj-update::before{
+  content:""; position:absolute; left:-7px; top:2px; width:12px; height:12px; border-radius:50%;
+  background:var(--surface); border:2px solid var(--uc,var(--brand));
+}
+.proj-update-date{font-family:var(--font-mono); font-size:11.5px; color:var(--muted-2); letter-spacing:.04em}
+.proj-update h3{font-size:16.5px; font-weight:800; letter-spacing:-.01em; margin-top:5px}
+.proj-update p{color:var(--muted); font-size:14.5px; line-height:1.65; margin-top:7px}
+.proj-tags{display:flex; flex-wrap:wrap; gap:7px; margin-top:11px}
+.proj-tag{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--muted-2); background:var(--surface-2); border:1px solid var(--line-soft); border-radius:6px; padding:3px 8px;
+}
+
+/* Videos */
+.proj-video-featured{
+  display:grid; grid-template-columns:minmax(240px,420px) 1fr; gap:clamp(18px,3vw,32px); align-items:center;
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius-lg); box-shadow:var(--shadow-md);
+  padding:clamp(18px,3vw,26px); overflow:hidden;
+}
+@media(max-width:720px){.proj-video-featured{grid-template-columns:1fr}}
+.proj-video-thumb{position:relative; border-radius:var(--radius-sm); overflow:hidden; aspect-ratio:16/9; background:var(--surface-2); display:block}
+.proj-video-thumb img{width:100%; height:100%; object-fit:cover; display:block}
+.proj-video-thumb .play{
+  position:absolute; inset:0; display:grid; place-items:center; background:rgba(11,22,56,.28);
+  transition:background var(--dur-base) var(--ease-out);
+}
+.proj-video-thumb .play svg{width:56px; height:56px; filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
+.proj-video-thumb:hover .play{background:rgba(11,22,56,.42)}
+.proj-video-featured .kicker{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--brand-text); margin-bottom:8px;
+}
+.proj-video-featured h3{font-size:clamp(19px,2.6vw,24px); font-weight:800; letter-spacing:-.01em; line-height:1.25}
+.proj-video-featured .date{font-family:var(--font-mono); font-size:12px; color:var(--muted-2); margin-top:6px}
+.proj-video-featured p{color:var(--muted); font-size:14.5px; line-height:1.65; margin-top:12px}
+.proj-video-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-top:16px}
+.proj-video-card{
+  display:flex; flex-direction:column; text-decoration:none; color:var(--text);
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius); box-shadow:var(--shadow-sm);
+  overflow:hidden; transition:transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+}
+a.proj-video-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
+.proj-video-card .proj-video-thumb .play svg{width:38px; height:38px}
+.proj-video-card .body{padding:14px 16px}
+.proj-video-card h4{font-size:14.5px; font-weight:700; letter-spacing:-.005em; line-height:1.35}
+.proj-video-card .date{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); margin-top:6px}
+
+/* Pro / zu wissen — zwei gleichwertige Listen, keine Ampel-Tabelle */
+.proj-points{display:grid; gap:10px}
+.proj-point{
+  display:flex; gap:13px; align-items:flex-start; background:var(--surface); border:1px solid var(--line-soft);
+  border-radius:var(--radius); padding:15px 17px; box-shadow:var(--shadow-sm);
+}
+.proj-point .ic{
+  flex:none; width:26px; height:26px; border-radius:50%; display:grid; place-items:center;
+  font-family:var(--font-display); font-weight:800; font-size:13px; color:#fff; background:var(--pc,var(--muted-2));
+}
+.proj-point h4{font-size:15px; font-weight:700; letter-spacing:-.005em}
+.proj-point p{color:var(--muted); font-size:13.5px; line-height:1.6; margin-top:4px}
+
+/* Zielgruppe */
+.proj-audience{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media(max-width:720px){.proj-audience{grid-template-columns:1fr}}
+.proj-audience h3{font-size:15.5px; font-weight:700; margin-bottom:12px}
+.proj-audience ul{list-style:none; display:grid; gap:10px}
+.proj-audience li{
+  display:flex; gap:10px; color:var(--muted); font-size:14.5px; line-height:1.55;
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:11px; padding:11px 14px; box-shadow:var(--shadow-sm);
+}
+.proj-audience li::before{content:"—"; color:var(--muted-2); flex:none}
+
+/* CTA / Partnerlink-Karte */
+.proj-cta-card{
+  background:linear-gradient(155deg, var(--surface) 0%, var(--surface-2) 100%); border:1px solid var(--line-soft);
+  border-radius:var(--radius-lg); box-shadow:var(--shadow-md); padding:clamp(22px,4vw,32px);
+}
+.proj-cta-card .top{display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+.proj-cta-card p{color:var(--muted); font-size:14.5px; line-height:1.65; margin-top:14px; max-width:60ch}
+.proj-cta-actions{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:20px}
+.proj-affiliate-tag{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--muted-2); border:1px solid var(--line); border-radius:6px; padding:4px 9px;
+}
+
+/* Community-Input (vorbereitet, noch kein Backend) */
+.proj-community input[disabled]{
+  width:100%; background:var(--surface-2); border:1px solid var(--line); border-radius:11px;
+  padding:13px 15px; color:var(--muted-2); font-family:var(--font-body); font-size:14.5px; cursor:not-allowed;
+}
+.proj-community .note{
+  font-family:var(--font-mono); font-size:11.5px; color:var(--muted-2); margin-top:9px;
+}
+
+/* Sticky Mobile-CTA */
+.proj-sticky{
+  display:none; position:fixed; left:0; right:0; bottom:0; z-index:55;
+  background:var(--dark-bg); border-top:1px solid var(--dark-line-soft);
+  padding:12px clamp(14px,4vw,20px); gap:10px;
+  padding-bottom:calc(12px + env(safe-area-inset-bottom));
+}
+@media(max-width:720px){.proj-sticky{display:flex} body.has-proj-sticky{padding-bottom:70px}}
+.proj-sticky a{flex:1; text-align:center; padding:12px 10px; font-size:14px}
+
+/* Projekt-Übersicht (/projekte/) */
+.proj-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px}

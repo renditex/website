@@ -42,6 +42,9 @@ var NAV = [
       {href:'/halving-countdown/', label:'Halving-Countdown'},
       {href:'/sparplan-rechner/', label:'Sparplan-Rechner'}
     ]},
+  { label:'Projekte', href:'/projekte/', items:[
+      {href:'/projekte/bitopex/', label:'Bitopex'}
+    ]},
   { label:'Plattformen', href:'/#plattformen' },
   { label:'Über mich', href:'/#ueber-mich' }
 ];
