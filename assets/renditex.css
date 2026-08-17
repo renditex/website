@@ -1397,13 +1397,14 @@ a.note:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
 }
 
 /* Videos */
-.proj-video-featured{
-  display:grid; grid-template-columns:minmax(240px,420px) 1fr; gap:clamp(18px,3vw,32px); align-items:center;
-  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius-lg); box-shadow:var(--shadow-md);
-  padding:clamp(18px,3vw,26px); overflow:hidden;
+.sec-kicker{
+  display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--brand-text); margin-bottom:10px;
 }
-@media(max-width:720px){.proj-video-featured{grid-template-columns:1fr}}
-.proj-video-thumb{position:relative; border-radius:var(--radius-sm); overflow:hidden; aspect-ratio:16/9; background:var(--surface-2); display:block}
+.proj-video-thumb{
+  position:relative; width:100%; border-radius:var(--radius-sm); overflow:hidden; aspect-ratio:16/9;
+  background:var(--surface-2); display:block; padding:0; border:0; cursor:pointer; font:inherit;
+}
 .proj-video-thumb img{width:100%; height:100%; object-fit:cover; display:block}
 .proj-video-thumb .play{
   position:absolute; inset:0; display:grid; place-items:center; background:rgba(11,22,56,.28);
@@ -1411,12 +1412,22 @@ a.note:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
 }
 .proj-video-thumb .play svg{width:56px; height:56px; filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
 .proj-video-thumb:hover .play{background:rgba(11,22,56,.42)}
-.proj-video-featured .kicker{
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--brand-text); margin-bottom:8px;
+
+/* Grosses Hauptvideo — bewusst NUR das Thumbnail bekommt Rahmen/Schatten,
+   keine zusaetzliche Card drumherum ("Card um eine Card"). */
+.proj-video-thumb.big{
+  max-width:900px; border-radius:var(--radius); border:1px solid var(--line-soft); box-shadow:var(--shadow-md);
 }
-.proj-video-featured h3{font-size:clamp(19px,2.6vw,24px); font-weight:800; letter-spacing:-.01em; line-height:1.25}
-.proj-video-featured .date{font-family:var(--font-mono); font-size:12px; color:var(--muted-2); margin-top:6px}
-.proj-video-featured p{color:var(--muted); font-size:14.5px; line-height:1.65; margin-top:12px}
+.proj-video-thumb.big .play svg{width:72px; height:72px}
+.proj-featured-meta{margin-top:18px; max-width:900px}
+.proj-featured-meta h3{font-size:clamp(19px,2.6vw,24px); font-weight:800; letter-spacing:-.01em; line-height:1.3}
+.proj-featured-meta p{color:var(--muted); font-size:14.5px; line-height:1.65; margin-top:10px}
+.proj-video-dates{display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-top:14px; font-family:var(--font-mono); font-size:12.5px; color:var(--muted-2)}
+.proj-video-dates b{font-family:var(--font-body); font-weight:600; color:var(--text)}
+.proj-fresh{
+  font-family:var(--font-body); font-weight:600; font-size:12.5px; color:var(--brand-text);
+  background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:3px 11px;
+}
 .proj-video-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-top:16px}
 .proj-video-card{
   display:flex; flex-direction:column; text-decoration:none; color:var(--text);

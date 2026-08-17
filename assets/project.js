@@ -208,36 +208,68 @@ function renderTimeline(host, data){
   }).join('');
 }
 
-/* ---------- Video (Featured, Klick-zu-Embed) ---------- */
-function renderVideoSection(section, videos){
+/* ---------- Video: Auswahl des Hauptvideos ----------
+   Explizit markiertes featured:true gewinnt, sonst automatisch das
+   neueste nach publishedAt. */
+function pickFeaturedVideo(videos){
+  if(!videos || !videos.length) return null;
+  var explicit = videos.filter(function(v){ return v.featured; })[0];
+  if(explicit) return explicit;
+  return videos.slice().sort(function(a,b){ return new Date(b.publishedAt) - new Date(a.publishedAt); })[0];
+}
+
+/* ---------- Grosses Hauptvideo — eigener, prominenter Bereich direkt
+   nach Hero/Status, kein Video "in einer Card in einer Card". ---------- */
+function renderFeaturedVideo(section, data){
   if(!section) return;
-  if(!videos || !videos.length){ hide(section); return; }
+  var featured = pickFeaturedVideo(data.videos);
+  if(!featured){ hide(section); return; }
   show(section);
-  var sorted = videos.slice().sort(function(a,b){ return new Date(b.publishedAt) - new Date(a.publishedAt); });
-  var featured = sorted.filter(function(v){ return v.featured; })[0] || sorted[0];
-  var rest = sorted.filter(function(v){ return v !== featured; }).slice(0, 3);
   var fId = youtubeId(featured.youtubeUrl);
   var fThumb = featured.thumbnail || youtubeThumb(featured.youtubeUrl);
 
-  var featuredHost = $('projVideoFeatured');
-  if(featuredHost){
-    featuredHost.innerHTML =
-      '<button type="button" class="proj-video-thumb" data-yt="' + esc(fId || '') + '" aria-label="Video abspielen: ' + esc(featured.title) + '">' +
+  var videoHost = $('projFeaturedVideo');
+  if(videoHost){
+    videoHost.innerHTML =
+      '<button type="button" class="proj-video-thumb big" data-yt="' + esc(fId || '') + '" aria-label="Video abspielen: ' + esc(featured.title) + '">' +
         (fThumb ? '<img src="' + esc(fThumb) + '" alt="" loading="lazy">' : '') +
         '<span class="play">' + PLAY_ICON + '</span>' +
-      '</button>' +
-      '<div>' +
-        '<div class="kicker">Aktuellstes Video</div>' +
-        '<h3>' + esc(featured.title) + '</h3>' +
-        '<div class="date">' + fmtDate(featured.publishedAt) + '</div>' +
-        (featured.description ? '<p>' + esc(featured.description) + '</p>' : '') +
-        '<div style="margin-top:16px"><a class="btn primary" href="' + esc(featured.youtubeUrl) + '" target="_blank" rel="noopener">Video ansehen</a></div>' +
+      '</button>';
+  }
+
+  var metaHost = $('projFeaturedMeta');
+  if(metaHost){
+    var latest = latestPerformance(data);
+    var fresh = '';
+    if(latest && featured.publishedAt && new Date(latest.date) > new Date(featured.publishedAt)){
+      fresh = '<span class="proj-fresh">Neuere Daten vorhanden</span>';
+    }
+    metaHost.innerHTML =
+      '<h3>' + esc(featured.title) + '</h3>' +
+      (featured.description ? '<p>' + esc(featured.description) + '</p>' : '') +
+      '<div class="proj-video-dates">' +
+        '<span>Video veröffentlicht: <b>' + esc(fmtDate(featured.publishedAt)) + '</b></span>' +
+        (latest ? '<span>Aktueller RenditeX-Stand: <b>' + esc(fmtDate(latest.date)) + '</b></span>' : '') +
+        fresh +
       '</div>';
   }
-  var gridHost = $('projVideoGrid');
-  if(gridHost){
-    gridHost.hidden = !rest.length;
-    gridHost.innerHTML = rest.map(function(v){
+}
+
+/* ---------- Weitere Videos — kleinere Cards, ohne das Hauptvideo
+   ein zweites Mal zu zeigen. Eigener, spaeter platzierter Bereich. ---------- */
+function renderVideoGrid(section, data){
+  if(!section) return;
+  var videos = data.videos;
+  var featured = pickFeaturedVideo(videos);
+  var rest = (videos || [])
+    .filter(function(v){ return v !== featured; })
+    .sort(function(a,b){ return new Date(b.publishedAt) - new Date(a.publishedAt); })
+    .slice(0, 4);
+  if(!rest.length){ hide(section); return; }
+  show(section);
+  var host = $('projVideoGrid');
+  if(host){
+    host.innerHTML = rest.map(function(v){
       var thumb = v.thumbnail || youtubeThumb(v.youtubeUrl);
       return '<a class="proj-video-card" href="' + esc(v.youtubeUrl) + '" target="_blank" rel="noopener">' +
         '<span class="proj-video-thumb">' + (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '') + '<span class="play">' + PLAY_ICON + '</span></span>' +
@@ -322,7 +354,8 @@ function init(data){
 
   renderPerformanceSection($('projPerformance'), data);
   renderTimeline($('projTimeline'), data);
-  renderVideoSection($('videos'), data.videos);
+  renderFeaturedVideo($('hauptvideo'), data);
+  renderVideoGrid($('weitere-videos'), data);
   renderInterview($('interview'), data.interview);
 
   renderPoints($('projPositives'), data.positives, '✓', 'var(--brand)');
