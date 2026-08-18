@@ -326,7 +326,8 @@ function renderLiveTeaser(){
       '<span class="lp-name">BTC Heatzone</span>' +
       '<span class="lp-val" style="color:' + d.zone.hex + '">' + RX.currency.format(d.price, 0) + '</span>' +
       '<span class="lp-zone" style="color:' + d.zone.hex + '">' + P.esc(d.zone.de) + '</span>' +
-      sparklineSvg(d.spark, d.zone.hex);
+      sparklineSvg(d.spark, d.zone.hex) +
+      '<span class="lp-cue">Tool öffnen →</span>';
   }).catch(function(){ var el = $('teaserHeatzone'); if(el) hide(el.closest('.live-card')); });
 
   fetchFearGreed().then(function(d){
@@ -336,7 +337,8 @@ function renderLiveTeaser(){
       '<span class="lp-name">Fear &amp; Greed</span>' +
       '<span class="lp-val" style="color:' + d.zone.c + '">' + d.value + '</span>' +
       '<span class="lp-zone" style="color:' + d.zone.c + '">' + P.esc(d.zone.de) + '</span>' +
-      sparklineSvg(d.spark, d.zone.c);
+      sparklineSvg(d.spark, d.zone.c) +
+      '<span class="lp-cue">Tool öffnen →</span>';
   }).catch(function(){ var el = $('teaserFg'); if(el) hide(el.closest('.live-card')); });
 
   sparplanData().then(function(d){
@@ -345,7 +347,8 @@ function renderLiveTeaser(){
     host.innerHTML =
       '<span class="lp-name">Sparplan-Rechner</span>' +
       '<span class="lp-val">' + RX.currency.format(d.valueToday, 0) + '</span>' +
-      '<span class="lp-zone">aus ' + RX.currency.format(d.invested, 0) + ' in ' + d.months + ' Monaten</span>';
+      '<span class="lp-zone">aus ' + RX.currency.format(d.invested, 0) + ' in ' + d.months + ' Monaten</span>' +
+      '<span class="lp-cue">Tool öffnen →</span>';
   }).catch(function(){ var el = $('teaserSparplan'); if(el) hide(el.closest('.live-card')); });
 }
 
