@@ -57,11 +57,6 @@ function youtubeThumb(url, fallback){
 }
 var PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="rgba(11,22,56,.72)"/><path d="M10 8.2v7.6l6-3.8-6-3.8z" fill="#fff"/></svg>';
 
-function statusPillHtml(status){
-  var s = STATUS[status] || STATUS.active;
-  return '<span class="proj-pill" style="--sc:' + s.color + '"><span class="dot"></span>Status: ' + esc(s.label) + '</span>';
-}
-
 /* ---------- Aktuellste Kennzahl je Serie, aus weeklyPerformance ---------- */
 function latestPerformance(data){
   var pts = data.weeklyPerformance;
@@ -70,39 +65,15 @@ function latestPerformance(data){
   return sorted[0];
 }
 
-/* ---------- Hero-Dashboard-Card ---------- */
-function renderHeroDashboard(host, data){
-  if(!host) return;
-  var latest = latestPerformance(data);
-  var rows =
-    '<div class="pdb-row"><span>Live-Test seit</span><b>' + esc(fmtMonthYear(data.testStartedAt)) + '</b></div>' +
-    '<div class="pdb-row"><span>Letztes Update</span><b>' + esc(fmtDate(data.updatedAt)) + '</b></div>';
-
-  var metrics = '';
-  if(latest && data.performanceSeries && data.performanceSeries.length){
-    metrics = '<div class="pdb-metrics">' + data.performanceSeries.map(function(s){
-      var v = latest[s.key];
-      var up = v >= 0;
-      return '<div class="pdb-metric"><span class="l">' + esc(s.label) + '</span>' +
-        '<span class="v" style="color:' + (up ? 'var(--z3)' : 'var(--red)') + '">' + fmtPct(v) + '</span></div>';
-    }).join('') + '</div>';
-  }
-
-  host.innerHTML =
-    '<div class="pdb-head"><span class="pdb-name">' + esc(data.name) + '</span><span class="pdb-sub">Mein Praxistest</span></div>' +
-    statusPillHtml(data.status) +
-    '<div class="pdb-rows">' + rows + '</div>' +
-    metrics;
-}
-
-/* ---------- Statuskarte "Mein aktueller Stand" ---------- */
-function renderStats(host, stats){
-  if(!host) return;
-  if(!stats || !stats.length){ hide(host); return; }
-  show(host);
-  host.innerHTML = stats.map(function(s){
-    return '<div class="stat"><div class="k">' + esc(s.k) + '</div><div class="n">' + esc(s.v) + '</div></div>';
-  }).join('');
+/* ---------- Hero-Metazeile: Status, Testbeginn, Schwerpunkt, Stand ---------- */
+function renderHeroMeta(el, data){
+  if(!el) return;
+  var s = STATUS[data.status] || STATUS.active;
+  var parts = [esc(s.label)];
+  if(data.testStartedAt) parts.push('Live-Test seit ' + esc(fmtMonthYear(data.testStartedAt)));
+  if(data.focusLabel) parts.push(esc(data.focusLabel));
+  parts.push('Stand: ' + esc(fmtDate(data.updatedAt)));
+  el.innerHTML = parts.join(' <span>·</span> ');
 }
 
 /* ---------- Wochenperformance: Karten + Chart + Liste ---------- */
@@ -189,15 +160,10 @@ function renderPerformanceSection(section, data){
   }
 }
 
-/* ---------- Timeline (fester Verlauf + automatischer letzter Punkt) ---------- */
+/* ---------- Timeline: fester, kuratierter Verlauf ---------- */
 function renderTimeline(host, data){
   if(!host) return;
-  var items = (data.timeline || []).slice();
-  var latest = latestPerformance(data);
-  if(latest && data.performanceSeries && data.performanceSeries.length){
-    var text = data.performanceSeries.map(function(s){ return s.label + ': ' + fmtPct(latest[s.key]); }).join(' · ');
-    items.push({ date: latest.date, title:'Aktueller Stand', text: text, dynamic:true });
-  }
+  var items = data.timeline || [];
   if(!items.length){ hide(host.closest('section')); return; }
   host.innerHTML = items.map(function(u){
     return '<div class="proj-update">' +
@@ -219,7 +185,8 @@ function pickFeaturedVideo(videos){
 }
 
 /* ---------- Grosses Hauptvideo — eigener, prominenter Bereich direkt
-   nach Hero/Status, kein Video "in einer Card in einer Card". ---------- */
+   nach dem Hero. Darunter die kompakte "seit diesem Video"-Brücke
+   zu den aktuellen Zahlen. ---------- */
 function renderFeaturedVideo(section, data){
   if(!section) return;
   var featured = pickFeaturedVideo(data.videos);
@@ -239,25 +206,67 @@ function renderFeaturedVideo(section, data){
 
   var metaHost = $('projFeaturedMeta');
   if(metaHost){
-    var latest = latestPerformance(data);
-    var fresh = '';
-    if(latest && featured.publishedAt && new Date(latest.date) > new Date(featured.publishedAt)){
-      fresh = '<span class="proj-fresh">Neuere Daten vorhanden</span>';
-    }
     metaHost.innerHTML =
       '<h3>' + esc(featured.title) + '</h3>' +
       (featured.description ? '<p>' + esc(featured.description) + '</p>' : '') +
-      '<div class="proj-video-dates">' +
-        '<span>Video veröffentlicht: <b>' + esc(fmtDate(featured.publishedAt)) + '</b></span>' +
-        (latest ? '<span>Aktueller RenditeX-Stand: <b>' + esc(fmtDate(latest.date)) + '</b></span>' : '') +
-        fresh +
-      '</div>';
+      (featured.publishedAt ? '<div class="proj-video-dates"><span>Video veröffentlicht: <b>' + esc(fmtDate(featured.publishedAt)) + '</b></span></div>' : '');
   }
+
+  renderSinceVideo($('projSinceVideo'), data, featured);
 }
 
-/* ---------- Weitere Videos — kleinere Cards, ohne das Hauptvideo
-   ein zweites Mal zu zeigen. Eigener, spaeter platzierter Bereich. ---------- */
-function renderVideoGrid(section, data){
+/* ---------- Brücke "Seit diesem Video passiert" ----------
+   Zeigt, je nachdem was an echten Daten vorliegt, entweder die
+   praezisen Wochenwerte (Bitopex-Stil: weeklyPerformance) oder,
+   falls nur ein aktueller Datenstand ohne Zeitreihe existiert,
+   eine schlankere, rein qualitative Variante. Rendert nichts,
+   wenn kein echter Datenpunkt neuer ist als das Video. ---------- */
+function renderSinceVideo(host, data, featured){
+  if(!host) return;
+  if(!featured || !featured.publishedAt){ hide(host); return; }
+  var vidDate = new Date(featured.publishedAt);
+  var series = data.performanceSeries;
+  var pts = data.weeklyPerformance;
+  var hasSeries = pts && pts.length && series && series.length;
+  var newerPts = hasSeries ? pts.filter(function(p){ return new Date(p.date) > vidDate; }) : [];
+
+  if(hasSeries && newerPts.length){
+    var latest = latestPerformance(data);
+    var metrics = series.map(function(s){
+      var v = latest[s.key], up = v >= 0;
+      return '<div class="proj-since-item"><span class="l">' + esc(s.label) + ' zuletzt</span>' +
+        '<span class="v" style="color:' + (up ? 'var(--z3)' : 'var(--red)') + '">' + fmtPct(v) + '</span></div>';
+    }).join('');
+    show(host);
+    host.innerHTML =
+      '<div class="proj-since-head">Seit diesem Video passiert</div>' +
+      '<div class="proj-since-row">' +
+        '<div class="proj-since-item"><span class="l">Neue Updates</span><span class="v">' + newerPts.length + '</span></div>' +
+        '<div class="proj-since-item"><span class="l">Letztes Update</span><span class="v">' + esc(fmtDate(latest.date)) + '</span></div>' +
+        metrics +
+        '<a class="proj-since-link" href="#projPerformance">Alle Updates ansehen ↓</a>' +
+      '</div>';
+    return;
+  }
+
+  // Qualitative Variante: kein Zeitreihen-Datensatz, aber ein echter,
+  // neuerer Datenstand als das Video.
+  var hasFreshStand = data.updatedAt && new Date(data.updatedAt) > vidDate;
+  if(!hasFreshStand){ hide(host); return; }
+  show(host);
+  var s = STATUS[data.status] || STATUS.active;
+  host.innerHTML =
+    '<div class="proj-since-head">Seit diesem Video passiert</div>' +
+    '<div class="proj-since-row">' +
+      '<div class="proj-since-item"><span class="l">Status</span><span class="v">' + esc(s.label) + '</span></div>' +
+      '<div class="proj-since-item"><span class="l">Aktueller Datenstand</span><span class="v">' + esc(fmtDate(data.updatedAt)) + '</span></div>' +
+      '<a class="proj-since-link" href="#einschaetzung">Meine Einschätzung lesen ↓</a>' +
+    '</div>';
+}
+
+/* ---------- Weitere Videos + Interview — gemeinsamer Bereich,
+   jeder Teilblock blendet sich unabhaengig aus, wenn keine Daten da sind. ---------- */
+function renderMoreSection(section, data){
   if(!section) return;
   var videos = data.videos;
   var featured = pickFeaturedVideo(videos);
@@ -265,18 +274,42 @@ function renderVideoGrid(section, data){
     .filter(function(v){ return v !== featured; })
     .sort(function(a,b){ return new Date(b.publishedAt) - new Date(a.publishedAt); })
     .slice(0, 4);
-  if(!rest.length){ hide(section); return; }
-  show(section);
-  var host = $('projVideoGrid');
-  if(host){
-    host.innerHTML = rest.map(function(v){
-      var thumb = v.thumbnail || youtubeThumb(v.youtubeUrl);
-      return '<a class="proj-video-card" href="' + esc(v.youtubeUrl) + '" target="_blank" rel="noopener">' +
-        '<span class="proj-video-thumb">' + (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '') + '<span class="play">' + PLAY_ICON + '</span></span>' +
-        '<div class="body"><h4>' + esc(v.title) + '</h4><div class="date">' + fmtDate(v.publishedAt) + '</div></div>' +
-      '</a>';
-    }).join('');
+
+  var gridWrap = $('projVideoGridWrap');
+  if(rest.length){
+    show(gridWrap);
+    var gridHost = $('projVideoGrid');
+    if(gridHost){
+      gridHost.innerHTML = rest.map(function(v){
+        var thumb = v.thumbnail || youtubeThumb(v.youtubeUrl);
+        return '<a class="proj-video-card" href="' + esc(v.youtubeUrl) + '" target="_blank" rel="noopener">' +
+          '<span class="proj-video-thumb">' + (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '') + '<span class="play">' + PLAY_ICON + '</span></span>' +
+          '<div class="body"><h4>' + esc(v.title) + '</h4><div class="date">' + fmtDate(v.publishedAt) + '</div></div>' +
+        '</a>';
+      }).join('');
+    }
+  } else {
+    hide(gridWrap);
   }
+
+  var interview = data.interview;
+  var interviewWrap = $('projInterviewBlock');
+  if(interview && interview.youtubeUrl){
+    show(interviewWrap);
+    var thumb = interview.thumbnail || youtubeThumb(interview.youtubeUrl);
+    var host = $('projInterview');
+    if(host){
+      host.innerHTML =
+        '<a class="proj-video-card" href="' + esc(interview.youtubeUrl) + '" target="_blank" rel="noopener" style="max-width:420px">' +
+          '<span class="proj-video-thumb">' + (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '') + '<span class="play">' + PLAY_ICON + '</span></span>' +
+          '<div class="body"><h4>' + esc(interview.title || 'Im Gespräch mit Bitopex') + '</h4></div>' +
+        '</a>';
+    }
+  } else {
+    hide(interviewWrap);
+  }
+
+  section.hidden = !(rest.length || (interview && interview.youtubeUrl));
 }
 
 document.addEventListener('click', function(e){
@@ -290,22 +323,6 @@ document.addEventListener('click', function(e){
     'style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
   btn.replaceWith(wrap);
 });
-
-/* ---------- Interview (eigener, kleiner Block, nur wenn echter Link vorhanden) ---------- */
-function renderInterview(section, interview){
-  if(!section) return;
-  if(!interview || !interview.youtubeUrl){ hide(section); return; }
-  show(section);
-  var thumb = interview.thumbnail || youtubeThumb(interview.youtubeUrl);
-  var host = $('projInterview');
-  if(host){
-    host.innerHTML =
-      '<a class="proj-video-card" href="' + esc(interview.youtubeUrl) + '" target="_blank" rel="noopener" style="max-width:420px">' +
-        '<span class="proj-video-thumb">' + (thumb ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">' : '') + '<span class="play">' + PLAY_ICON + '</span></span>' +
-        '<div class="body"><h4>' + esc(interview.title || 'Im Gespräch mit Bitopex') + '</h4></div>' +
-      '</a>';
-  }
-}
 
 /* ---------- Punkte (Einschätzung: was interessant / was wissen) ---------- */
 function renderPoints(host, items, icon, color){
@@ -346,23 +363,19 @@ function renderRelated(host, items){
 
 /* ---------- Master-Init ---------- */
 function init(data){
-  if($('projUpdatedHero')) $('projUpdatedHero').textContent = 'Stand: ' + fmtDate(data.updatedAt);
-  renderHeroDashboard($('projHeroDashboard'), data);
+  renderHeroMeta($('projUpdatedHero'), data);
 
-  renderStats($('projSnapshot'), data.stats);
-  if($('projAssessText')) $('projAssessText').textContent = data.currentAssessment || '';
-
+  renderFeaturedVideo($('hauptvideo'), data);
   renderPerformanceSection($('projPerformance'), data);
   renderTimeline($('projTimeline'), data);
-  renderFeaturedVideo($('hauptvideo'), data);
-  renderVideoGrid($('weitere-videos'), data);
-  renderInterview($('interview'), data.interview);
+  renderMoreSection($('weitere-videos'), data);
 
+  if($('projAssessText')) $('projAssessText').textContent = data.currentAssessment || '';
   renderPoints($('projPositives'), data.positives, '✓', 'var(--brand)');
   renderPoints($('projConsiderations'), data.considerations, '!', 'var(--z2)');
-  var assessSection = $('einordnung');
+  var assessSection = $('einschaetzung');
   if(assessSection){
-    var hasAny = (data.positives && data.positives.length) || (data.considerations && data.considerations.length);
+    var hasAny = data.currentAssessment || (data.positives && data.positives.length) || (data.considerations && data.considerations.length);
     assessSection.hidden = !hasAny;
   }
 

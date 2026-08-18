@@ -43,7 +43,8 @@ var NAV = [
       {href:'/sparplan-rechner/', label:'Sparplan-Rechner'}
     ]},
   { label:'Projekte', href:'/projekte/', items:[
-      {href:'/projekte/bitopex/', label:'Bitopex'}
+      {href:'/projekte/bitopex/', label:'Bitopex'},
+      {href:'/projekte/hyperocket/', label:'HyperRocket'}
     ]},
   { label:'Plattformen', href:'/#plattformen' },
   { label:'Über mich', href:'/#ueber-mich' }

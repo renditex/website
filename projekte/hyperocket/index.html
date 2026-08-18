@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HyperRocket: Mein Praxistest und aktueller Stand | RenditeX</title>
+<meta name="description" content="Ich teste HyperRocket selbst und dokumentiere hier meinen aktuellen Stand, mein aktuellstes Video und die Entwicklung seither — laufend aktualisiert.">
+<link rel="canonical" href="https://renditex.netlify.app/projekte/hyperocket/">
+<meta property="og:title" content="HyperRocket: Mein Praxistest und aktueller Stand">
+<meta property="og:description" content="Laufender Praxistest von HyperRocket — aktuellstes Video, aktueller Stand und meine Einschätzung, transparent dokumentiert.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://renditex.netlify.app/projekte/hyperocket/">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=25">
+<script>
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Projekt-Tracker</div>
+  <h1>HyperRocket: <em>Mein Praxistest und aktueller Stand</em></h1>
+  <p class="hero-sub">Ich begleite HyperRocket bereits seit einiger Zeit und halte hier meinen aktuellen Stand, wichtige Änderungen und meine Erfahrungen fest. Mein Video zeigt den Stand zum Zeitpunkt der Veröffentlichung — hier auf RenditeX siehst du, was danach passiert ist.</p>
+  <div class="trust-line" id="projUpdatedHero">—</div>
+  <div class="hub-cta">
+    <a class="btn primary" href="#einschaetzung">Meine Einschätzung lesen</a>
+  </div>
+</div>
+
+<!-- ============ MEIN AKTUELLES HYPEROCKET-VIDEO ============ -->
+<section id="hauptvideo" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-kicker">Aktuelles Video</span>
+      <h2>Mein aktuelles HyperRocket-Update</h2>
+      <p>Im Video zeige ich meinen damaligen Stand ausführlich. Die aktuelleren Entwicklungen findest du direkt darunter.</p>
+    </div>
+    <div class="reveal" id="projFeaturedVideo"></div>
+    <div class="proj-featured-meta reveal" id="projFeaturedMeta"></div>
+
+    <div class="proj-since" id="projSinceVideo"></div>
+  </div>
+</section>
+
+<!-- ============ MEINE AKTUELLEN HYPEROCKET-ERGEBNISSE ============
+     Aktiviert sich automatisch, sobald echte Kennzahlen (weeklyPerformance)
+     im Datenobjekt unten ergänzt werden. -->
+<section id="projPerformance" class="tint" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Meine aktuellen HyperRocket-Ergebnisse</h2>
+      <p>Mein dokumentierter Verlauf — neueste Werte zuerst.</p>
+    </div>
+
+    <div class="proj-perf-cards reveal" id="projPerfCards"></div>
+
+    <div class="chart-card reveal" style="margin-top:16px">
+      <div class="chart-host" id="chartHost" style="height:300px">
+        <div id="projPerfChart"></div>
+        <div class="tip" id="projPerfTip"></div>
+      </div>
+    </div>
+
+    <div class="proj-perf-list reveal" id="projPerfList" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<!-- ============ MEIN BISHERIGER VERLAUF ============ -->
+<section id="verlauf" class="reveal">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Mein bisheriger Verlauf</h2>
+    </div>
+    <div class="proj-timeline reveal" id="projTimeline"></div>
+  </div>
+</section>
+
+<!-- ============ WEITERE VIDEOS & INTERVIEW ============ -->
+<section id="weitere-videos" class="tint" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Weitere Videos &amp; Interview</h2>
+    </div>
+
+    <div id="projVideoGridWrap" hidden>
+      <h3 class="proj-sub-head">Weitere HyperRocket-Videos</h3>
+      <div class="proj-video-grid reveal" id="projVideoGrid"></div>
+    </div>
+
+    <div id="projInterviewBlock" hidden style="margin-top:30px">
+      <h3 class="proj-sub-head">Im Gespräch mit HyperRocket</h3>
+      <div class="reveal" id="projInterview"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PERSÖNLICHE EINSCHÄTZUNG ============ -->
+<section id="einschaetzung" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Meine persönliche Einschätzung</h2>
+    </div>
+    <div class="intro reveal" style="margin-top:-6px; margin-bottom:26px">
+      <p id="projAssessText">—</p>
+    </div>
+    <div class="proj-audience reveal">
+      <div>
+        <h3>Was ich interessant finde</h3>
+        <div class="proj-points" id="projPositives"></div>
+      </div>
+      <div>
+        <h3>Was man wissen sollte</h3>
+        <div class="proj-points" id="projConsiderations"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RISIKEN ============ -->
+<section id="risiken" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Welche Risiken ich sehe</h2>
+    </div>
+    <div class="limits reveal" id="projRisks"></div>
+    <div class="disclaimer reveal">Keine Anlageberatung. Investments sind mit Risiken bis hin zum vollständigen Verlust des eingesetzten Kapitals verbunden. Vergangene Ergebnisse sind keine Garantie für zukünftige Ergebnisse.</div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Häufige Fragen</h2>
+    </div>
+    <div class="acc reveal" id="projFaq"></div>
+  </div>
+</section>
+
+<!-- ============ CTA / PARTNERLINK ============ -->
+<section id="cta" class="tint" hidden>
+  <div class="wrap">
+    <div class="proj-cta-card reveal">
+      <div class="top">
+        <h3 style="font-size:17px; font-weight:800">Offizielle <span id="projCtaName">HyperRocket</span>-Seite</h3>
+        <span class="proj-affiliate-tag" id="projAffiliateTag">Partnerlink</span>
+      </div>
+      <p>Meine Einordnung ersetzt keine eigene Prüfung. Wenn du dich über den Link registrierst, kann ich eine Vergütung erhalten — für dich entstehen dadurch keine zusätzlichen Kosten.</p>
+      <div class="proj-cta-actions">
+        <a class="btn primary" id="projCtaBtn" href="#" target="_blank" rel="sponsored noopener">HyperRocket öffnen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEITERFÜHRENDE INHALTE ============ -->
+<section id="weiterfuehrend">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Das könnte dich auch interessieren</h2>
+    </div>
+    <div class="notes reveal" id="projRelated"></div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<div class="proj-sticky" id="projSticky">
+  <a class="btn" href="#hauptvideo">Video</a>
+  <a class="btn primary" href="#cta">HyperRocket öffnen</a>
+</div>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"RenditeX","item":"https://renditex.netlify.app/"},
+{"@type":"ListItem","position":2,"name":"Projekte","item":"https://renditex.netlify.app/projekte/"},
+{"@type":"ListItem","position":3,"name":"HyperRocket","item":"https://renditex.netlify.app/projekte/hyperocket/"}
+]}
+</script>
+<script type="application/ld+json" id="projJsonLd">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Was ist HyperRocket?","acceptedAnswer":{"@type":"Answer","text":"Ein Cashflow-Projekt, bei dem Nutzer mit Einzahlungen in USDT oder USDC teilnehmen. Ich teste es selbst und dokumentiere hier meinen eigenen Stand."}},
+{"@type":"Question","name":"Zeigt mein Video den aktuellen Stand?","acceptedAnswer":{"@type":"Answer","text":"Das Video zeigt meinen Stand zum Zeitpunkt der Veröffentlichung. Was danach passiert ist, dokumentiere ich hier auf dieser Seite weiter."}},
+{"@type":"Question","name":"Warum gibt es diese Seite zusätzlich zum Video?","acceptedAnswer":{"@type":"Answer","text":"Weil sich mein Stand nach einem Video weiterentwickelt. Hier siehst du, was seitdem passiert ist, statt nur eine einzelne Momentaufnahme."}},
+{"@type":"Question","name":"Sind die Ergebnisse garantiert?","acceptedAnswer":{"@type":"Answer","text":"Nein. Vergangene Ergebnisse lassen keine verlässliche Aussage über zukünftige Ergebnisse zu."}}
+]}
+</script>
+
+<script src="/assets/site.js?v=25"></script>
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="/assets/project.js?v=25"></script>
+<script>
+RX.header();
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Projekte', href:'/projekte/'},
+    {label:'HyperRocket', current:true}
+  ]
+});
+RX.footer();
+</script>
+<script>
+/* ============================================================
+   Projektdaten HyperRocket — einzige Stelle, die gepflegt werden muss.
+   Gleiches System wie /projekte/bitopex/ (siehe assets/project.js).
+
+   Sobald echte Wochen-/Verlaufszahlen vorliegen, koennen sie unter
+   weeklyPerformance + performanceSeries ergaenzt werden — der
+   Ergebnis-Bereich samt Chart aktiviert sich dann automatisch.
+   ============================================================ */
+var HYPEROCKET = {
+  slug: 'hyperocket',
+  name: 'HyperRocket',
+  status: 'active', // active | watching | paused | ended
+
+  updatedAt: '2026-08-18', // einzige Quelle fuer "Stand: ..."
+  focusLabel: 'Cashflow-Projekt',
+
+  websiteUrl: 'https://hyperocket.io/?ref=RenditeX',
+  affiliate: true,
+
+  currentAssessment: 'Für mich ist entscheidend, wie sich HyperRocket über mehrere Monate entwickelt, und nicht, wie eine einzelne Momentaufnahme aussieht. Genau deshalb ist mir der laufende Stand wichtiger als ein einmaliges Werbeversprechen oder ein einzelnes gutes Ergebnis. Deshalb dokumentiere ich hier nicht nur mein aktuellstes Video, sondern auch, was seither passiert.',
+
+  // Zeitreihe fuer Chart/Ergebniskarten — aktuell leer, da noch keine
+  // belastbaren Verlaufszahlen vorliegen. Struktur wie bei Bitopex:
+  // performanceSeries: [ { key:'...', label:'...', color:'#...' } ],
+  // weeklyPerformance: [ { date:'YYYY-MM-DD', ... } ],
+
+  timeline: [
+    { dateLabel:'Start', title:'Start meines Praxistests', text:'Ich beginne, HyperRocket direkt selbst zu testen, um mir ein eigenes Bild zu machen.' },
+    { dateLabel:'Später', title:'Erste längere Erfahrungsphase', text:'Ich sammle über einen längeren Zeitraum eigene Erfahrungen, bevor ich ausführlicher darüber berichte.' },
+    { dateLabel:'Aktuell', title:'Aktuelles Update nach 5 Monaten', text:'In meinem aktuellsten Video ordne ich meinen Gewinn und Stand nach fünf Monaten ein.' }
+  ],
+
+  videos: [
+    {
+      title: 'HypeRocket hat ALLES geändert: Mein Gewinn nach 5 Monaten',
+      youtubeUrl: 'https://youtu.be/iPHxi99XNRI',
+      publishedAt: '2026-08-05',
+      featured: true,
+      description: 'Nach fünf Monaten HyperRocket: mein aktueller Gewinn und Stand.'
+    }
+  ],
+
+  interview: null,
+
+  positives: [
+    { title:'Entwicklung über mehrere Monate', text:'Ich schaue mir an, wie sich mein Stand über einen längeren Zeitraum entwickelt, nicht nur bei einer einzelnen guten Phase.' },
+    { title:'Fokus auf das tatsächliche Ergebnis', text:'Für mich zählt mein tatsächlicher Gewinn bzw. Stand, nicht einzelne Pakete oder Werbeversprechen.' },
+    { title:'Laufende Updates statt einmaligem Video', text:'Ich halte meinen Stand hier über das einzelne Video hinaus aktuell.' }
+  ],
+  considerations: [
+    { title:'Ergebnisse schwanken', text:'Einzelne Phasen können deutlich unterschiedlich ausfallen.' },
+    { title:'Vergangene Ergebnisse sind keine Garantie', text:'Auch ein gutes Update sagt nichts Sicheres über die Zukunft aus.' }
+  ],
+
+  risks: [
+    { title:'Ergebnisrisiko', text:'Verlustphasen oder schwächere Phasen sind grundsätzlich möglich, unabhängig vom bisherigen Verlauf.' },
+    { title:'Plattformrisiko', text:'Neben dem eigentlichen Ergebnis besteht ein Risiko durch die verwendete Plattform selbst.' },
+    { title:'Gegenparteirisiko', text:'Du bist von der Zuverlässigkeit des Unternehmens hinter der Plattform abhängig.' },
+    { title:'Momentaufnahme-Risiko', text:'Ein einzelnes gutes Update oder Video ersetzt keine laufende Beobachtung über einen längeren Zeitraum.' }
+  ],
+
+  faq: [
+    { q:'Was ist HyperRocket?', a:'Ein Cashflow-Projekt, bei dem Nutzer mit Einzahlungen in USDT oder USDC teilnehmen. Ich teste es selbst und dokumentiere hier meinen eigenen Stand.' },
+    { q:'Worum geht es auf dieser Seite?', a:'Hier halte ich meinen laufenden HyperRocket-Test fest — meinen aktuellen Stand, mein aktuellstes Video und meine Einschätzung, unabhängig von einzelnen Momentaufnahmen.' },
+    { q:'Zeigt mein Video den aktuellen Stand?', a:'Das Video zeigt meinen Stand zum Zeitpunkt der Veröffentlichung. Was danach passiert ist, dokumentiere ich hier auf dieser Seite weiter.' },
+    { q:'Warum gibt es diese Seite zusätzlich zum Video?', a:'Weil sich mein Stand nach einem Video weiterentwickelt. Hier siehst du, was seitdem passiert ist, statt nur eine einzelne Momentaufnahme.' },
+    { q:'Sind die Ergebnisse garantiert?', a:'Nein. Vergangene Ergebnisse lassen keine verlässliche Aussage über zukünftige Ergebnisse zu.' },
+    { q:'Ist der Link zu HyperRocket ein Partnerlink?', a:'Ja. Wenn du dich darüber registrierst, kann ich eine Vergütung erhalten. Für dich entstehen dadurch keine zusätzlichen Kosten.' }
+  ],
+
+  related: [
+    { kicker:'Projekt', label:'Bitopex', href:'/projekte/bitopex/', desc:'Mein laufender Praxistest von Bitopex — Copy-Trading mit 0DTE und ALT-0DTE.' },
+    { kicker:'Tool', label:'Scam-Check', href:'/scam-check/', desc:'Zwölf Warnsignale für Krypto-Betrug zum Ankreuzen — bevor du irgendwo Geld einzahlst.' },
+    { kicker:'Tool', label:'Fear & Greed Index', href:'/fear-greed/', desc:'Zeigt, ob im Markt gerade Angst oder Gier herrscht.' },
+    { kicker:'Tool', label:'Heatzone Chart', href:'/heatzone-chart/', desc:'Ist Bitcoin gerade günstig oder teuer bewertet?' }
+  ]
+};
+
+RX.project.init(HYPEROCKET);
+RX.reveal();
+</script>
+</body>
+</html>
