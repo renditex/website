@@ -21,7 +21,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=36">
+<link rel="stylesheet" href="/assets/renditex.css?v=37">
 <script>
 document.documentElement.className += ' js';
 function rxShowAll(){
@@ -56,14 +56,20 @@ window.addEventListener('error', rxShowAll);
     <div class="tools-pair-grid reveal">
       <a class="tf-card tf-primary" href="/heatzone-chart/">
         <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
-        <h3>BTC Heatzone</h3>
+        <div class="tf-head-row">
+          <span class="tool-badge ti-heatzone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 4 4 7-8"/><path d="M14 7h6v6"/></svg></span>
+          <h3>BTC Heatzone</h3>
+        </div>
         <div id="toolsHeatzoneMain"></div>
         <span class="pf-cta">Heatzone öffnen <span class="arr">→</span></span>
       </a>
 
       <a class="tf-card" href="/fear-greed/">
         <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
-        <h3>Fear &amp; Greed</h3>
+        <div class="tf-head-row">
+          <span class="tool-badge ti-feargreed" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16a7.5 7.5 0 0 1 15 0"/><path d="M12 16l3.5-4.5"/><circle cx="12" cy="16" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+          <h3>Fear &amp; Greed</h3>
+        </div>
         <div id="toolsFgMain"></div>
         <span class="pf-cta">Fear &amp; Greed öffnen <span class="arr">→</span></span>
       </a>
@@ -81,7 +87,10 @@ window.addEventListener('error', rxShowAll);
 
     <a class="tf-card tf-primary reveal" href="/sparplan-rechner/" style="max-width:480px">
       <div class="tf-top"><span class="tf-label">Rechner</span><span class="badge live">Live</span></div>
-      <h3>Sparplan-Rechner</h3>
+      <div class="tf-head-row">
+        <span class="tool-badge ti-sparplan" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.3 9.4c0-1.1 1.1-2 2.7-2s2.7.7 2.7 1.8c0 2.4-5.4 1.5-5.4 3.9 0 1.1 1.1 1.9 2.7 1.9s2.7-.8 2.7-1.9"/><path d="M12 7.4v1M12 15.6v1"/></svg></span>
+        <h3>Sparplan-Rechner</h3>
+      </div>
       <div id="toolsSparplanMain"></div>
       <span class="pf-cta">Sparplan-Rechner öffnen <span class="arr">→</span></span>
     </a>
@@ -98,7 +107,10 @@ window.addEventListener('error', rxShowAll);
 
     <div class="tools-compact reveal">
       <div class="tool-mini">
-        <h4><a href="/haltefrist-tracker/">Haltefrist-Tracker</a></h4>
+        <div class="tm-head-row">
+          <span class="tool-badge sm ti-haltefrist" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14.5" rx="2.2"/><path d="M4 10h16M8 3v4M16 3v4"/><path d="M9 14.5l2 2 4-4.5"/></svg></span>
+          <h4><a href="/haltefrist-tracker/">Haltefrist-Tracker</a></h4>
+        </div>
         <div class="util-demo">
           <span class="util-demo-tag">Beispiel</span>
           <div class="util-demo-row"><span>BTC · Kauf 18.09.2025</span></div>
@@ -110,7 +122,10 @@ window.addEventListener('error', rxShowAll);
       </div>
 
       <a class="tool-mini" href="/scam-check/">
-        <h4>Scam-Check</h4>
+        <div class="tm-head-row">
+          <span class="tool-badge sm ti-scamcheck" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l6.5 2.6v5.4c0 4.6-3 7.4-6.5 8.6-3.5-1.2-6.5-4-6.5-8.6V6.1L12 3.5z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg></span>
+          <h4>Scam-Check</h4>
+        </div>
         <div class="util-demo">
           <span class="util-demo-tag">Beispiel</span>
           <div class="util-demo-row"><span>Warnsignale</span><b>5 / 12</b></div>
@@ -132,7 +147,10 @@ window.addEventListener('error', rxShowAll);
 
     <div class="tools-compact reveal">
       <a class="tool-mini" href="/halving-countdown/">
-        <h4>Halving-Countdown</h4>
+        <div class="tm-head-row">
+          <span class="tool-badge sm ti-halving" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h11M6.5 20.5h11"/><path d="M7.5 3.5c0 4.5 3.7 5.6 4.5 5.6s4.5-1.1 4.5-5.6M7.5 20.5c0-4.5 3.7-5.6 4.5-5.6s4.5 1.1 4.5 5.6"/></svg></span>
+          <h4>Halving-Countdown</h4>
+        </div>
         <p style="margin-top:2px">Noch <b class="util-val" id="utilHalvingVal">…</b> bis zum nächsten Bitcoin-Halving.</p>
         <span class="open">Tool öffnen →</span>
       </a>
@@ -142,9 +160,9 @@ window.addEventListener('error', rxShowAll);
 
 <footer id="rx-foot"></footer>
 
-<script src="/assets/site.js?v=36"></script>
-<script src="/assets/project.js?v=36"></script>
-<script src="/assets/home.js?v=36"></script>
+<script src="/assets/site.js?v=37"></script>
+<script src="/assets/project.js?v=37"></script>
+<script src="/assets/home.js?v=37"></script>
 <script>
 RX.header();
 RX.breadcrumb({

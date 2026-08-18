@@ -16,6 +16,7 @@ var P = window.RX.project;
 var DATA = window.RX_DATA || {};
 var BITOPEX = DATA.bitopex;
 var HYPEROCKET = DATA.hyperocket;
+var SMARTIT = DATA.smartit;
 
 function $(id){ return document.getElementById(id); }
 function hide(el){ if(el) el.hidden = true; }
@@ -255,6 +256,33 @@ function renderFeaturedProjects(){
         '</div>' +
         spark2 +
         '<div class="pf-meta">Stand: ' + P.esc(P.fmtDate(snap.date)) + '</div>' +
+        '<span class="pf-cta">Praxistest ansehen <span class="arr">→</span></span>' +
+      '</a>'
+    );
+  }
+
+  if(SMARTIT && SMARTIT.snapshot){
+    var snap3 = SMARTIT.snapshot;
+    var claimActions = (SMARTIT.actions || []).filter(function(a){ return a.type === 'Claim'; })
+      .slice().sort(function(a, b){ return new Date(a.createdAt) - new Date(b.createdAt); });
+    var monthsMap3 = {};
+    claimActions.forEach(function(a){
+      var ym = a.createdAt.slice(0, 7);
+      monthsMap3[ym] = (monthsMap3[ym] || 0) + a.amountEur;
+    });
+    var months3 = Object.keys(monthsMap3).sort().map(function(ym){ return monthsMap3[ym]; });
+    var spark3 = months3.length >= 2 ? sparklineSvg(months3, '#8B5CF6') : '';
+    cards.push(
+      '<a class="proj-feature-card" href="/projekte/smartit/">' +
+        '<div class="pf-top"><span class="pf-label">Praxistest</span>' + pillHtml(SMARTIT.status) + '</div>' +
+        '<h3>SmartIT</h3>' +
+        '<p>Mein Staking-Setup rund um den SIT-Token, mit meinen gestakten Positionen und dem aktuellen Rewards-Stand.</p>' +
+        '<div class="pf-metrics">' +
+          '<div class="pf-metric"><span class="l">Kaufwert</span><span class="v">' + P.fmtMoney(snap3.purchasePriceEur, '€') + '</span></div>' +
+          '<div class="pf-metric"><span class="l">Rewards gesamt</span><span class="v">' + P.fmtSit(snap3.totalRewardsSit) + '</span></div>' +
+        '</div>' +
+        spark3 +
+        '<div class="pf-meta">Stand: ' + P.esc(P.fmtDate(snap3.date)) + '</div>' +
         '<span class="pf-cta">Praxistest ansehen <span class="arr">→</span></span>' +
       '</a>'
     );
