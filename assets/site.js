@@ -24,19 +24,21 @@ var LINKS = {
 
 /* ---------- Hauptnavigation ----------
    Eine einzige, feste Struktur für den Header auf JEDER Seite.
-   Reihenfolge folgt bewusst der RenditeX-2.0-Prioritaet Wissen →
-   Tools → Projekte → Markt (nicht Projekte zuerst) — "Plattformen"
-   und "Ueber mich" sind als Ankersektionen weiter unten auf der
-   Startseite erhalten (u. a. als "Warum RenditeX?"), stehen aber
-   nicht mehr gleichwertig im Hauptmenue. Neue Tools/Artikel/Projekte
-   einfach hier eintragen, wirkt sich automatisch ueberall aus. */
+   Reihenfolge folgt der RenditeX-Prioritaet Wissen → Tools →
+   Praxistests — "Markt" ist kein eigener Hauptpunkt mehr, Fear &
+   Greed/Heatzone stehen dafuer klar unter Tools (dort jetzt gross
+   als Featured Tools, siehe /tools/). "Plattformen" und "Ueber mich"
+   sind als Ankersektionen weiter unten auf der Startseite erhalten
+   (u. a. als "Warum RenditeX?"), stehen aber nicht mehr gleichwertig
+   im Hauptmenue. Neue Tools/Artikel/Projekte einfach hier eintragen,
+   wirkt sich automatisch ueberall aus. */
 var NAV = [
   { label:'Start', href:'/' },
   { label:'Wissen', href:'/#wissen', items:[
       {href:'/#wissen', label:'Krypto-Guide (kostenlos)'},
       {href:'/wissen/die-einjahresfrist/', label:'Die Einjahresfrist'}
     ]},
-  { label:'Tools', href:'/#tools', items:[
+  { label:'Tools', href:'/tools/', items:[
       {href:'/fear-greed/', label:'Fear & Greed Index'},
       {href:'/heatzone-chart/', label:'Heatzone Chart'},
       {href:'/sparplan-rechner/', label:'Sparplan-Rechner'},
@@ -44,14 +46,10 @@ var NAV = [
       {href:'/scam-check/', label:'Scam-Check'},
       {href:'/halving-countdown/', label:'Halving-Countdown'}
     ]},
-  { label:'Projekte', href:'/projekte/', items:[
+  { label:'Praxistests', href:'/projekte/', items:[
       {href:'/projekte/bitopex/', label:'Bitopex'},
       {href:'/projekte/hyperocket/', label:'HyperRocket'},
       {href:'/projekte/smartit/', label:'SmartIT'}
-    ]},
-  { label:'Markt', href:'/#markt', items:[
-      {href:'/fear-greed/', label:'Fear & Greed Index'},
-      {href:'/heatzone-chart/', label:'Heatzone Chart'}
     ]}
 ];
 var CHEVRON = '<svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';

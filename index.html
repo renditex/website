@@ -21,7 +21,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=34">
+<link rel="stylesheet" href="/assets/renditex.css?v=35">
 <script>
 /* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
    nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
@@ -49,12 +49,36 @@ window.addEventListener('error', rxShowAll);
   <p class="lead">RenditeX verbindet verständliches Krypto-Wissen, praktische Tools und meine eigenen Praxistests. So kannst du Themen nicht nur verstehen, sondern selbst analysieren und langfristig verfolgen.</p>
   <div class="hub-cta">
     <a class="btn primary" href="#wissen">Wissen entdecken</a>
-    <a class="btn" href="#tools">Tools nutzen</a>
+    <a class="btn" href="/tools/">Tools nutzen</a>
   </div>
   <div class="trust-line">
     <a href="#projekte" style="color:inherit">Meine Praxistests →</a>
   </div>
 </div>
+
+<!-- ============ LIVE AUF RENDITEX ============
+     Kompakter Vorgeschmack direkt nach dem Hero — zeigt, dass
+     RenditeX echte interaktive Tools hat, nicht nur Artikel. Die
+     volle Tool-Welt mit denselben Live-Werten kommt weiter unten,
+     hier bewusst nur drei kleine Zahlen statt Fliesstext. -->
+<section id="live-teaser" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:16px">
+      <h2 style="font-size:clamp(19px,2.4vw,25px)">Live auf RenditeX</h2>
+    </div>
+    <div class="live-teaser-grid reveal">
+      <div class="live-card">
+        <div class="live-card-body" id="teaserHeatzone"><span class="live-card-skeleton">Lädt …</span></div>
+      </div>
+      <div class="live-card">
+        <div class="live-card-body" id="teaserFg"><span class="live-card-skeleton">Lädt …</span></div>
+      </div>
+      <div class="live-card">
+        <div class="live-card-body" id="teaserSparplan"><span class="live-card-skeleton">Lädt …</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============ KRYPTO VERSTEHEN (WISSEN) ============ -->
 <section id="wissen">
@@ -86,30 +110,23 @@ window.addEventListener('error', rxShowAll);
       </div>
     </div>
 
-    <div class="sec-head reveal" style="margin-top:clamp(30px,4vw,44px); margin-bottom:16px">
-      <h3 style="font-size:17px; font-weight:800; letter-spacing:-.01em">Ausgewählte Inhalte</h3>
+    <div class="sec-head reveal" style="margin-top:clamp(26px,3.4vw,36px); margin-bottom:2px">
+      <h3 style="font-size:16px; font-weight:800; letter-spacing:-.01em">Beliebte Themen</h3>
     </div>
-    <div class="article-grid reveal">
-      <a class="article-card" href="/wissen/die-einjahresfrist/">
-        <div class="kicker">Steuern</div>
-        <h3>Die Einjahresfrist</h3>
-        <p>Deutschlands wichtigste Krypto-Regel: Wann Gewinne steuerfrei bleiben und was du von Anfang an dokumentieren solltest.</p>
-      </a>
-      <a class="article-card" href="/fear-greed/#faktoren">
-        <div class="kicker">Strategie</div>
-        <h3>Wie der Fear &amp; Greed Index entsteht</h3>
-        <p>Sechs Faktoren, einzeln normalisiert und gewichtet zu einem Wert zwischen 0 und 100.</p>
-      </a>
-      <a class="article-card" href="/scam-check/">
-        <div class="kicker">Sicherheit</div>
-        <h3>Scam erkennen</h3>
-        <p>Feste Tagesrenditen, Empfehlungsdruck, anonyme Teams — die Warnsignale, bevor du irgendwo Geld einzahlst.</p>
-      </a>
+    <div class="topic-links reveal">
+      <a class="topic-link" href="/wissen/die-einjahresfrist/">Einjahresfrist</a>
+      <a class="topic-link" href="/fear-greed/#faktoren">Fear &amp; Greed verstehen</a>
+      <a class="topic-link" href="/scam-check/">Scam erkennen</a>
+      <a class="topic-link" href="/guide/RenditeX-Krypto-Guide.pdf" target="_blank" rel="noopener">DeFi Grundlagen</a>
     </div>
   </div>
 </section>
 
-<!-- ============ RENDITEX TOOLS ============ -->
+<!-- ============ RENDITEX TOOLS ============
+     Produktartig statt redaktionell: echte, live berechnete Werte
+     statt Icon+Text-Cards (siehe assets/home.js). Heatzone ist die
+     grosse Primaerkarte, Fear & Greed und Sparplan-Rechner mittelgross
+     daneben, darunter die kompaktere Utility-Reihe. -->
 <section id="tools" class="tint">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -117,33 +134,37 @@ window.addEventListener('error', rxShowAll);
       <p>Verstehen ist der erste Schritt. Mit den Tools kannst du selbst rechnen, vergleichen und den Markt einordnen.</p>
     </div>
 
-    <div class="tools-live reveal">
-      <a class="tool" href="/fear-greed/">
-        <span class="badge live">Live</span>
-        <h3>Fear &amp; Greed</h3>
-        <div class="live-val" id="fgLive">— <small id="fgLiveLbl">wird geladen</small></div>
-        <p>Marktstimmung einordnen und verschiedene Strategien anhand vorhandener Daten nachvollziehen.</p>
-        <span class="open">Fear &amp; Greed öffnen <span class="arr">→</span></span>
+    <div class="tools-featured-grid reveal">
+      <a class="tf-card tf-primary" href="/heatzone-chart/">
+        <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
+        <h3>BTC Heatzone</h3>
+        <div id="toolsHeatzoneMain"></div>
+        <span class="pf-cta">Heatzone öffnen <span class="arr">→</span></span>
       </a>
 
-      <a class="tool" href="/heatzone-chart/">
-        <span class="badge live">Live</span>
-        <h3>BTC Heatzone</h3>
-        <div class="live-val" id="fvrLive">— <small id="fvrLiveLbl">wird geladen</small></div>
-        <p>Bitcoin anhand verschiedener Bewertungszonen langfristig einordnen.</p>
-        <span class="open">Heatzone öffnen <span class="arr">→</span></span>
+      <a class="tf-card" href="/fear-greed/">
+        <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
+        <h3>Fear &amp; Greed</h3>
+        <div id="toolsFgMain"></div>
+        <span class="pf-cta">Fear &amp; Greed öffnen <span class="arr">→</span></span>
+      </a>
+
+      <a class="tf-card" href="/sparplan-rechner/">
+        <div class="tf-top"><span class="tf-label">Rechner</span><span class="badge live">Live</span></div>
+        <h3>Sparplan-Rechner</h3>
+        <div id="toolsSparplanMain"></div>
+        <span class="pf-cta">Sparplan-Rechner öffnen <span class="arr">→</span></span>
       </a>
     </div>
 
-    <div class="tools-compact reveal" style="margin-top:16px">
-      <a class="tool-mini" href="/sparplan-rechner/">
-        <h4>Sparplan-Rechner</h4>
-        <p>Was wäre aus einem Sparplan geworden? Mit echten Kursen.</p>
-        <span class="open">Tool öffnen →</span>
-      </a>
-
+    <div class="tools-compact reveal" style="margin-top:20px">
       <div class="tool-mini">
         <h4><a href="/haltefrist-tracker/">Haltefrist-Tracker</a></h4>
+        <div class="util-demo">
+          <span class="util-demo-tag">Beispiel</span>
+          <div class="util-demo-row"><span>BTC · Kauf 18.09.2025</span></div>
+          <div class="util-demo-row"><span>Steuerfrei in</span><b>31 Tagen</b></div>
+        </div>
         <p>Countdown zur einjährigen Steuerfreiheit, als CSV exportierbar.</p>
         <a class="open" href="/haltefrist-tracker/">Tool öffnen →</a>
         <a class="xlink" href="/wissen/die-einjahresfrist/">Die Einjahresfrist verstehen →</a>
@@ -151,16 +172,23 @@ window.addEventListener('error', rxShowAll);
 
       <a class="tool-mini" href="/scam-check/">
         <h4>Scam-Check</h4>
+        <div class="util-demo">
+          <span class="util-demo-tag">Beispiel</span>
+          <div class="util-demo-row"><span>Warnsignale</span><b>5 / 12</b></div>
+          <div class="util-demo-row"><span>Risiko</span><b style="color:var(--z1)">Erhöht</b></div>
+        </div>
         <p>Zwölf Warnsignale für Krypto-Betrug zum Ankreuzen.</p>
         <span class="open">Tool öffnen →</span>
       </a>
 
       <a class="tool-mini" href="/halving-countdown/">
         <h4>Halving-Countdown</h4>
-        <p>Wie viele Tage noch bis zum nächsten Bitcoin-Halving?</p>
+        <p style="margin-top:2px">Noch <b class="util-val" id="utilHalvingVal">…</b> bis zum nächsten Bitcoin-Halving.</p>
         <span class="open">Tool öffnen →</span>
       </a>
     </div>
+
+    <div class="src-note reveal" style="margin-top:18px">Alle Tools im Überblick: <a href="/tools/">RenditeX Tools →</a></div>
   </div>
 </section>
 
@@ -185,29 +213,6 @@ window.addEventListener('error', rxShowAll);
     <div class="reveal" id="homeVideoThumb" style="max-width:1000px"></div>
     <div class="proj-featured-meta reveal" id="homeVideoMeta" style="max-width:1000px"></div>
     <div class="proj-since reveal" id="homeVideoLink" style="max-width:640px" hidden></div>
-  </div>
-</section>
-
-<!-- ============ MARKT IM BLICK ============ -->
-<section id="markt">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <h2>Markt im Blick</h2>
-      <p>Fear &amp; Greed und Heatzone werden bereits bei den Tools ausführlich behandelt — hier deshalb bewusst kompakt.</p>
-    </div>
-    <div class="market-grid reveal">
-      <a class="market-card" href="/fear-greed/">
-        <div class="market-card-top"><span class="k">Fear &amp; Greed</span><span class="badge live">Live</span></div>
-        <div class="market-val" id="marketFgVal">…</div>
-        <p>Marktstimmung einordnen und Strategien simulieren.</p>
-        <span class="open">Analyse öffnen <span class="arr">→</span></span>
-      </a>
-      <a class="market-card" href="/heatzone-chart/">
-        <div class="market-card-top"><span class="k">BTC Heatzone</span></div>
-        <p>Bitcoin langfristig anhand verschiedener Bewertungszonen einordnen.</p>
-        <span class="open">Heatzone öffnen <span class="arr">→</span></span>
-      </a>
-    </div>
   </div>
 </section>
 
@@ -388,61 +393,16 @@ window.addEventListener('error', rxShowAll);
 
 <footer id="rx-foot"></footer>
 
-<script src="/assets/site.js?v=34"></script>
-<script src="/assets/project.js?v=34"></script>
-<script src="/assets/data/bitopex.js?v=34"></script>
-<script src="/assets/data/hyperocket.js?v=34"></script>
-<script src="/assets/home.js?v=34"></script>
+<script src="/assets/site.js?v=35"></script>
+<script src="/assets/project.js?v=35"></script>
+<script src="/assets/data/bitopex.js?v=35"></script>
+<script src="/assets/data/hyperocket.js?v=35"></script>
+<script src="/assets/home.js?v=35"></script>
 <script>
 RX.header();
 RX.footer();
 RX.home.init();
 RX.reveal();
-
-/* Live-Wert in der Fear-&-Greed-Tool-Karte */
-(function(){
-  var ZONES = [
-    {max:24, de:'Extreme Angst', c:'#D91B26'},
-    {max:44, de:'Angst',         c:'#C24A0A'},
-    {max:55, de:'Neutral',       c:'#8F6A00'},
-    {max:75, de:'Gier',          c:'#0C7A3A'},
-    {max:100,de:'Extreme Gier',  c:'#04806A'}
-  ];
-  fetch('https://api.alternative.me/fng/?limit=1&format=json', {cache:'no-store'})
-    .then(function(r){ return r.json(); })
-    .then(function(j){
-      var v = parseInt(j.data[0].value, 10);
-      var z = ZONES.find(function(x){ return v <= x.max; });
-      var el = document.getElementById('fgLive');
-      el.style.color = z.c;
-      el.innerHTML = v + ' <small style="color:var(--muted)">' + z.de + '</small>';
-    })
-    .catch(function(){
-      document.getElementById('fgLive').innerHTML =
-        '<small style="color:var(--muted-2); margin-left:0">Live-Wert im Tool</small>';
-    });
-})();
-
-/* Live-Kurs in der Heatzone-Tool-Karte — folgt der oben gewählten Währung */
-(function(){
-  function load(){
-    var cur = RX.currency.get().toLowerCase();
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=' + cur, {cache:'no-store'})
-      .then(function(r){ return r.json(); })
-      .then(function(j){
-        var p = j && j.bitcoin && j.bitcoin[cur];
-        var el = document.getElementById('fvrLive');
-        if(!p){ throw new Error('keine Daten'); }
-        el.innerHTML = RX.currency.format(p) + ' <small style="color:var(--muted)">aktueller Kurs</small>';
-      })
-      .catch(function(){
-        document.getElementById('fvrLive').innerHTML =
-          '<small style="color:var(--muted-2); margin-left:0">Live-Wert im Tool</small>';
-      });
-  }
-  load();
-  window.addEventListener('rx-currency', load);
-})();
 </script>
 </body>
 </html>

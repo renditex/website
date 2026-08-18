@@ -1,10 +1,13 @@
 /* ============================================================
    RenditeX — Startseiten-Logik (RenditeX 2.0)
-   Liest ausschliesslich aus den bestehenden zentralen Datenquellen
-   (RX_DATA.bitopex, RX_DATA.hyperocket, RX.project-Helfer) und dem
-   Live-Fear&Greed-Endpoint. Erfindet, interpoliert oder cached NICHTS
-   eigenes — fehlt eine Datenquelle, blendet sich der jeweilige
-   Bereich aus, statt einen falschen/veralteten Wert zu zeigen.
+   Liest ausschliesslich aus bestehenden zentralen Datenquellen
+   (RX_DATA.bitopex, RX_DATA.hyperocket, RX.project-Helfer) und
+   echten Live-Endpoints (alternative.me Fear & Greed, CoinGecko BTC,
+   mempool.space Blockstand). Erfindet, interpoliert oder cached
+   NICHTS eigenes — fehlt eine Datenquelle, blendet sich der
+   jeweilige Bereich aus, statt einen falschen/veralteten Wert zu
+   zeigen. Wird sowohl von index.html ("Live auf RenditeX" + Tools-
+   Sektion) als auch von /tools/ eingebunden.
    ============================================================ */
 (function(){
 "use strict";
@@ -41,7 +44,16 @@ function sparklineSvg(values, color){
   '</svg>';
 }
 
-/* ---------- Live Fear & Greed ---------- */
+/* ============================================================
+   Live-Tool-Vorschauen ("Live auf RenditeX" + Tool-Sektion)
+   Heatzone und Sparplan-Rechner teilen sich eine BTC-Preisserie
+   (ein Fetch statt zwei). Fear & Greed kommt mit kurzer Historie fuer
+   die Mini-Sparkline. Alle drei liefern Promises mit echten Werten
+   oder werfen — der jeweilige Kartenhost blendet sich dann selbst
+   aus, es wird nie ein Fake-/Naeherungswert angezeigt.
+   ============================================================ */
+
+/* ---------- Fear & Greed (Wert + kurze Historie fuer Sparkline) ---------- */
 var FG_ZONES = [
   { max:24,  de:'Extreme Angst', c:'var(--z0)' },
   { max:44,  de:'Angst',         c:'var(--z1)' },
@@ -52,27 +64,145 @@ var FG_ZONES = [
 var fgPromise = null;
 function fetchFearGreed(){
   if(!fgPromise){
-    fgPromise = fetch('https://api.alternative.me/fng/?limit=1&format=json', { cache:'no-store' })
+    fgPromise = fetch('https://api.alternative.me/fng/?limit=30&format=json', { cache:'no-store' })
       .then(function(r){ return r.json(); })
       .then(function(j){
-        var v = parseInt(j.data[0].value, 10);
-        var zone = FG_ZONES.filter(function(z){ return v <= z.max; })[0];
-        return { value:v, zone:zone };
+        var arr = j.data.slice().reverse(); // alt -> neu
+        var value = parseInt(arr[arr.length - 1].value, 10);
+        var zone = FG_ZONES.filter(function(z){ return value <= z.max; })[0];
+        var spark = arr.map(function(d){ return parseInt(d.value, 10); });
+        return { value:value, zone:zone, spark:spark };
       });
   }
   return fgPromise;
 }
-function loadFearGreedInto(elId, withLabel){
-  var el = $(elId);
-  if(!el) return;
-  fetchFearGreed().then(function(r){
-    el.style.color = r.zone.c;
-    el.innerHTML = r.value + (withLabel ? ' <small style="color:var(--muted); font-weight:400">' + r.zone.de + '</small>' : '');
-  }).catch(function(){
-    var wrap = el.closest('.market-card');
-    if(wrap) hide(wrap); else el.textContent = '';
+
+/* ---------- BTC-Preisserie + Heatzone-Bewertungsmodell ----------
+   Gleiches Modell wie /heatzone-chart/ (log-log-Regression ueber den
+   bekannten Kursverlauf; letzte 365 Tage live von CoinGecko, Aelteres
+   als feste, oeffentlich dokumentierte Eckdaten — siehe Kommentar
+   dort zur 365-Tage-Grenze der kostenlosen API). Bewusst eine
+   eigenstaendige Kopie statt eines Imports, um die funktionierende
+   Tool-Seite nicht anzufassen — Zonen/Anker bei Aenderungen an
+   beiden Stellen pflegen. */
+var HZ_ZONES = [
+  { hex:'#4C3A9E', de:'Kapitulation', lo:-Infinity, hi:-1.5 },
+  { hex:'#2E52C7', de:'Kaufen',       lo:-1.5, hi:-0.9 },
+  { hex:'#0D7A82', de:'Akkumulieren', lo:-0.9, hi:-0.3 },
+  { hex:'#1C8F52', de:'Neutral',      lo:-0.3, hi:0.3 },
+  { hex:'#E06A3A', de:'FOMO',         lo:0.3, hi:0.9 },
+  { hex:'#C92E68', de:'Euphorie',     lo:0.9, hi:1.5 },
+  { hex:'#A81548', de:'Blase',        lo:1.5, hi:Infinity }
+];
+function hzZoneOfZ(z){
+  for(var i = 0; i < HZ_ZONES.length; i++){ if(z > HZ_ZONES[i].lo && z <= HZ_ZONES[i].hi) return HZ_ZONES[i]; }
+  return HZ_ZONES[3];
+}
+var HZ_GENESIS = Date.UTC(2009, 0, 3);
+function hzDaysSince(t){ return Math.max(1, (t - HZ_GENESIS) / 86400000); }
+function hzFallbackSeries(cutoffT){
+  var fx = 0.92;
+  var anchors = [
+    ['2013-01-01',12],['2014-01-01',700],['2015-01-01',250],['2016-01-01',380],
+    ['2017-01-01',900],['2017-12-17',17500],['2018-12-15',3300],['2019-06-26',11000],
+    ['2020-03-13',4600],['2020-12-31',26000],['2021-04-14',61000],['2021-11-10',61500],
+    ['2022-06-18',18000],['2022-11-21',15800],['2023-12-31',40000],['2024-03-14',68000],
+    ['2024-11-10',76000],['2025-06-01',100000],['2025-10-06',126000],['2025-12-01',92000],['2026-08-01',64000]
+  ].map(function(a){ return { t:new Date(a[0] + 'T00:00:00Z').getTime(), p:a[1] * fx }; });
+  var out = [];
+  for(var i = 0; i < anchors.length - 1; i++){
+    var a = anchors[i], b = anchors[i + 1], steps = Math.max(1, Math.round((b.t - a.t) / 86400000));
+    for(var s = 0; s < steps; s++){
+      var f = s / steps, t = a.t + f * (b.t - a.t);
+      var p = Math.exp(Math.log(a.p) + f * (Math.log(b.p) - Math.log(a.p)));
+      out.push({ t:t, p:p });
+    }
+  }
+  out.push({ t:anchors[anchors.length - 1].t, p:anchors[anchors.length - 1].p });
+  return cutoffT == null ? out : out.filter(function(d){ return d.t < cutoffT; });
+}
+function hzFitModel(series){
+  var n = 0, sx = 0, sy = 0, sxx = 0, sxy = 0;
+  var pts = series.map(function(d){ return { x:Math.log10(hzDaysSince(d.t)), y:Math.log10(d.p) }; });
+  pts.forEach(function(p){ n++; sx += p.x; sy += p.y; sxx += p.x * p.x; sxy += p.x * p.y; });
+  var B = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+  var A = (sy - B * sx) / n;
+  var ybar = sy / n, ssRes = 0, ssTot = 0;
+  pts.forEach(function(p){ var pred = A + B * p.x; ssRes += (p.y - pred) * (p.y - pred); ssTot += (p.y - ybar) * (p.y - ybar); });
+  return { A:A, B:B, sigma:Math.sqrt(ssRes / n) };
+}
+function hzZScore(model, t, price){ return (Math.log10(price) - (model.A + model.B * Math.log10(hzDaysSince(t)))) / model.sigma; }
+
+var btcSeriesPromise = null;
+function fetchBtcSeries(){
+  if(!btcSeriesPromise){
+    var cur = RX.currency.get().toLowerCase();
+    var livePriceP = fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=' + cur, { cache:'no-store' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){ return (j && j.bitcoin && typeof j.bitcoin[cur] === 'number') ? j.bitcoin[cur] : null; })
+      .catch(function(){ return null; });
+    var recentP = fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=' + cur + '&days=365&interval=daily', { cache:'no-store' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        if(j && j.prices && j.prices.length > 200){
+          return j.prices.map(function(p){ return { t:p[0], p:p[1] }; }).filter(function(d){ return d.p > 0; });
+        }
+        return null;
+      })
+      .catch(function(){ return null; });
+    btcSeriesPromise = Promise.all([livePriceP, recentP]).then(function(r){
+      var livePrice = r[0], recent = r[1];
+      if(!livePrice && !recent) throw new Error('keine BTC-Daten');
+      var cutoff = recent ? recent[0].t : Date.now();
+      var series = hzFallbackSeries(cutoff).concat(recent || []);
+      if(livePrice){
+        var lastT = series.length ? series[series.length - 1].t : 0;
+        if(Date.now() - lastT > 6 * 3600000){ series.push({ t:Date.now(), p:livePrice }); }
+        else{ series[series.length - 1] = { t:series[series.length - 1].t, p:livePrice }; }
+      }
+      return { series:series, currency:cur };
+    });
+  }
+  return btcSeriesPromise;
+}
+function heatzoneData(){
+  return fetchBtcSeries().then(function(r){
+    var model = hzFitModel(r.series);
+    var last = r.series[r.series.length - 1];
+    var zone = hzZoneOfZ(hzZScore(model, last.t, last.p));
+    return { price:last.p, zone:zone, spark:r.series.slice(-120).map(function(d){ return d.p; }), currency:r.currency };
   });
 }
+
+/* ---------- Sparplan-Rechner: echter 12-Monats-DCA-Backtest ----------
+   Die reale /sparplan-rechner/-Seite begrenzt den Backtest bewusst auf
+   maximal 12 Monate (dieselbe 365-Tage-API-Grenze) — die Vorschau
+   rechnet deshalb ebenfalls mit 12 Monaten statt einer laengeren,
+   nicht mit echten Daten belegbaren Zeitspanne. */
+function sparplanData(){
+  return fetchBtcSeries().then(function(r){
+    var months = 12, amount = 100;
+    var last = r.series[r.series.length - 1];
+    var start = new Date();
+    start = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() - months + 1, 1));
+    var dates = [];
+    for(var i = 0; i < months; i++){ dates.push(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + i, 1)); }
+    function priceOnOrBefore(ts){
+      var best = r.series[0];
+      for(var j = 0; j < r.series.length; j++){ if(r.series[j].t <= ts) best = r.series[j]; else break; }
+      return best;
+    }
+    var units = 0;
+    dates.forEach(function(t){ units += amount / priceOnOrBefore(t).p; });
+    return { amount:amount, months:months, invested:amount * months, valueToday:units * last.p, currency:r.currency };
+  });
+}
+
+window.addEventListener('rx-currency', function(){
+  btcSeriesPromise = null;
+  renderLiveTeaser();
+  renderToolsFeatured();
+});
 
 /* ---------- Meine Praxistests — grosse, datenorientierte Cards. Bewusst
    erst nach Wissen/Tools, damit RenditeX nicht zuerst wie eine
@@ -182,12 +312,96 @@ function renderFeaturedVideo(){
   }
 }
 
-/* ---------- Markt im Blick — Fear & Greed live, Heatzone ohne
-   eigenstaendig nachgerechneten Live-Zonenwert (siehe Kommentar in
-   heatzone-chart/index.html: eigenes Bewertungsmodell, keine
-   Duplizierung der Berechnung auf der Startseite). ---------- */
-function renderMarket(){
-  loadFearGreedInto('marketFgVal', true);
+/* ---------- "Live auf RenditeX" — kompakter Vorgeschmack direkt nach
+   dem Hero. Zeigt nur, dass RenditeX echte, interaktive Tools hat —
+   die volle Tool-Welt mit denselben Daten kommt weiter unten. ---------- */
+function renderLiveTeaser(){
+  var section = $('live-teaser');
+  if(!section) return;
+
+  heatzoneData().then(function(d){
+    var host = $('teaserHeatzone');
+    if(!host) return;
+    host.innerHTML =
+      '<span class="lp-name">BTC Heatzone</span>' +
+      '<span class="lp-val" style="color:' + d.zone.hex + '">' + RX.currency.format(d.price, 0) + '</span>' +
+      '<span class="lp-zone" style="color:' + d.zone.hex + '">' + P.esc(d.zone.de) + '</span>' +
+      sparklineSvg(d.spark, d.zone.hex);
+  }).catch(function(){ var el = $('teaserHeatzone'); if(el) hide(el.closest('.live-card')); });
+
+  fetchFearGreed().then(function(d){
+    var host = $('teaserFg');
+    if(!host) return;
+    host.innerHTML =
+      '<span class="lp-name">Fear &amp; Greed</span>' +
+      '<span class="lp-val" style="color:' + d.zone.c + '">' + d.value + '</span>' +
+      '<span class="lp-zone" style="color:' + d.zone.c + '">' + P.esc(d.zone.de) + '</span>' +
+      sparklineSvg(d.spark, d.zone.c);
+  }).catch(function(){ var el = $('teaserFg'); if(el) hide(el.closest('.live-card')); });
+
+  sparplanData().then(function(d){
+    var host = $('teaserSparplan');
+    if(!host) return;
+    host.innerHTML =
+      '<span class="lp-name">Sparplan-Rechner</span>' +
+      '<span class="lp-val">' + RX.currency.format(d.valueToday, 0) + '</span>' +
+      '<span class="lp-zone">aus ' + RX.currency.format(d.invested, 0) + ' in ' + d.months + ' Monaten</span>';
+  }).catch(function(){ var el = $('teaserSparplan'); if(el) hide(el.closest('.live-card')); });
+}
+
+/* ---------- Vollstaendige Tool-Sektion: dieselben drei Live-Werte,
+   groesser und mit mehr Kontext — nichts wird neu geladen, die
+   Promises sind bereits durch renderLiveTeaser() angestossen bzw.
+   werden von dort wiederverwendet. ---------- */
+function renderToolsFeatured(){
+  heatzoneData().then(function(d){
+    var host = $('toolsHeatzoneMain');
+    if(!host) return;
+    host.innerHTML =
+      '<div class="tf-price" style="color:' + d.zone.hex + '">' + RX.currency.format(d.price, 0) + '</div>' +
+      '<span class="tf-zone-badge" style="color:' + d.zone.hex + '; border-color:' + d.zone.hex + '">' + P.esc(d.zone.de) + '</span>' +
+      sparklineSvg(d.spark, d.zone.hex) +
+      '<p class="tf-sub">Fair-Value-Modell aus dem gesamten bekannten Kursverlauf, live berechnet.</p>';
+  }).catch(function(){ var el = $('toolsHeatzoneMain'); if(el) el.innerHTML = ''; });
+
+  fetchFearGreed().then(function(d){
+    var host = $('toolsFgMain');
+    if(!host) return;
+    host.innerHTML =
+      '<div class="tf-price" style="color:' + d.zone.c + '">' + d.value + '</div>' +
+      '<span class="tf-zone-badge" style="color:' + d.zone.c + '; border-color:' + d.zone.c + '">' + P.esc(d.zone.de) + '</span>' +
+      sparklineSvg(d.spark, d.zone.c) +
+      '<p class="tf-sub">Verlauf der letzten 30 Tage, inkl. Contrarian-DCA-Simulation im Tool.</p>';
+  }).catch(function(){ var el = $('toolsFgMain'); if(el) el.innerHTML = ''; });
+
+  sparplanData().then(function(d){
+    var host = $('toolsSparplanMain');
+    if(!host) return;
+    var sign = d.valueToday >= d.invested ? 'var(--z3)' : 'var(--red)';
+    host.innerHTML =
+      '<div class="sp-demo-row"><span>Bitcoin</span><span>' + RX.currency.format(d.amount, 0) + ' / Monat</span></div>' +
+      '<div class="sp-demo-row"><span>Zeitraum</span><span>' + d.months + ' Monate</span></div>' +
+      '<div class="sp-demo-row"><span>Eingezahlt</span><b>' + RX.currency.format(d.invested, 0) + '</b></div>' +
+      '<div class="sp-demo-row"><span>Wert heute</span><b style="color:' + sign + '">' + RX.currency.format(d.valueToday, 0) + '</b></div>';
+  }).catch(function(){ var el = $('toolsSparplanMain'); if(el) el.innerHTML = ''; });
+}
+
+/* ---------- Halving-Countdown als kleines Utility — echter, live aus
+   dem aktuellen Blockstand berechneter Wert (mempool.space), keine
+   Naeherung. ---------- */
+function renderHalvingUtil(){
+  var host = $('utilHalvingVal');
+  if(!host) return;
+  var NEXT_HALVING_BLOCK = 1050000;
+  fetch('https://mempool.space/api/blocks/tip/height', { cache:'no-store' })
+    .then(function(r){ if(!r.ok) throw new Error('bad status'); return r.text(); })
+    .then(function(txt){
+      var h = parseInt(txt, 10);
+      if(!h || isNaN(h)) throw new Error('keine Zahl');
+      var days = Math.floor(Math.max(0, NEXT_HALVING_BLOCK - h) * 600 / 86400);
+      host.textContent = days + ' Tage';
+    })
+    .catch(function(){ var wrap = host.closest('.tool-mini'); if(wrap) hide(wrap); });
 }
 
 /* ---------- Neu auf RenditeX — automatisch aus vorhandenen
@@ -250,9 +464,11 @@ function renderUpdatesFeed(){
 }
 
 function init(){
+  renderLiveTeaser();
   renderFeaturedProjects();
   renderFeaturedVideo();
-  renderMarket();
+  renderToolsFeatured();
+  renderHalvingUtil();
   renderUpdatesFeed();
 }
 

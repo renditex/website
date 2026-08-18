@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RenditeX Tools — Markt analysieren, rechnen, prüfen</title>
+<meta name="description" content="Alle RenditeX Tools an einem Ort: BTC Heatzone, Fear &amp; Greed, Sparplan-Rechner, Haltefrist-Tracker und Scam-Check. Kostenlos, ohne Anmeldung, direkt im Browser.">
+<link rel="canonical" href="https://renditex.netlify.app/tools/">
+<meta property="og:title" content="RenditeX Tools — Markt analysieren, rechnen, prüfen">
+<meta property="og:description" content="Alle RenditeX Tools an einem Ort: BTC Heatzone, Fear & Greed, Sparplan-Rechner, Haltefrist-Tracker und Scam-Check.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://renditex.netlify.app/tools/">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=35">
+<script>
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Werkzeugkasten</div>
+  <h1>RenditeX <em>Tools</em></h1>
+  <p class="hero-sub">Kostenlose Rechner und Marktindikatoren, mit denen du Themen aus meinen Videos selbst nachvollziehen kannst. Alles läuft direkt im Browser, ohne Anmeldung — deine Eingaben bleiben bei dir.</p>
+</div>
+
+<!-- ============ MARKT ANALYSIEREN ============ -->
+<section id="markt-analysieren">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Markt analysieren</h2>
+      <p>Zwei Blickwinkel auf denselben Markt: kurzfristige Stimmung und langfristige Bewertung.</p>
+    </div>
+
+    <div class="tools-pair-grid reveal">
+      <a class="tf-card tf-primary" href="/heatzone-chart/">
+        <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
+        <h3>BTC Heatzone</h3>
+        <div id="toolsHeatzoneMain"></div>
+        <span class="pf-cta">Heatzone öffnen <span class="arr">→</span></span>
+      </a>
+
+      <a class="tf-card" href="/fear-greed/">
+        <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
+        <h3>Fear &amp; Greed</h3>
+        <div id="toolsFgMain"></div>
+        <span class="pf-cta">Fear &amp; Greed öffnen <span class="arr">→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECHNEN & PLANEN ============ -->
+<section id="rechnen-planen" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Rechnen &amp; planen</h2>
+      <p>Was wäre aus einem Sparplan geworden? Weitere Rechner ergänze ich hier, sobald sie fertig sind.</p>
+    </div>
+
+    <a class="tf-card tf-primary reveal" href="/sparplan-rechner/" style="max-width:480px">
+      <div class="tf-top"><span class="tf-label">Rechner</span><span class="badge live">Live</span></div>
+      <h3>Sparplan-Rechner</h3>
+      <div id="toolsSparplanMain"></div>
+      <span class="pf-cta">Sparplan-Rechner öffnen <span class="arr">→</span></span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ STEUERN & SICHERHEIT ============ -->
+<section id="steuern-sicherheit" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Steuern &amp; Sicherheit</h2>
+      <p>Zwei praktische Prüfwerkzeuge — deine Daten bleiben lokal im Browser, es wird nichts an mich übertragen.</p>
+    </div>
+
+    <div class="tools-compact reveal">
+      <div class="tool-mini">
+        <h4><a href="/haltefrist-tracker/">Haltefrist-Tracker</a></h4>
+        <div class="util-demo">
+          <span class="util-demo-tag">Beispiel</span>
+          <div class="util-demo-row"><span>BTC · Kauf 18.09.2025</span></div>
+          <div class="util-demo-row"><span>Steuerfrei in</span><b>31 Tagen</b></div>
+        </div>
+        <p>Countdown zur einjährigen Steuerfreiheit, als CSV exportierbar.</p>
+        <a class="open" href="/haltefrist-tracker/">Tool öffnen →</a>
+        <a class="xlink" href="/wissen/die-einjahresfrist/">Die Einjahresfrist verstehen →</a>
+      </div>
+
+      <a class="tool-mini" href="/scam-check/">
+        <h4>Scam-Check</h4>
+        <div class="util-demo">
+          <span class="util-demo-tag">Beispiel</span>
+          <div class="util-demo-row"><span>Warnsignale</span><b>5 / 12</b></div>
+          <div class="util-demo-row"><span>Risiko</span><b style="color:var(--z1)">Erhöht</b></div>
+        </div>
+        <p>Zwölf Warnsignale für Krypto-Betrug zum Ankreuzen.</p>
+        <span class="open">Tool öffnen →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEITERE TOOLS ============ -->
+<section id="weitere-tools">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Weitere Tools</h2>
+    </div>
+
+    <div class="tools-compact reveal">
+      <a class="tool-mini" href="/halving-countdown/">
+        <h4>Halving-Countdown</h4>
+        <p style="margin-top:2px">Noch <b class="util-val" id="utilHalvingVal">…</b> bis zum nächsten Bitcoin-Halving.</p>
+        <span class="open">Tool öffnen →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script src="/assets/site.js?v=35"></script>
+<script src="/assets/project.js?v=35"></script>
+<script src="/assets/home.js?v=35"></script>
+<script>
+RX.header();
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Tools', current:true}
+  ]
+});
+RX.footer();
+RX.home.init();
+RX.reveal();
+</script>
+</body>
+</html>
