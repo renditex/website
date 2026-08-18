@@ -861,7 +861,7 @@ html.js .tools-soon.reveal:not(.in) .soon-row{
   background:var(--hero-gradient); border-radius:var(--radius-lg); overflow:hidden;
   border:1px solid rgba(255,255,255,.16);
 }
-.hub-hero h1{font-size:clamp(30px,5.6vw,54px); max-width:16ch}
+.hub-hero h1{font-size:clamp(30px,5.6vw,54px); max-width:23ch}
 .hub-hero h1 em{font-style:normal; color:var(--brand-onDark); font-weight:900}
 .hub-hero .lead{color:var(--muted); font-size:clamp(15px,1.7vw,18.5px); max-width:58ch; margin-top:18px}
 .hub-cta{display:flex; flex-wrap:wrap; gap:11px; margin-top:26px}
@@ -1492,19 +1492,38 @@ a.proj-video-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
    RenditeX 2.0 — Startseite
    ============================================================ */
 
-/* "Heute bei RenditeX" — Live-Panel im Hero (ersetzt die generische
-   Illustration). today-card ist ein .pdb-card mit Link-Verhalten,
-   keine neue Kartensprache noetig. */
-#todayPanel{display:flex; flex-direction:column; gap:12px; align-self:start}
-.today-head{
-  display:flex; align-items:baseline; justify-content:space-between; gap:10px;
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted-2);
+/* Wissen: Guide als hochwertige Featured Card, Themen als dezente
+   Pills (keine vier separaten, teils unpassenden Kachel-Links —
+   die Themen beschreiben, was im Guide steckt). */
+.guide-topics{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.guide-topic{
+  font-family:var(--font-mono); font-size:11.5px; color:var(--muted-2);
+  background:var(--surface-2); border:1px solid var(--line-soft); border-radius:999px; padding:5px 12px;
 }
-.today-grid{display:flex; flex-direction:column; gap:12px}
-a.today-card{display:block; text-decoration:none; color:var(--text); transition:transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out)}
-a.today-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-md)}
-.today-card.pdb-card .pdb-metric .v{font-size:17px}
-.today-card.pdb-card{padding:18px 20px}
+
+/* Kompakte, redaktionelle Wissens-Cards — bewusst anders als Tool-/
+   Projekt-Cards: keine Statuszahlen, kein Live-Wert, nur Kategorie +
+   Titel + kurzer Text. */
+.article-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px}
+.article-card{
+  display:flex; flex-direction:column; gap:8px; text-decoration:none; color:var(--text);
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius); box-shadow:var(--shadow-sm);
+  padding:18px 20px; transition:transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+}
+a.article-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-md)}
+.article-card .kicker{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2);
+}
+.article-card h3{font-size:16px; font-weight:800; letter-spacing:-.008em; line-height:1.3}
+.article-card p{color:var(--muted); font-size:13.5px; line-height:1.55; margin:0}
+
+/* Wissen ↔ Tools Cross-Link: kleine, dezente Zeile unter einer
+   Tool-/Artikel-Card, die auf das jeweils passende Gegenstueck zeigt. */
+.xlink{
+  display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600;
+  color:var(--brand-text); text-decoration:none; margin-top:2px;
+}
+.xlink:hover{text-decoration:underline}
 
 /* Meine aktuellen Projekte — grosse, datengetriebene Cards, bewusst
    anders als Tool-/Artikel-Cards (Status, Datum, echte Zahlen, Sparkline). */
@@ -1554,10 +1573,11 @@ a.market-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
   background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius); box-shadow:var(--shadow-sm);
   padding:16px 18px; transition:transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
 }
-a.tool-mini:hover{transform:translateY(-2px); box-shadow:var(--shadow-md)}
+.tool-mini:hover{transform:translateY(-2px); box-shadow:var(--shadow-md)}
 .tool-mini h4{font-size:14.5px; font-weight:700; letter-spacing:-.005em}
+.tool-mini h4 a{color:inherit; text-decoration:none}
 .tool-mini p{color:var(--muted); font-size:12.5px; line-height:1.5; margin:0}
-.tool-mini .open{font-size:12px; font-weight:700; color:var(--brand-text); margin-top:2px}
+.tool-mini .open{display:block; font-size:12px; font-weight:700; color:var(--brand-text); margin-top:2px; text-decoration:none}
 
 /* Neu auf RenditeX — kompakte Changelog-Timeline, kein Social-Feed */
 .update-feed{display:flex; flex-direction:column; gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); border-radius:var(--radius); overflow:hidden}

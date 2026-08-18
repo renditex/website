@@ -41,8 +41,7 @@ function sparklineSvg(values, color){
   '</svg>';
 }
 
-/* ---------- Live Fear & Greed (ein gemeinsamer Fetch fuer Hero-Panel
-   und Markt-Sektion, damit nicht doppelt geladen wird) ---------- */
+/* ---------- Live Fear & Greed ---------- */
 var FG_ZONES = [
   { max:24,  de:'Extreme Angst', c:'var(--z0)' },
   { max:44,  de:'Angst',         c:'var(--z1)' },
@@ -70,69 +69,14 @@ function loadFearGreedInto(elId, withLabel){
     el.style.color = r.zone.c;
     el.innerHTML = r.value + (withLabel ? ' <small style="color:var(--muted); font-weight:400">' + r.zone.de + '</small>' : '');
   }).catch(function(){
-    var wrap = el.closest('.today-card') || el.closest('.market-card');
+    var wrap = el.closest('.market-card');
     if(wrap) hide(wrap); else el.textContent = '';
   });
 }
 
-/* ---------- "Heute bei RenditeX" — kompaktes Live-Panel im Hero ---------- */
-function renderTodayPanel(){
-  var host = $('todayGrid');
-  var section = $('todayPanel');
-  if(!host || !section) return;
-  var cards = [];
-
-  if(BITOPEX){
-    var latest = P.latestPerformance(BITOPEX);
-    if(latest && BITOPEX.performanceSeries && BITOPEX.performanceSeries.length){
-      var metrics = BITOPEX.performanceSeries.map(function(s){
-        var v = latest[s.key], up = v >= 0;
-        return '<div class="pdb-metric"><span class="l">' + P.esc(s.label) + '</span>' +
-          '<span class="v" style="color:' + (up ? 'var(--z3)' : 'var(--red)') + '">' + P.fmtPct(v) + '</span></div>';
-      }).join('');
-      cards.push(
-        '<a class="pdb-card today-card" href="/projekte/bitopex/">' +
-          '<div class="pdb-head"><span class="pdb-name">Bitopex</span><span class="pdb-sub">Praxistest</span></div>' +
-          pillHtml(BITOPEX.status) +
-          '<div class="pdb-rows"><div class="pdb-row"><span>Letztes Update</span><b>' + P.esc(P.fmtDate(latest.date)) + '</b></div></div>' +
-          '<div class="pdb-metrics">' + metrics + '</div>' +
-        '</a>'
-      );
-    }
-  }
-
-  if(HYPEROCKET && HYPEROCKET.accountSnapshot){
-    var snap = HYPEROCKET.accountSnapshot;
-    var totalW = (HYPEROCKET.withdrawals || []).reduce(function(a, w){ return a + w.amount; }, 0);
-    cards.push(
-      '<a class="pdb-card today-card" href="/projekte/hyperocket/">' +
-        '<div class="pdb-head"><span class="pdb-name">HyperRocket</span><span class="pdb-sub">Praxistest</span></div>' +
-        pillHtml(HYPEROCKET.status) +
-        '<div class="pdb-rows"><div class="pdb-row"><span>Stand</span><b>' + P.esc(P.fmtDate(snap.date)) + '</b></div></div>' +
-        '<div class="pdb-metrics">' +
-          '<div class="pdb-metric"><span class="l">Aktiv investiert</span><span class="v">' + P.fmtMoney(snap.activeInvestmentUsdt, 'USDT') + '</span></div>' +
-          '<div class="pdb-metric"><span class="l">Ausgezahlt</span><span class="v">' + P.fmtMoney(totalW, '$') + '</span></div>' +
-        '</div>' +
-      '</a>'
-    );
-  }
-
-  cards.push(
-    '<a class="pdb-card today-card" href="/fear-greed/">' +
-      '<div class="pdb-head"><span class="pdb-name">Markt</span><span class="pdb-sub">Live</span></div>' +
-      '<div class="pdb-metrics" style="margin-top:16px; padding-top:0; border-top:0">' +
-        '<div class="pdb-metric"><span class="l">Fear &amp; Greed</span><span class="v" id="todayFgVal">…</span></div>' +
-      '</div>' +
-    '</a>'
-  );
-
-  if(!cards.length){ hide(section); return; }
-  show(section);
-  host.innerHTML = cards.join('');
-  loadFearGreedInto('todayFgVal', false);
-}
-
-/* ---------- Meine aktuellen Projekte — grosse, datenorientierte Cards ---------- */
+/* ---------- Meine Praxistests — grosse, datenorientierte Cards. Bewusst
+   erst nach Wissen/Tools, damit RenditeX nicht zuerst wie eine
+   Investment-/Affiliate-Seite wirkt (siehe index.html-Reihenfolge). ---------- */
 function renderFeaturedProjects(){
   var host = $('projFeatureGrid');
   var section = $('projekte');
@@ -229,8 +173,8 @@ function renderFeaturedVideo(){
     if(proj){
       show(linkHost);
       linkHost.innerHTML =
-        '<div class="proj-since-head">Zu diesem Video gibt es aktuelle Daten auf RenditeX</div>' +
-        '<p style="color:var(--muted); font-size:14.5px; margin-top:8px">Das Video zeigt meinen Stand zum Zeitpunkt der Veröffentlichung. Die neuesten Zahlen und Entwicklungen findest du auf der Projektseite.</p>' +
+        '<div class="proj-since-head">Seit diesem Video gibt es neuere Daten</div>' +
+        '<p style="color:var(--muted); font-size:14.5px; margin-top:8px">Das Video zeigt meinen Stand zum Zeitpunkt der Aufnahme. Den aktuellen Stand dokumentiere ich auf RenditeX weiter.</p>' +
         '<a class="btn primary" style="margin-top:14px" href="/projekte/' + P.esc(proj.slug) + '/">Aktuellen Stand ansehen</a>';
     } else {
       hide(linkHost);
@@ -293,7 +237,7 @@ function renderUpdatesFeed(){
 
   items = items.filter(function(it){ return it.date; });
   items.sort(function(a, b){ return new Date(b.date) - new Date(a.date); });
-  items = items.slice(0, 6);
+  items = items.slice(0, 5);
 
   if(!items.length){ hide(section); return; }
   show(section);
@@ -306,7 +250,6 @@ function renderUpdatesFeed(){
 }
 
 function init(){
-  renderTodayPanel();
   renderFeaturedProjects();
   renderFeaturedVideo();
   renderMarket();

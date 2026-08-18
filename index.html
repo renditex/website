@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RenditeX — Krypto Tools, Praxistests &amp; Marktanalysen</title>
-<meta name="description" content="Meine laufenden Krypto-Praxistests (Bitopex, HyperRocket), kostenlose Tools wie Fear &amp; Greed und BTC Heatzone, Marktindikatoren und aktuelle Videos — alles an einem Ort.">
+<meta name="description" content="Verständliches Krypto-Wissen, kostenlose Tools wie Fear &amp; Greed und BTC Heatzone, meine laufenden Praxistests (Bitopex, HyperRocket) und aktuelle Videos — alles an einem Ort.">
 <link rel="canonical" href="https://renditex.netlify.app/">
 <meta property="og:title" content="RenditeX — Krypto Tools, Praxistests & Marktanalysen">
-<meta property="og:description" content="Laufende Praxistests, kostenlose Tools und Marktindikatoren — transparent dokumentiert, mit Verbindung zu meinen YouTube-Videos.">
+<meta property="og:description" content="Verständliches Krypto-Wissen, kostenlose Tools und meine laufenden Praxistests — transparent dokumentiert, mit Verbindung zu meinen YouTube-Videos.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://renditex.netlify.app/">
 <script>
@@ -21,7 +21,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=30">
+<link rel="stylesheet" href="/assets/renditex.css?v=31">
 <script>
 /* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
    nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
@@ -40,38 +40,136 @@ window.addEventListener('error', rxShowAll);
 <header id="rx-top"></header>
 
 <!-- ============ HERO ============
-     Rechts kein generisches Bild mehr, sondern "Heute bei RenditeX" —
-     ein echtes, aus den Projektdaten berechnetes Live-Panel
-     (siehe assets/home.js). Zeigt sich nur, wenn echte Daten da sind. -->
+     Bewusst kompakt und einspaltig: kein dominanter "Heute bei
+     RenditeX"-Block mehr im ersten Screen (siehe RX-2.0-Feedback) —
+     Aktualitaet zeigt sich stattdessen ueber die Projektkarten, die
+     YouTube-Verknuepfung und "Neu auf RenditeX" weiter unten. -->
 <div class="wrap hub-hero">
-  <div class="proj-hero-grid">
-    <div>
-      <h1>Krypto verstehen. <em>Strategien testen.</em> Entwicklungen verfolgen.</h1>
-      <p class="lead">Ich teste Plattformen und Strategien selbst, dokumentiere meine Ergebnisse und entwickle Tools, mit denen du den Kryptomarkt besser einordnen kannst.</p>
-      <div class="hub-cta">
-        <a class="btn primary" href="#projekte">Aktuelle Projekte</a>
-        <a class="btn" href="#tools">Tools entdecken</a>
-      </div>
-      <div class="trust-line">
-        <a href="#youtube" style="color:inherit; display:inline-flex; align-items:center; gap:7px">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          Neueste Videos
-        </a>
-      </div>
-    </div>
-    <div id="todayPanel">
-      <div class="today-head">Heute bei RenditeX</div>
-      <div class="today-grid" id="todayGrid"></div>
-    </div>
+  <h1>Krypto verstehen. <em>Selbst analysieren.</em> Erfahrungen nachvollziehen.</h1>
+  <p class="lead">RenditeX verbindet verständliches Krypto-Wissen, praktische Tools und meine eigenen Praxistests. So kannst du Themen nicht nur verstehen, sondern selbst analysieren und langfristig verfolgen.</p>
+  <div class="hub-cta">
+    <a class="btn primary" href="#wissen">Wissen entdecken</a>
+    <a class="btn" href="#tools">Tools nutzen</a>
+  </div>
+  <div class="trust-line">
+    <a href="#projekte" style="color:inherit">Meine Praxistests →</a>
   </div>
 </div>
 
-<!-- ============ MEINE AKTUELLEN PROJEKTE ============ -->
+<!-- ============ KRYPTO VERSTEHEN (WISSEN) ============ -->
+<section id="wissen">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Krypto verstehen</h2>
+      <p>RenditeX ist zuerst eine Plattform, auf der du Dinge in Ruhe verstehen kannst — bevor es um Tools oder eigene Praxistests geht.</p>
+    </div>
+
+    <div class="guide reveal">
+      <img class="cover" src="/guide/cover.png" alt="Titelseite des RenditeX Krypto-Guides" loading="lazy">
+      <div>
+        <span class="freebadge">100 % kostenlos</span>
+        <h3>Neu bei Krypto? Der RenditeX Krypto-Guide</h3>
+        <p>Von den Grundlagen bis zu Wallets, DeFi, Sicherheit und Steuern. Schritt für Schritt und ohne unnötige Fachsprache.</p>
+        <div class="guide-topics">
+          <span class="guide-topic">Grundlagen</span>
+          <span class="guide-topic">Wallets &amp; Sicherheit</span>
+          <span class="guide-topic">DeFi &amp; Strategien</span>
+          <span class="guide-topic">Steuern</span>
+        </div>
+        <div class="meta">
+          <span>10 Kapitel</span><span>PDF zum Mitnehmen</span><span>Stand Mai 2026</span>
+        </div>
+        <div class="actions">
+          <a class="btn primary" href="/guide/RenditeX-Krypto-Guide.pdf" download>Guide starten</a>
+          <a class="btn" href="/guide/RenditeX-Krypto-Guide.pdf" target="_blank" rel="noopener">Erst mal reinschauen</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-head reveal" style="margin-top:clamp(30px,4vw,44px); margin-bottom:16px">
+      <h3 style="font-size:17px; font-weight:800; letter-spacing:-.01em">Ausgewählte Inhalte</h3>
+    </div>
+    <div class="article-grid reveal">
+      <a class="article-card" href="/wissen/die-einjahresfrist/">
+        <div class="kicker">Steuern</div>
+        <h3>Die Einjahresfrist</h3>
+        <p>Deutschlands wichtigste Krypto-Regel: Wann Gewinne steuerfrei bleiben und was du von Anfang an dokumentieren solltest.</p>
+      </a>
+      <a class="article-card" href="/fear-greed/#faktoren">
+        <div class="kicker">Strategie</div>
+        <h3>Wie der Fear &amp; Greed Index entsteht</h3>
+        <p>Sechs Faktoren, einzeln normalisiert und gewichtet zu einem Wert zwischen 0 und 100.</p>
+      </a>
+      <a class="article-card" href="/scam-check/">
+        <div class="kicker">Sicherheit</div>
+        <h3>Scam erkennen</h3>
+        <p>Feste Tagesrenditen, Empfehlungsdruck, anonyme Teams — die Warnsignale, bevor du irgendwo Geld einzahlst.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RENDITEX TOOLS ============ -->
+<section id="tools" class="tint">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>RenditeX Tools</h2>
+      <p>Verstehen ist der erste Schritt. Mit den Tools kannst du selbst rechnen, vergleichen und den Markt einordnen.</p>
+    </div>
+
+    <div class="tools-live reveal">
+      <a class="tool" href="/fear-greed/">
+        <span class="badge live">Live</span>
+        <h3>Fear &amp; Greed</h3>
+        <div class="live-val" id="fgLive">— <small id="fgLiveLbl">wird geladen</small></div>
+        <p>Marktstimmung einordnen und verschiedene Strategien anhand vorhandener Daten nachvollziehen.</p>
+        <span class="open">Fear &amp; Greed öffnen <span class="arr">→</span></span>
+      </a>
+
+      <a class="tool" href="/heatzone-chart/">
+        <span class="badge live">Live</span>
+        <h3>BTC Heatzone</h3>
+        <div class="live-val" id="fvrLive">— <small id="fvrLiveLbl">wird geladen</small></div>
+        <p>Bitcoin anhand verschiedener Bewertungszonen langfristig einordnen.</p>
+        <span class="open">Heatzone öffnen <span class="arr">→</span></span>
+      </a>
+    </div>
+
+    <div class="tools-compact reveal" style="margin-top:16px">
+      <a class="tool-mini" href="/sparplan-rechner/">
+        <h4>Sparplan-Rechner</h4>
+        <p>Was wäre aus einem Sparplan geworden? Mit echten Kursen.</p>
+        <span class="open">Tool öffnen →</span>
+      </a>
+
+      <div class="tool-mini">
+        <h4><a href="/haltefrist-tracker/">Haltefrist-Tracker</a></h4>
+        <p>Countdown zur einjährigen Steuerfreiheit, als CSV exportierbar.</p>
+        <a class="open" href="/haltefrist-tracker/">Tool öffnen →</a>
+        <a class="xlink" href="/wissen/die-einjahresfrist/">Die Einjahresfrist verstehen →</a>
+      </div>
+
+      <a class="tool-mini" href="/scam-check/">
+        <h4>Scam-Check</h4>
+        <p>Zwölf Warnsignale für Krypto-Betrug zum Ankreuzen.</p>
+        <span class="open">Tool öffnen →</span>
+      </a>
+
+      <a class="tool-mini" href="/halving-countdown/">
+        <h4>Halving-Countdown</h4>
+        <p>Wie viele Tage noch bis zum nächsten Bitcoin-Halving?</p>
+        <span class="open">Tool öffnen →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEINE PRAXISTESTS ============ -->
 <section id="projekte">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Meine aktuellen Projekte</h2>
-      <p>Projekte und Strategien, die ich selbst teste oder aktiv begleite.</p>
+      <h2>Meine Praxistests</h2>
+      <p>Einige der Plattformen und Strategien, über die ich spreche, teste oder begleite ich selbst. Hier dokumentiere ich meinen aktuellen Stand und was sich nach meinen Videos verändert.</p>
     </div>
     <div class="proj-feature-grid reveal" id="projFeatureGrid"></div>
   </div>
@@ -95,6 +193,7 @@ window.addEventListener('error', rxShowAll);
   <div class="wrap">
     <div class="sec-head reveal">
       <h2>Markt im Blick</h2>
+      <p>Fear &amp; Greed und Heatzone werden bereits bei den Tools ausführlich behandelt — hier deshalb bewusst kompakt.</p>
     </div>
     <div class="market-grid reveal">
       <a class="market-card" href="/fear-greed/">
@@ -112,57 +211,6 @@ window.addEventListener('error', rxShowAll);
   </div>
 </section>
 
-<!-- ============ RENDITEX TOOLS ============ -->
-<section id="tools" class="tint">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <h2>RenditeX Tools</h2>
-      <p>Nicht nur lesen, sondern selbst rechnen und analysieren. Alles läuft direkt im Browser, ohne Anmeldung.</p>
-    </div>
-
-    <div class="tools-live reveal">
-      <a class="tool" href="/fear-greed/">
-        <span class="badge live">Live</span>
-        <h3>Fear &amp; Greed Strategie</h3>
-        <div class="live-val" id="fgLive">— <small id="fgLiveLbl">wird geladen</small></div>
-        <p>Marktstimmung einordnen und Strategien simulieren. Mit Verlauf der letzten Monate und einem Sparplan-Rechner, der den Betrag an die Marktlage anpasst.</p>
-        <span class="open">Tool öffnen <span class="arr">→</span></span>
-      </a>
-
-      <a class="tool" href="/heatzone-chart/">
-        <span class="badge live">Live</span>
-        <h3>BTC Heatzone</h3>
-        <div class="live-val" id="fvrLive">— <small id="fvrLiveLbl">wird geladen</small></div>
-        <p>Bitcoin langfristig anhand verschiedener Bewertungszonen einordnen. Das Regressionsmodell wird live aus den aktuellen Kursdaten berechnet.</p>
-        <span class="open">Heatzone öffnen <span class="arr">→</span></span>
-      </a>
-    </div>
-
-    <div class="tools-compact reveal" style="margin-top:16px">
-      <a class="tool-mini" href="/sparplan-rechner/">
-        <h4>Sparplan-Rechner</h4>
-        <p>Was wäre aus einem Sparplan geworden? Mit echten Kursen.</p>
-        <span class="open">Tool öffnen →</span>
-      </a>
-      <a class="tool-mini" href="/haltefrist-tracker/">
-        <h4>Haltefrist-Tracker</h4>
-        <p>Countdown zur einjährigen Steuerfreiheit, als CSV exportierbar.</p>
-        <span class="open">Tool öffnen →</span>
-      </a>
-      <a class="tool-mini" href="/scam-check/">
-        <h4>Scam-Check</h4>
-        <p>Zwölf Warnsignale für Krypto-Betrug zum Ankreuzen.</p>
-        <span class="open">Tool öffnen →</span>
-      </a>
-      <a class="tool-mini" href="/halving-countdown/">
-        <h4>Halving-Countdown</h4>
-        <p>Wie viele Tage noch bis zum nächsten Bitcoin-Halving?</p>
-        <span class="open">Tool öffnen →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- ============ NEU AUF RENDITEX ============
      Automatisch aus den Projektdaten abgeleitet (assets/home.js) —
      keine manuell doppelt gepflegten Update-Texte. -->
@@ -175,62 +223,15 @@ window.addEventListener('error', rxShowAll);
   </div>
 </section>
 
-<!-- ============ NEU BEI KRYPTO? ============ -->
-<section id="wissen" class="tint">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <h2>Neu bei Krypto?</h2>
-      <p>Wenn du bei Bitcoin, Wallets, DeFi oder Steuern erst einmal die Grundlagen verstehen möchtest, starte mit dem kostenlosen RenditeX Guide.</p>
-    </div>
-
-    <div class="guide reveal">
-      <img class="cover" src="/guide/cover.png" alt="Titelseite des RenditeX Krypto-Guides" loading="lazy">
-      <div>
-        <span class="freebadge">100 % kostenlos</span>
-        <h3>Der RenditeX Krypto-Guide</h3>
-        <p>Für Einsteiger und Fortgeschrittene. Grundlagen und Begriffe, die ersten praktischen Schritte, Wallets und Sicherheit, ein Kapitel über DeFi, Steuern in Deutschland und ein Glossar zum Nachschlagen. Geschrieben in normalem Deutsch, nicht in Fachchinesisch.</p>
-        <div class="meta">
-          <span>10 Kapitel</span><span>PDF zum Mitnehmen</span><span>Stand Mai 2026</span>
-        </div>
-        <div class="actions">
-          <a class="btn primary" href="/guide/RenditeX-Krypto-Guide.pdf" download>Krypto Guide starten</a>
-          <a class="btn" href="/guide/RenditeX-Krypto-Guide.pdf" target="_blank" rel="noopener">Erst mal reinschauen</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="notes reveal" style="margin-top:clamp(24px,3.4vw,32px)">
-      <a class="note" href="/wissen/die-einjahresfrist/">
-        <span class="badge live">Live</span>
-        <div class="kicker">Steuern</div>
-        <h3>Die Einjahresfrist</h3>
-        <p>Deutschlands wichtigste Krypto-Regel: Wann Gewinne steuerfrei bleiben und was du von Anfang an dokumentieren solltest.</p>
-      </a>
-      <a class="note" href="/fear-greed/">
-        <span class="badge live">Live</span>
-        <div class="kicker">Strategie</div>
-        <h3>Fear &amp; Greed Strategie</h3>
-        <p>Wie du deinen Sparplanbetrag antizyklisch an die Marktstimmung anpasst.</p>
-      </a>
-      <a class="note" href="/scam-check/">
-        <span class="badge live">Live</span>
-        <div class="kicker">Sicherheit</div>
-        <h3>Scam erkennen</h3>
-        <p>Feste Tagesrenditen, Empfehlungsdruck, anonyme Teams — die Warnsignale zum Ankreuzen, bevor du irgendwo Geld einzahlst.</p>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- ============ WARUM RENDITEX? ============ -->
-<section id="warum-renditex">
+<section id="warum-renditex" class="tint">
   <div class="wrap">
     <div class="sec-head reveal">
       <h2>Warum RenditeX?</h2>
     </div>
     <div class="about reveal">
       <div class="text">
-        <p>Ich teste viele der Plattformen und Strategien, über die ich auf YouTube spreche, selbst. Videos sind aber immer Momentaufnahmen. Auf RenditeX dokumentiere ich deshalb Zahlen, Veränderungen und meinen aktuellen Stand weiter und stelle zusätzlich die Tools bereit, die ich selbst sinnvoll finde.</p>
+        <p>Ich beschäftige mich selbst intensiv mit Krypto, DeFi und verschiedenen Plattformen. Viele Themen teste ich praktisch und spreche darüber auf YouTube. RenditeX ist der Ort, an dem ich Wissen, Tools und meine laufenden Erfahrungen an einem Platz zusammenbringe.</p>
         <p>Was du bei mir nicht findest: Kursziele, Kaufempfehlungen und das nächste sichere Ding. Ich bin kein Anlageberater und will keiner sein. Entscheiden musst du selbst — meine Aufgabe ist es, dir eine ordentliche Grundlage dafür zu geben.</p>
       </div>
       <div class="facts">
@@ -284,7 +285,7 @@ window.addEventListener('error', rxShowAll);
      fuer alle, die gezielt danach suchen. Bitopex/HyperRocket stehen
      hier nicht mehr, da beide bereits als eigene Projektseiten mit
      mehr Kontext oben auf der Seite vertreten sind. -->
-<section id="plattformen" class="tint">
+<section id="plattformen">
   <div class="wrap">
     <div class="sec-head reveal">
       <h2>Plattformen, die ich nutze oder getestet habe</h2>
@@ -392,20 +393,18 @@ window.addEventListener('error', rxShowAll);
 
 <footer id="rx-foot"></footer>
 
-<script src="/assets/site.js?v=30"></script>
-<script src="/assets/project.js?v=30"></script>
-<script src="/assets/data/bitopex.js?v=30"></script>
-<script src="/assets/data/hyperocket.js?v=30"></script>
-<script src="/assets/home.js?v=30"></script>
+<script src="/assets/site.js?v=31"></script>
+<script src="/assets/project.js?v=31"></script>
+<script src="/assets/data/bitopex.js?v=31"></script>
+<script src="/assets/data/hyperocket.js?v=31"></script>
+<script src="/assets/home.js?v=31"></script>
 <script>
 RX.header();
 RX.footer();
 RX.home.init();
 RX.reveal();
 
-/* Live-Wert in der Fear-&-Greed-Tool-Karte (eigener, kleiner Fetch —
-   home.js buendelt den fuer Hero-Panel/Markt-Sektion bereits genutzten
-   Aufruf nicht hierher, um die Tool-Karte unabhaengig zu halten). */
+/* Live-Wert in der Fear-&-Greed-Tool-Karte */
 (function(){
   var ZONES = [
     {max:24, de:'Extreme Angst', c:'#D91B26'},

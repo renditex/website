@@ -23,22 +23,18 @@ var LINKS = {
 };
 
 /* ---------- Hauptnavigation ----------
-   Eine einzige, feste Struktur für den Header auf JEDER Seite. Fuenf
-   Punkte entlang der RenditeX-2.0-Informationsarchitektur: Start,
-   Projekte, Markt, Tools, Wissen — "Plattformen" und "Ueber mich"
-   sind als Ankersektionen weiter unten auf der Startseite erhalten
-   (u. a. als "Warum RenditeX?"), stehen aber nicht mehr gleichwertig
-   im Hauptmenue. Neue Tools/Artikel/Projekte einfach hier eintragen,
-   wirkt sich automatisch ueberall aus. */
+   Eine einzige, feste Struktur für den Header auf JEDER Seite.
+   Reihenfolge folgt bewusst der RenditeX-2.0-Prioritaet Wissen →
+   Tools → Projekte → Markt (nicht Projekte zuerst) — "Plattformen"
+   und "Ueber mich" sind als Ankersektionen weiter unten auf der
+   Startseite erhalten (u. a. als "Warum RenditeX?"), stehen aber
+   nicht mehr gleichwertig im Hauptmenue. Neue Tools/Artikel/Projekte
+   einfach hier eintragen, wirkt sich automatisch ueberall aus. */
 var NAV = [
   { label:'Start', href:'/' },
-  { label:'Projekte', href:'/projekte/', items:[
-      {href:'/projekte/bitopex/', label:'Bitopex'},
-      {href:'/projekte/hyperocket/', label:'HyperRocket'}
-    ]},
-  { label:'Markt', href:'/#markt', items:[
-      {href:'/fear-greed/', label:'Fear & Greed Index'},
-      {href:'/heatzone-chart/', label:'Heatzone Chart'}
+  { label:'Wissen', href:'/#wissen', items:[
+      {href:'/#wissen', label:'Krypto-Guide (kostenlos)'},
+      {href:'/wissen/die-einjahresfrist/', label:'Die Einjahresfrist'}
     ]},
   { label:'Tools', href:'/#tools', items:[
       {href:'/fear-greed/', label:'Fear & Greed Index'},
@@ -48,9 +44,13 @@ var NAV = [
       {href:'/scam-check/', label:'Scam-Check'},
       {href:'/halving-countdown/', label:'Halving-Countdown'}
     ]},
-  { label:'Wissen', href:'/#wissen', items:[
-      {href:'/#wissen', label:'Krypto-Guide (kostenlos)'},
-      {href:'/wissen/die-einjahresfrist/', label:'Die Einjahresfrist'}
+  { label:'Projekte', href:'/projekte/', items:[
+      {href:'/projekte/bitopex/', label:'Bitopex'},
+      {href:'/projekte/hyperocket/', label:'HyperRocket'}
+    ]},
+  { label:'Markt', href:'/#markt', items:[
+      {href:'/fear-greed/', label:'Fear & Greed Index'},
+      {href:'/heatzone-chart/', label:'Heatzone Chart'}
     ]}
 ];
 var CHEVRON = '<svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
