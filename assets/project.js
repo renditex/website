@@ -30,7 +30,8 @@ var STATUS = {
 
 function fmtDate(iso){
   if(!iso) return '—';
-  var d = new Date(iso.length <= 7 ? iso + '-01' : iso + 'T00:00:00');
+  var s = iso.length <= 7 ? iso + '-01' : (iso.indexOf('T') > -1 ? iso : iso + 'T00:00:00');
+  var d = new Date(s);
   if(isNaN(d.getTime())) return iso;
   return d.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'});
 }
@@ -53,6 +54,10 @@ function fmtNum(v){
   if(v == null || isNaN(v)) return '—';
   var isInt = Math.abs(v - Math.round(v)) < 1e-9;
   return (isInt ? v.toFixed(0) : v.toFixed(1)).replace('.', ',');
+}
+function fmtSit(v){
+  if(v == null || isNaN(v)) return '—';
+  return v.toLocaleString('de-DE', {minimumFractionDigits:4, maximumFractionDigits:4}) + ' SIT';
 }
 function fmtDateShort(iso){
   var d = new Date(iso + 'T00:00:00');
@@ -91,7 +96,11 @@ function latestDataDate(data){
   if(data.withdrawals && data.withdrawals.length){
     candidates.push(data.withdrawals.slice().sort(function(a,b){ return new Date(b.date) - new Date(a.date); })[0].date);
   }
+  if(data.actions && data.actions.length){
+    candidates.push(data.actions.slice().sort(function(a,b){ return new Date(b.createdAt) - new Date(a.createdAt); })[0].createdAt);
+  }
   if(data.accountSnapshot && data.accountSnapshot.date) candidates.push(data.accountSnapshot.date);
+  if(data.snapshot && data.snapshot.date) candidates.push(data.snapshot.date);
   if(data.updatedAt) candidates.push(data.updatedAt);
   if(!candidates.length) return null;
   return candidates.sort(function(a,b){ return new Date(b) - new Date(a); })[0];
@@ -339,6 +348,142 @@ function renderWithdrawals(section, data){
   }
 }
 
+/* ---------- Staking-Snapshot (z. B. SmartIT): eigenes Staking-Setup
+   statt Strategie-Performance oder Auszahlungs-Historie. Rewards
+   werden bewusst nicht als Gewinn/Auszahlung bezeichnet — claimable,
+   claimed und der Dashboard-Euro-Wert sind sprachlich sauber
+   getrennte Groessen. ---------- */
+function renderStakingSnapshot(section, data){
+  if(!section) return;
+  var snap = data.snapshot;
+  if(!snap){ hide(section); return; }
+  show(section);
+
+  var standHost = $('projStakingStand');
+  if(standHost) standHost.textContent = 'Momentaufnahme meines eigenen Staking-Setups vom ' + fmtDate(snap.date) + '.';
+
+  var s = STATUS[data.status] || STATUS.active;
+  var mainHost = $('projStakingMain');
+  if(mainHost){
+    var mainCards = [
+      { k:'Gestaked', v: fmtSit(snap.stakedPositionSit) },
+      { k:'Kaufwert', v: fmtMoney(snap.purchasePriceEur, '€') },
+      { k:'Rewards gesamt', v: fmtSit(snap.totalRewardsSit) },
+      { k:'Status', v: s.label }
+    ];
+    mainHost.innerHTML = mainCards.map(function(c){
+      return '<div class="pcard"><div class="pcard-k">' + esc(c.k) + '</div><div class="pcard-v" style="color:var(--gold)">' + esc(c.v) + '</div></div>';
+    }).join('');
+  }
+
+  var extHost = $('projStakingExt');
+  if(extHost){
+    var extItems = [];
+    if(snap.todaysValueEur != null) extItems.push({ k:'Aktueller Wert der Position', v: fmtMoney(snap.todaysValueEur, '€') });
+    if(snap.claimedRewardsSit != null) extItems.push({ k:'Bisher geclaimte Rewards', v: fmtSit(snap.claimedRewardsSit) });
+    if(snap.claimableRewardsSit != null) extItems.push({ k:'Noch claimbar', v: fmtSit(snap.claimableRewardsSit) });
+    if(snap.totalRewardsEur != null) extItems.push({ k:'Rewards-Wert laut Dashboard', v: fmtMoney(snap.totalRewardsEur, '€') });
+    if(snap.mainPlan) extItems.push({ k:'Plan', v: snap.mainPlan });
+    if(snap.duration) extItems.push({ k:'Laufzeit', v: snap.duration });
+    if(snap.sitPriceUsdc != null) extItems.push({ k:'SIT-Preis', v: String(snap.sitPriceUsdc).replace('.', ',') + ' USDC' });
+    if(extItems.length){
+      show(extHost);
+      extHost.innerHTML = extItems.map(function(it){
+        return '<div class="stat"><div class="k">' + esc(it.k) + '</div><div class="n" style="font-size:17px">' + esc(it.v) + '</div></div>';
+      }).join('');
+    } else {
+      hide(extHost);
+    }
+  }
+}
+
+/* ---------- Aktionen (Claims/Staking-Events): Anzahl je Typ und
+   Claim-Summen automatisch aus der Liste berechnet. ---------- */
+function computeActionStats(actions){
+  var sortedDesc = actions.slice().sort(function(a,b){ return new Date(b.createdAt) - new Date(a.createdAt); });
+  var claims = actions.filter(function(a){ return a.type === 'Claim'; });
+  var stakings = actions.filter(function(a){ return a.type === 'Staking'; });
+  return {
+    sortedDesc: sortedDesc,
+    claimCount: claims.length,
+    stakingCount: stakings.length,
+    claimTotalSit: claims.reduce(function(a,c){ return a + c.amountSit; }, 0),
+    claimTotalEur: claims.reduce(function(a,c){ return a + c.amountEur; }, 0)
+  };
+}
+function renderActions(section, data){
+  if(!section) return;
+  var actions = data.actions;
+  if(!actions || !actions.length){ hide(section); return; }
+  show(section);
+  var stats = computeActionStats(actions);
+
+  var sumHost = $('projActionsSum');
+  if(sumHost){
+    var bits = [];
+    if(stats.claimCount) bits.push(stats.claimCount + ' dokumentierte' + (stats.claimCount === 1 ? 'r' : '') + ' Claim' + (stats.claimCount === 1 ? '' : 's'));
+    if(stats.stakingCount) bits.push(stats.stakingCount + ' dokumentierte Staking-Aktion' + (stats.stakingCount === 1 ? '' : 'en'));
+    sumHost.textContent = bits.join(' · ');
+  }
+
+  var listHost = $('projActionsList');
+  if(listHost){
+    listHost.innerHTML = stats.sortedDesc.map(function(a){
+      return '<div class="prow"><div class="prow-d">' + esc(fmtDate(a.createdAt)) + '</div>' +
+        '<div class="prow-vals">' +
+          '<span><i>' + esc(a.type) + '</i></span>' +
+          '<span><b style="color:var(--gold)">' + fmtSit(a.amountSit) + '</b></span>' +
+          '<span>' + fmtMoney(a.amountEur, '€') + '</span>' +
+          '<span><i>' + esc(a.status === 'Completed' ? 'Abgeschlossen' : a.status) + '</i></span>' +
+        '</div></div>';
+    }).join('');
+  }
+}
+
+/* ---------- Gestakte Positionen: Kennzahlen (Anzahl, fruehestes/
+   spaetestes Datum) automatisch aus der Liste berechnet — bei neuer
+   Position reicht ein Eintrag in data.positions. ---------- */
+function computePositionStats(positions){
+  var byCreated = positions.slice().sort(function(a,b){ return new Date(a.createdAt) - new Date(b.createdAt); });
+  var byUnlock = positions.slice().sort(function(a,b){ return new Date(a.unlockDate) - new Date(b.unlockDate); });
+  return {
+    count: positions.length,
+    sortedByUnlock: byUnlock,
+    earliestCreated: byCreated[0],
+    latestCreated: byCreated[byCreated.length - 1],
+    earliestUnlock: byUnlock[0],
+    latestUnlock: byUnlock[byUnlock.length - 1]
+  };
+}
+function renderPositions(section, data){
+  if(!section) return;
+  var positions = data.positions;
+  if(!positions || !positions.length){ hide(section); return; }
+  show(section);
+  var stats = computePositionStats(positions);
+
+  var sumHost = $('projPositionsSum');
+  if(sumHost){
+    sumHost.textContent = stats.count + ' dokumentierte Positionen mit Unlock-Daten zwischen ' +
+      fmtDate(stats.earliestUnlock.unlockDate) + ' und ' + fmtDate(stats.latestUnlock.unlockDate) + '.';
+  }
+
+  var listHost = $('projPositionsList');
+  if(listHost){
+    listHost.innerHTML = stats.sortedByUnlock.map(function(p){
+      return '<div class="pos-row">' +
+        '<div class="pos-row-top"><span class="pos-plan">' + esc(p.plan) + '</span><span class="pos-unlock">Unlock <b style="color:var(--gold)">' + esc(fmtDate(p.unlockDate)) + '</b></span></div>' +
+        '<div class="pos-row-vals">' +
+          '<div class="pos-metric"><span class="l">Gestaked</span><span class="v">' + fmtSit(p.stakedAmountSit) + '</span></div>' +
+          '<div class="pos-metric"><span class="l">Geclaimt</span><span class="v">' + fmtSit(p.claimedRewardsSit) + '</span></div>' +
+          '<div class="pos-metric"><span class="l">Claimbar</span><span class="v">' + fmtSit(p.claimableRewardsSit) + '</span></div>' +
+        '</div>' +
+        '<div class="pos-row-meta">Erstellt: ' + esc(fmtDate(p.createdAt)) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
 /* ---------- Anbieterangaben: Konzept-Erklaerung laut Praesentation
    (z. B. Verbindung zu Bitopex, ROI-Obergrenze, Network-Marketing).
    Bewusst als kompakte Punkte statt grosser Cards, mit neutralem
@@ -511,7 +656,27 @@ function renderSinceVideo(host, data, featured){
     }
   }
 
-  // Modus 3, qualitativ: kein Zeitreihen-/Auszahlungsdatensatz mit
+  // Modus 3: Aktionen (z. B. SmartIT) — neue Claims/Staking-Events seit Video.
+  var actions = data.actions;
+  if(actions && actions.length){
+    var newerA = actions.filter(function(a){ return new Date(a.createdAt) > vidDate; });
+    if(newerA.length){
+      var sumSit = newerA.reduce(function(a,x){ return a + x.amountSit; }, 0);
+      var latestA = newerA.slice().sort(function(a,b){ return new Date(b.createdAt) - new Date(a.createdAt); })[0];
+      show(host);
+      host.innerHTML =
+        '<div class="proj-since-head">Seit diesem Video passiert</div>' +
+        '<div class="proj-since-row">' +
+          '<div class="proj-since-item"><span class="l">Neue Aktionen</span><span class="v">' + newerA.length + '</span></div>' +
+          '<div class="proj-since-item"><span class="l">Summe seit Video</span><span class="v">' + fmtSit(sumSit) + '</span></div>' +
+          '<div class="proj-since-item"><span class="l">Letzte Aktion</span><span class="v">' + esc(fmtDate(latestA.createdAt)) + '</span></div>' +
+          '<a class="proj-since-link" href="#aktionen">Alle Aktionen ansehen ↓</a>' +
+        '</div>';
+      return;
+    }
+  }
+
+  // Modus 4, qualitativ: kein Zeitreihen-/Auszahlungs-/Aktionsdatensatz mit
   // neueren Einzelpunkten, aber ein echter, neuerer Datenstand als das Video.
   var hasFreshStand = data.updatedAt && new Date(data.updatedAt) > vidDate;
   if(!hasFreshStand){ hide(host); return; }
@@ -631,6 +796,12 @@ function init(data){
   renderPerformanceSection($('projPerformance'), data);
   renderAccountSnapshot($('account-stand'), data);
   renderWithdrawals($('auszahlungen'), data);
+  renderStakingSnapshot($('staking-stand'), data);
+  renderActions($('aktionen'), data);
+  renderPositions($('positionen'), data);
+  if($('projAboutText')) $('projAboutText').textContent = data.aboutText || '';
+  var aboutSection = $('was-ist-smartit');
+  if(aboutSection) aboutSection.hidden = !data.aboutText;
   renderPresentationConcept($('was-ist-hyperocket'), data);
   renderPresentationHistory($('praesentation-historie'), data);
   renderTimeline($('projTimeline'), data);
@@ -678,9 +849,10 @@ function init(data){
 window.RX = window.RX || {};
 window.RX.project = {
   init: init, STATUS: STATUS, esc: esc,
-  fmtDate: fmtDate, fmtMonthYear: fmtMonthYear, fmtPct: fmtPct, fmtMoney: fmtMoney, fmtNum: fmtNum,
+  fmtDate: fmtDate, fmtMonthYear: fmtMonthYear, fmtPct: fmtPct, fmtMoney: fmtMoney, fmtNum: fmtNum, fmtSit: fmtSit,
   youtubeId: youtubeId, youtubeThumb: youtubeThumb, playIcon: PLAY_ICON,
   pickFeaturedVideo: pickFeaturedVideo, latestPerformance: latestPerformance, latestDataDate: latestDataDate,
-  computeWithdrawalStats: computeWithdrawalStats, networkLabel: networkLabel
+  computeWithdrawalStats: computeWithdrawalStats, computeActionStats: computeActionStats, computePositionStats: computePositionStats,
+  networkLabel: networkLabel
 };
 })();

@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bitopex: Mein Praxistest seit April 2025 | RenditeX</title>
-<meta name="description" content="Ich teste Bitopex seit April 2025 live am Markt. Aktuellstes Video, Wochenperformance von 0DTE und ALT-0DTE, Verlauf und Risiken — laufend aktualisiert.">
-<link rel="canonical" href="https://renditex.netlify.app/projekte/bitopex/">
-<meta property="og:title" content="Bitopex: Mein Praxistest seit April 2025">
-<meta property="og:description" content="Laufender Praxistest von Bitopex — aktuellstes Video, Wochenperformance, Verlauf und Risiken, transparent dokumentiert.">
+<title>SmartIT Erfahrungen: Mein Staking-Test und aktueller Stand | RenditeX</title>
+<meta name="description" content="Mein persönlicher SmartIT-Praxistest mit echten gestakten SIT-Positionen, Rewards, Claims und aktuellem Stand — transparent dokumentiert.">
+<link rel="canonical" href="https://renditex.netlify.app/projekte/smartit/">
+<meta property="og:title" content="SmartIT Erfahrungen: Mein Staking-Test und aktueller Stand">
+<meta property="og:description" content="Mein persönlicher SmartIT-Praxistest mit echten gestakten SIT-Positionen, Rewards, Claims und aktuellem Stand — transparent dokumentiert.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://renditex.netlify.app/projekte/bitopex/">
+<meta property="og:url" content="https://renditex.netlify.app/projekte/smartit/">
 <script>
 (function(){
   try{
@@ -33,7 +33,7 @@ window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
 window.addEventListener('error', rxShowAll);
 </script>
 </head>
-<body id="top">
+<body id="top" class="pg-smartit">
 
 <header id="rx-top"></header>
 <div id="rx-crumb"></div>
@@ -41,21 +41,22 @@ window.addEventListener('error', rxShowAll);
 <!-- ============ HERO ============ -->
 <div class="wrap hero">
   <div class="eyebrow"><span class="beat"></span>Projekt-Tracker</div>
-  <h1>Bitopex: <em>Mein Praxistest seit April 2025</em></h1>
-  <p class="hero-sub">Ich teste und begleite Bitopex seit April 2025 live am Markt. Unten zeige ich zuerst mein aktuellstes Video — direkt danach, was sich seitdem an den Zahlen getan hat.</p>
+  <h1>SmartIT: <em>Mein Staking-Test und aktueller Stand</em></h1>
+  <p class="hero-sub">Ich begleite SmartIT nicht nur theoretisch, sondern mit eigenen gestakten SIT-Positionen. Auf dieser Seite dokumentiere ich meinen aktuellen Stand, meine Rewards, meine bisherigen Claims und die langfristige Entwicklung meines Setups.</p>
   <div class="trust-line" id="projUpdatedHero">—</div>
   <div class="hub-cta">
-    <a class="btn primary" href="#projPerformance">Zu den aktuellen Ergebnissen</a>
+    <a class="btn primary" href="#hauptvideo">Aktuelles Video ansehen</a>
+    <a class="btn" href="#staking-stand">Zu meinem Stand</a>
   </div>
 </div>
 
-<!-- ============ MEIN AKTUELLES BITOPEX-VIDEO ============ -->
+<!-- ============ MEIN AKTUELLES SMARTIT-VIDEO ============ -->
 <section id="hauptvideo" hidden>
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="sec-kicker">Aktuelles Video</span>
-      <h2>Mein aktuelles Bitopex-Update</h2>
-      <p>Im Video zeige ich meinen damaligen Stand ausführlich.</p>
+      <h2>Mein SmartIT-Update</h2>
+      <p>Das Video zeigt meinen damaligen Stand und meine Einordnung. Auf RenditeX dokumentiere ich die aktuelleren Daten, Rewards und Claims weiter.</p>
     </div>
     <div class="reveal" id="projFeaturedVideo"></div>
     <div class="proj-featured-meta reveal" id="projFeaturedMeta"></div>
@@ -64,24 +65,55 @@ window.addEventListener('error', rxShowAll);
   </div>
 </section>
 
-<!-- ============ MEINE AKTUELLEN BITOPEX-ERGEBNISSE ============ -->
-<section id="projPerformance" class="tint" hidden>
+<!-- ============ MEIN AKTUELLER SMARTIT-STAND ============
+     Fasst Account-Snapshot und Rewards-Aufschluesselung in einer
+     Sektion zusammen, statt dieselben Zahlen zweimal hintereinander
+     zu zeigen (Snapshot + "Staking & Rewards" waeren identisch). -->
+<section id="staking-stand" hidden>
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Meine aktuellen Bitopex-Ergebnisse</h2>
-      <p>Meine dokumentierte Wochenperformance von 0DTE und ALT-0DTE — neueste Werte zuerst.</p>
+      <h2>Mein aktueller SmartIT-Stand</h2>
+      <p>Für mich ist bei SmartIT nicht nur interessant, dass gestaked wird, sondern wie groß meine Position tatsächlich ist, welche Rewards bereits aufgelaufen sind, was ich schon geclaimt habe und wie lange mein Kapital gebunden bleibt. Genau deshalb halte ich diese Daten hier transparent fest.</p>
     </div>
+    <p id="projStakingStand" class="src-note" style="margin-top:-10px; margin-bottom:20px">—</p>
 
-    <div class="proj-perf-cards reveal" id="projPerfCards"></div>
+    <div class="proj-perf-cards reveal" id="projStakingMain"></div>
 
-    <div class="chart-card reveal" style="margin-top:16px">
-      <div class="chart-host" id="chartHost" style="height:300px">
-        <div id="projPerfChart"></div>
-        <div class="tip" id="projPerfTip"></div>
-      </div>
+    <div class="stats reveal" id="projStakingExt" style="margin-top:22px"></div>
+  </div>
+</section>
+
+<!-- ============ MEINE DOKUMENTIERTEN SMARTIT-AKTIONEN ============ -->
+<section id="aktionen" class="tint" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Meine dokumentierten SmartIT-Aktionen</h2>
+      <p id="projActionsSum">—</p>
     </div>
+    <div class="proj-perf-list reveal" id="projActionsList"></div>
+  </div>
+</section>
 
-    <div class="proj-perf-list reveal" id="projPerfList" style="margin-top:16px"></div>
+<!-- ============ MEINE GESTAKTEN POSITIONEN ============ -->
+<section id="positionen" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Meine gestakten Positionen</h2>
+      <p id="projPositionsSum">—</p>
+    </div>
+    <div class="pos-list reveal" id="projPositionsList"></div>
+  </div>
+</section>
+
+<!-- ============ WAS IST SMARTIT? ============ -->
+<section id="was-ist-smartit" class="tint" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Was ist SmartIT?</h2>
+    </div>
+    <div class="intro reveal">
+      <p id="projAboutText">—</p>
+    </div>
   </div>
 </section>
 
@@ -89,7 +121,7 @@ window.addEventListener('error', rxShowAll);
 <section id="verlauf" class="reveal">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Mein bisheriger Verlauf</h2>
+      <h2>Mein SmartIT-Verlauf</h2>
     </div>
     <div class="proj-timeline reveal" id="projTimeline"></div>
   </div>
@@ -103,12 +135,12 @@ window.addEventListener('error', rxShowAll);
     </div>
 
     <div id="projVideoGridWrap" hidden>
-      <h3 class="proj-sub-head">Weitere Bitopex-Videos</h3>
+      <h3 class="proj-sub-head">Weitere SmartIT-Videos</h3>
       <div class="proj-video-grid reveal" id="projVideoGrid"></div>
     </div>
 
     <div id="projInterviewBlock" hidden style="margin-top:30px">
-      <h3 class="proj-sub-head">Im Gespräch mit Bitopex</h3>
+      <h3 class="proj-sub-head">Im Gespräch mit SmartIT</h3>
       <div class="reveal" id="projInterview"></div>
     </div>
   </div>
@@ -118,7 +150,7 @@ window.addEventListener('error', rxShowAll);
 <section id="einschaetzung" hidden>
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Meine persönliche Einschätzung</h2>
+      <h2>Meine bisherige Einschätzung</h2>
     </div>
     <div class="intro reveal" style="margin-top:-6px; margin-bottom:26px">
       <p id="projAssessText">—</p>
@@ -140,10 +172,10 @@ window.addEventListener('error', rxShowAll);
 <section id="risiken" class="tint">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Risiken</h2>
+      <h2>Welche Risiken ich sehe</h2>
     </div>
     <div class="limits reveal" id="projRisks"></div>
-    <div class="disclaimer reveal">Keine Anlageberatung. Investments und Trading sind mit Risiken bis hin zum vollständigen Verlust des eingesetzten Kapitals verbunden. Vergangene Ergebnisse sind keine Garantie für zukünftige Ergebnisse.</div>
+    <div class="disclaimer reveal">Keine Anlageberatung. Investments sind mit Risiken bis hin zum vollständigen Verlust des eingesetzten Kapitals verbunden. Vergangene Ergebnisse sind keine Garantie für zukünftige Ergebnisse.</div>
   </div>
 </section>
 
@@ -162,12 +194,12 @@ window.addEventListener('error', rxShowAll);
   <div class="wrap">
     <div class="proj-cta-card reveal">
       <div class="top">
-        <h3 style="font-size:17px; font-weight:800">Offizielle <span id="projCtaName">Bitopex</span>-Seite</h3>
+        <h3 style="font-size:17px; font-weight:800">Offizielle <span id="projCtaName">SmartIT</span>-Seite</h3>
         <span class="proj-affiliate-tag" id="projAffiliateTag">Partnerlink</span>
       </div>
       <p>Meine Einordnung ersetzt keine eigene Prüfung. Wenn du dich über den Link registrierst, kann ich eine Vergütung erhalten — für dich entstehen dadurch keine zusätzlichen Kosten.</p>
       <div class="proj-cta-actions">
-        <a class="btn primary" id="projCtaBtn" href="#" target="_blank" rel="sponsored noopener">Bitopex öffnen</a>
+        <a class="btn primary" id="projCtaBtn" href="#" target="_blank" rel="sponsored noopener">SmartIT öffnen</a>
       </div>
     </div>
   </div>
@@ -187,40 +219,39 @@ window.addEventListener('error', rxShowAll);
 
 <div class="proj-sticky" id="projSticky">
   <a class="btn" href="#hauptvideo">Video</a>
-  <a class="btn primary" href="#projPerformance">Ergebnisse</a>
+  <a class="btn primary" href="#staking-stand">Mein Stand</a>
 </div>
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
 {"@type":"ListItem","position":1,"name":"RenditeX","item":"https://renditex.netlify.app/"},
 {"@type":"ListItem","position":2,"name":"Projekte","item":"https://renditex.netlify.app/projekte/"},
-{"@type":"ListItem","position":3,"name":"Bitopex","item":"https://renditex.netlify.app/projekte/bitopex/"}
+{"@type":"ListItem","position":3,"name":"SmartIT","item":"https://renditex.netlify.app/projekte/smartit/"}
 ]}
 </script>
 <script type="application/ld+json" id="projJsonLd">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-{"@type":"Question","name":"Seit wann testest du Bitopex?","acceptedAnswer":{"@type":"Answer","text":"Seit April 2025."}},
-{"@type":"Question","name":"Waren deine ersten YouTube-Videos gleichzeitig der Beginn deines Tests?","acceptedAnswer":{"@type":"Answer","text":"Nein. Ich habe Bitopex bereits vorher live verfolgt und erst später begonnen, auf YouTube darüber zu berichten."}},
-{"@type":"Question","name":"Ist das ein Backtest?","acceptedAnswer":{"@type":"Answer","text":"Nein. Meine Berichterstattung bezieht sich auf einen laufenden Test unter realen Marktbedingungen, kein rückwirkend berechnetes Backtesting."}},
-{"@type":"Question","name":"Sind die Ergebnisse garantiert?","acceptedAnswer":{"@type":"Answer","text":"Nein. Vergangene Ergebnisse lassen keine verlässliche Aussage über zukünftige Ergebnisse zu."}}
+{"@type":"Question","name":"Wie viel SIT habe ich aktuell gestaked?","acceptedAnswer":{"@type":"Answer","text":"21.888,6450 SIT laut meinem Dashboard-Stand vom 18.08.2026."}},
+{"@type":"Question","name":"Wie hoch sind meine aktuellen Rewards?","acceptedAnswer":{"@type":"Answer","text":"Insgesamt 1.487,0056 SIT, davon 135,6024 SIT aktuell claimbar und 1.351,4032 SIT bereits geclaimt."}},
+{"@type":"Question","name":"Wie lange sind meine Positionen gebunden?","acceptedAnswer":{"@type":"Answer","text":"Die dokumentierten Unlock-Daten reichen aktuell von September 2030 bis Mai 2031."}},
+{"@type":"Question","name":"Sind Rewards dasselbe wie Gewinn?","acceptedAnswer":{"@type":"Answer","text":"Nicht automatisch. Reward-Werte hängen auch vom Tokenpreis und der weiteren Entwicklung ab."}}
 ]}
 </script>
 
 <script src="/assets/site.js?v=33"></script>
-<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 <script src="/assets/project.js?v=33"></script>
-<script src="/assets/data/bitopex.js?v=33"></script>
+<script src="/assets/data/smartit.js?v=33"></script>
 <script>
 RX.header();
 RX.breadcrumb({
   trail: [
     {label:'Start', href:'/'},
     {label:'Projekte', href:'/projekte/'},
-    {label:'Bitopex', current:true}
+    {label:'SmartIT', current:true}
   ]
 });
 RX.footer();
-RX.project.init(RX_DATA.bitopex);
+RX.project.init(RX_DATA.smartit);
 RX.reveal();
 </script>
 </body>

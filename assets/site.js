@@ -46,7 +46,8 @@ var NAV = [
     ]},
   { label:'Projekte', href:'/projekte/', items:[
       {href:'/projekte/bitopex/', label:'Bitopex'},
-      {href:'/projekte/hyperocket/', label:'HyperRocket'}
+      {href:'/projekte/hyperocket/', label:'HyperRocket'},
+      {href:'/projekte/smartit/', label:'SmartIT'}
     ]},
   { label:'Markt', href:'/#markt', items:[
       {href:'/fear-greed/', label:'Fear & Greed Index'},
