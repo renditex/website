@@ -69,10 +69,17 @@ window.RX_DATA.smartit = {
 
   videos: [
     {
+      title: '4.500 $ in SmartIT investiert: So verdiene ich Rewards mit dem SIT Token',
+      youtubeUrl: 'https://youtu.be/oi3avBdMq6g',
+      publishedAt: '2026-07-22',
+      featured: true,
+      projectSlug: 'smartit',
+      description: 'Mein SmartIT-Investment und wie ich mit gestaktem SIT Rewards verdiene.'
+    },
+    {
       title: 'SmartIT & SIT Token erklärt: Warum das Staking jetzt spannend ist',
       youtubeUrl: 'https://www.youtube.com/watch?v=fkw4djZtUlE',
       publishedAt: '2026-05-20',
-      featured: true,
       projectSlug: 'smartit',
       description: 'Ich erkläre SmartIT und den SIT-Token und ordne ein, warum das Staking-Modell für mich interessant ist.'
     }
