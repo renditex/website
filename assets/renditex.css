@@ -884,54 +884,6 @@ html.js .tools-soon.reveal:not(.in) .soon-row{
 .btn.red{background:var(--red); border-color:var(--red); color:#fff}
 .btn.red:hover{background:#B8151F; border-color:#B8151F}
 
-/* Kopfbereich mit Portrait */
-.hero-split{display:grid; grid-template-columns:1fr auto; gap:clamp(20px,4vw,54px); align-items:end}
-@media(max-width:900px){
-  .hero-split{grid-template-columns:1fr}
-  .hero-split .portrait-wrap{order:-1; justify-self:center; margin-bottom:-6px}
-}
-.portrait-wrap{position:relative; align-self:start}
-.portrait-wrap::before{
-  content:""; position:absolute; z-index:0; left:50%; bottom:8%; transform:translateX(-50%);
-  width:128%; aspect-ratio:1; border-radius:50%;
-  /* Auf dem jetzt dunklen Hintergrund braucht der Glow mehr Leuchtkraft
-     als auf hellem Papier, sonst verschwindet er im Navy. */
-  background:radial-gradient(circle, rgba(46,123,255,.38) 0%, rgba(46,123,255,.14) 45%, transparent 72%);
-}
-.portrait-cut{
-  display:block; width:clamp(220px,27vw,340px); height:auto; position:relative; z-index:1;
-  filter:drop-shadow(0 20px 34px rgba(34,20,10,.16));
-  /* Leichte Drehung, damit der zeigende Finger mehr Richtung Textspalte
-     zeigt. Bewusst klein gehalten (5°) — bei mehr wirkt die gerade
-     Kante des rechteckigen Fotoausschnitts (Schulter/Hemdsaum) schief. */
-  transform:rotate(-5deg);
-  /* Nur der letzte schmale Streifen faded aus, damit die harte Kante des
-     Fotoausschnitts unten nicht wie ein Schnitt wirkt, das Foto selbst
-     aber nicht "ausgeblichen" aussieht (siehe frühere Version, die zu
-     viel vom Bild wegfaded hat). */
-  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%);
-  mask-image:linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%);
-}
-@media(max-width:900px){.portrait-cut{width:clamp(190px,50vw,260px)}}
-
-.hero-quote{
-  margin-top:clamp(20px,3vw,32px); max-width:46ch; position:relative;
-  background:var(--surface); border:1px solid var(--line-soft); box-shadow:var(--shadow-sm);
-  border-radius:var(--radius); padding:20px 24px 18px 42px;
-}
-.hero-quote::before{
-  content:"\201C"; position:absolute; left:14px; top:2px; font-family:var(--font-display);
-  font-weight:900; font-size:46px; line-height:1; color:var(--red); opacity:.4;
-}
-.hero-quote blockquote{
-  margin:0; font-family:var(--font-display); font-weight:800; letter-spacing:-.015em;
-  font-size:clamp(16px,2vw,21px); line-height:1.32; color:var(--text); position:relative; z-index:1;
-}
-.hero-quote blockquote em{font-style:normal; color:var(--brand-text)}
-.hero-quote .sig{
-  margin-top:10px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em;
-  color:var(--muted-2); position:relative; z-index:1;
-}
 
 .usehint{
   display:flex; align-items:center; gap:12px; flex-wrap:wrap;
@@ -1339,7 +1291,7 @@ a.note:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
 .proj-pill .dot{width:8px; height:8px; border-radius:50%; background:var(--sc,var(--z3)); flex:none}
 
 /* Hero: Text links, Dashboard-Card rechts (Desktop) / untereinander (Mobile) */
-.proj-hero-grid{display:grid; grid-template-columns:1fr 340px; gap:clamp(24px,4vw,44px); align-items:start; margin-top:clamp(20px,3vw,30px)}
+.proj-hero-grid{display:grid; grid-template-columns:1fr 380px; gap:clamp(24px,4vw,44px); align-items:start; margin-top:clamp(20px,3vw,30px)}
 @media(max-width:860px){.proj-hero-grid{grid-template-columns:1fr}}
 
 /* Dashboard-Card — helle Karte im dunklen Hero, wie .gauge-card */
@@ -1424,6 +1376,10 @@ a.note:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
 .proj-featured-meta p{color:var(--muted); font-size:14.5px; line-height:1.65; margin-top:10px}
 .proj-video-dates{display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-top:14px; font-family:var(--font-mono); font-size:12.5px; color:var(--muted-2)}
 .proj-video-dates b{font-family:var(--font-body); font-weight:600; color:var(--text)}
+.proj-fresh{
+  font-family:var(--font-body); font-weight:600; font-size:12.5px; color:var(--brand-text);
+  background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:3px 11px;
+}
 
 /* "Seit diesem Video passiert" — kompakte Bruecke zwischen Hauptvideo und den aktuellen Zahlen */
 .proj-since{
@@ -1452,11 +1408,48 @@ a.proj-video-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
 .proj-video-card .date{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); margin-top:6px}
 .proj-sub-head{font-size:15.5px; font-weight:700; margin-bottom:14px}
 
+/* ROI-Fortschritt — reine Dashboard-Dokumentation, keine eigene
+   Interpretation ("noch X $ bis..."), deshalb bewusst zurueckhaltend. */
+.proj-roi{background:var(--surface-2); border:1px solid var(--line-soft); border-radius:var(--radius); padding:18px 20px}
+.proj-roi-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap}
+.proj-roi-top .l{font-size:14px; font-weight:700}
+.proj-roi-top .v{font-family:var(--font-mono); font-weight:800; font-size:15px; color:var(--brand-text); font-variant-numeric:tabular-nums}
+.proj-roi .fbar{margin-top:12px}
+.proj-roi .src-note span{margin:0 8px}
+
+/* Auszahlungen: Gesamtsumme, Balkendiagramm nach Monat, Liste
+   (letztere via bestehendes .proj-perf-list/.prow wiederverwendet). */
+.wd-total{font-family:var(--font-display); font-weight:800; font-size:clamp(36px,6vw,50px); letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+.wd-total-meta{font-family:var(--font-mono); font-size:13px; color:var(--muted-2); margin-top:8px}
+.wd-total-meta span{margin:0 8px}
+.wd-chart{display:flex; align-items:flex-end; gap:clamp(10px,3vw,26px); height:220px; padding:8px 4px 0}
+.wd-bar-col{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:8px; min-width:0}
+.wd-bar-val{font-family:var(--font-mono); font-size:12.5px; font-weight:700; color:var(--text); white-space:nowrap; font-variant-numeric:tabular-nums}
+.wd-bar-track{width:100%; max-width:64px; flex:1; display:flex; align-items:flex-end; background:var(--surface-2); border-radius:8px 8px 4px 4px; overflow:hidden}
+.wd-bar-fill{width:100%; background:linear-gradient(180deg, var(--brand-vivid), var(--brand)); border-radius:8px 8px 0 0; min-height:4px; transition:height 1s var(--ease-out)}
+.wd-bar-label{font-family:var(--font-mono); font-size:11px; color:var(--muted-2); text-align:center; white-space:nowrap}
+@media(max-width:480px){.wd-chart{gap:8px; height:180px} .wd-bar-val{font-size:10.5px} .wd-bar-label{font-size:9.5px}}
+
+/* Anbieterangaben (z. B. HypeRocket-Praesentation): eigener, bewusst
+   zurueckhaltender Look — Quellen-Pill (.proj-source-tag nutzt dieselbe
+   Optik wie .proj-affiliate-tag, siehe dort) + gedaempfter Balkenchart,
+   damit diese Zahlen nie wichtiger wirken als die eigenen Account-Daten. */
+.proj-source-tag{display:inline-block; margin-bottom:12px}
+.hist-chart-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
+.hist-chart{display:flex; align-items:flex-end; gap:10px; height:150px; padding:8px 4px 0; min-width:640px}
+.hist-bar-col{flex:1; min-width:34px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:6px}
+.hist-bar-val{font-family:var(--font-mono); font-size:10px; color:var(--muted-2); white-space:nowrap}
+.hist-bar-track{width:100%; max-width:26px; flex:1; display:flex; align-items:flex-end; background:var(--surface-2); border-radius:5px 5px 3px 3px; overflow:hidden}
+.hist-bar-fill{width:100%; background:var(--muted-2); border-radius:5px 5px 0 0; min-height:3px}
+.hist-bar-label{font-family:var(--font-mono); font-size:9.5px; color:var(--muted-2); text-align:center; white-space:nowrap}
+
 /* Pro / zu wissen — zwei gleichwertige Spalten, keine Ampel-Tabelle */
 .proj-audience{display:grid; grid-template-columns:1fr 1fr; gap:20px}
 @media(max-width:720px){.proj-audience{grid-template-columns:1fr}}
 .proj-audience h3{font-size:15.5px; font-weight:700; margin-bottom:12px}
 .proj-points{display:grid; gap:10px}
+.proj-points.grid-2{grid-template-columns:1fr 1fr}
+@media(max-width:720px){.proj-points.grid-2{grid-template-columns:1fr}}
 .proj-point{
   display:flex; gap:13px; align-items:flex-start; background:var(--surface); border:1px solid var(--line-soft);
   border-radius:var(--radius); padding:15px 17px; box-shadow:var(--shadow-sm);
@@ -1477,7 +1470,7 @@ a.proj-video-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
 .proj-cta-card .top{display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:space-between}
 .proj-cta-card p{color:var(--muted); font-size:14px; line-height:1.6; margin-top:12px; max-width:60ch}
 .proj-cta-actions{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:16px}
-.proj-affiliate-tag{
+.proj-affiliate-tag, .proj-source-tag{
   font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase;
   color:var(--muted-2); border:1px solid var(--line); border-radius:6px; padding:4px 9px; flex:none;
 }
@@ -1494,3 +1487,90 @@ a.proj-video-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
 
 /* Projekt-Übersicht (/projekte/) */
 .proj-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px}
+
+/* ============================================================
+   RenditeX 2.0 — Startseite
+   ============================================================ */
+
+/* "Heute bei RenditeX" — Live-Panel im Hero (ersetzt die generische
+   Illustration). today-card ist ein .pdb-card mit Link-Verhalten,
+   keine neue Kartensprache noetig. */
+#todayPanel{display:flex; flex-direction:column; gap:12px; align-self:start}
+.today-head{
+  display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted-2);
+}
+.today-grid{display:flex; flex-direction:column; gap:12px}
+a.today-card{display:block; text-decoration:none; color:var(--text); transition:transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out)}
+a.today-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-md)}
+.today-card.pdb-card .pdb-metric .v{font-size:17px}
+.today-card.pdb-card{padding:18px 20px}
+
+/* Meine aktuellen Projekte — grosse, datengetriebene Cards, bewusst
+   anders als Tool-/Artikel-Cards (Status, Datum, echte Zahlen, Sparkline). */
+.proj-feature-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+@media(max-width:860px){.proj-feature-grid{grid-template-columns:1fr}}
+.proj-feature-card{
+  display:flex; flex-direction:column; text-decoration:none; color:var(--text);
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm); padding:clamp(22px,3vw,28px); gap:2px;
+  transition:transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+}
+a.proj-feature-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
+.pf-top{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.pf-label{font-family:var(--font-mono); font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted-2)}
+.proj-feature-card h3{font-size:22px; font-weight:800; letter-spacing:-.01em; margin-top:12px}
+.pf-sub{font-family:var(--font-mono); font-size:12px; color:var(--muted-2); margin-top:3px}
+.proj-feature-card > p{color:var(--muted); font-size:14.5px; line-height:1.6; margin-top:10px}
+.pf-metrics{display:flex; gap:26px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line-soft)}
+.pf-metric{display:flex; flex-direction:column; gap:4px}
+.pf-metric .l{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted-2)}
+.pf-metric .v{font-family:var(--font-display); font-weight:800; font-size:19px; letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+.pf-spark{display:block; width:100%; height:36px; margin-top:14px}
+.pf-meta{font-family:var(--font-mono); font-size:11.5px; color:var(--muted-2); margin-top:14px}
+.pf-cta{display:inline-flex; align-items:center; gap:6px; font-weight:700; font-size:14px; color:var(--brand-text); margin-top:14px}
+.pf-cta .arr{transition:transform var(--dur-base) var(--ease-out)}
+a.proj-feature-card:hover .pf-cta .arr{transform:translateX(3px)}
+
+/* Markt im Blick — kompakt, zahlenzentriert, bewusst anders als
+   die groesseren Featured-Tool-Cards weiter unten. */
+.market-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px}
+.market-card{
+  display:flex; flex-direction:column; gap:8px; text-decoration:none; color:var(--text);
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius); box-shadow:var(--shadow-sm);
+  padding:20px 22px; transition:transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+}
+a.market-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
+.market-card-top{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.market-card-top .k{font-weight:700; font-size:15px}
+.market-val{font-family:var(--font-display); font-weight:800; font-size:30px; letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+.market-card p{color:var(--muted); font-size:13.5px; line-height:1.55; margin:0}
+.market-card .open{display:inline-flex; align-items:center; gap:6px; font-weight:700; font-size:13.5px; color:var(--brand-text); margin-top:4px}
+
+/* Kompakte Tool-Reihe unterhalb der zwei Featured Tools */
+.tools-compact{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px}
+.tool-mini{
+  display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--text);
+  background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius); box-shadow:var(--shadow-sm);
+  padding:16px 18px; transition:transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+}
+a.tool-mini:hover{transform:translateY(-2px); box-shadow:var(--shadow-md)}
+.tool-mini h4{font-size:14.5px; font-weight:700; letter-spacing:-.005em}
+.tool-mini p{color:var(--muted); font-size:12.5px; line-height:1.5; margin:0}
+.tool-mini .open{font-size:12px; font-weight:700; color:var(--brand-text); margin-top:2px}
+
+/* Neu auf RenditeX — kompakte Changelog-Timeline, kein Social-Feed */
+.update-feed{display:flex; flex-direction:column; gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); border-radius:var(--radius); overflow:hidden}
+a.update-row{
+  display:grid; grid-template-columns:120px 1fr; gap:18px; align-items:baseline; text-decoration:none; color:var(--text);
+  background:var(--surface); padding:15px 18px; transition:background var(--dur-base) var(--ease-out);
+}
+a.update-row:hover{background:var(--surface-2)}
+.update-date{font-family:var(--font-mono); font-size:12px; color:var(--muted-2)}
+.update-body h4{font-size:14.5px; font-weight:700; letter-spacing:-.005em}
+.update-body p{color:var(--muted); font-size:13px; margin-top:3px}
+.update-body p span{margin:0 6px}
+@media(max-width:600px){
+  a.update-row{grid-template-columns:1fr}
+  .update-date{font-size:11px}
+}

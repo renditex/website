@@ -45,6 +45,22 @@ function fmtPct(v){
   var sign = v >= 0 ? '+' : '';
   return sign + v.toFixed(2).replace('.', ',') + ' %';
 }
+function fmtMoney(v, suffix){
+  if(v == null || isNaN(v)) return '—';
+  return v.toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + suffix;
+}
+function fmtNum(v){
+  if(v == null || isNaN(v)) return '—';
+  var isInt = Math.abs(v - Math.round(v)) < 1e-9;
+  return (isInt ? v.toFixed(0) : v.toFixed(1)).replace('.', ',');
+}
+function fmtDateShort(iso){
+  var d = new Date(iso + 'T00:00:00');
+  if(isNaN(d.getTime())) return iso;
+  return ('0'+d.getDate()).slice(-2) + '.' + ('0'+(d.getMonth()+1)).slice(-2) + '.';
+}
+var NETWORKS = { SOL:'Solana', ETH:'Ethereum', BSC:'BNB Smart Chain', BTC:'Bitcoin', TRX:'Tron', POLYGON:'Polygon', MATIC:'Polygon', ARB:'Arbitrum' };
+function networkLabel(code){ return NETWORKS[String(code || '').toUpperCase()] || code; }
 
 function youtubeId(url){
   if(!url) return null;
@@ -65,15 +81,38 @@ function latestPerformance(data){
   return sorted[0];
 }
 
-/* ---------- Hero-Metazeile: Status, Testbeginn, Schwerpunkt, Stand ---------- */
+/* ---------- Juengster echter Datenpunkt ueber alle moeglichen
+   Datenquellen einer Projektseite hinweg — fuer den Freshness-
+   Abgleich "Video vs. aktueller Stand". ---------- */
+function latestDataDate(data){
+  var candidates = [];
+  var lp = latestPerformance(data);
+  if(lp) candidates.push(lp.date);
+  if(data.withdrawals && data.withdrawals.length){
+    candidates.push(data.withdrawals.slice().sort(function(a,b){ return new Date(b.date) - new Date(a.date); })[0].date);
+  }
+  if(data.accountSnapshot && data.accountSnapshot.date) candidates.push(data.accountSnapshot.date);
+  if(data.updatedAt) candidates.push(data.updatedAt);
+  if(!candidates.length) return null;
+  return candidates.sort(function(a,b){ return new Date(b) - new Date(a); })[0];
+}
+
+/* ---------- Hero-Metazeile: entweder ein explizites metaTags-Array
+   oder automatisch aus Status/Testbeginn/Schwerpunkt zusammengesetzt.
+   "Stand: ..." wird immer automatisch angehaengt. ---------- */
 function renderHeroMeta(el, data){
   if(!el) return;
-  var s = STATUS[data.status] || STATUS.active;
-  var parts = [esc(s.label)];
-  if(data.testStartedAt) parts.push('Live-Test seit ' + esc(fmtMonthYear(data.testStartedAt)));
-  if(data.focusLabel) parts.push(esc(data.focusLabel));
-  parts.push('Stand: ' + esc(fmtDate(data.updatedAt)));
-  el.innerHTML = parts.join(' <span>·</span> ');
+  var parts = [];
+  if(data.metaTags && data.metaTags.length){
+    parts = data.metaTags.slice();
+  } else {
+    var s = STATUS[data.status] || STATUS.active;
+    parts.push(s.label);
+    if(data.testStartedAt) parts.push('Live-Test seit ' + fmtMonthYear(data.testStartedAt));
+    if(data.focusLabel) parts.push(data.focusLabel);
+  }
+  parts.push('Stand: ' + fmtDate(data.updatedAt));
+  el.innerHTML = parts.map(esc).join(' <span>·</span> ');
 }
 
 /* ---------- Wochenperformance: Karten + Chart + Liste ---------- */
@@ -160,6 +199,203 @@ function renderPerformanceSection(section, data){
   }
 }
 
+/* ---------- Account-Snapshot (z. B. HyperRocket): eigener Investment-
+   Stand statt Strategie-Performance. "Bisher tatsächlich ausgezahlt"
+   wird bewusst aus den echten withdrawals berechnet, nicht aus einer
+   Dashboard-Kennzahl uebernommen — Auszahlung != Gewinn. ---------- */
+function renderAccountSnapshot(section, data){
+  if(!section) return;
+  var snap = data.accountSnapshot;
+  if(!snap){ hide(section); return; }
+  show(section);
+
+  var totalWithdrawn = 0;
+  if(data.withdrawals && data.withdrawals.length){
+    totalWithdrawn = data.withdrawals.reduce(function(a,w){ return a + w.amount; }, 0);
+  }
+
+  var standHost = $('projAccountStand');
+  if(standHost) standHost.textContent = 'Momentaufnahme meines eigenen Accounts vom ' + fmtDate(snap.date) + '.';
+
+  var s = STATUS[data.status] || STATUS.active;
+  var mainHost = $('projAccountMain');
+  if(mainHost){
+    var mainCards = [
+      { k:'Aktiv investiert', v: fmtMoney(snap.activeInvestmentUsdt, 'USDT') },
+      { k:'Bisher tatsächlich ausgezahlt', v: fmtMoney(totalWithdrawn, '$') },
+      { k:'ROI-Fortschritt laut Dashboard', v: fmtMoney(snap.roiEarnedDisplayedUsd, '$') },
+      { k:'Status', v: s.label }
+    ];
+    mainHost.innerHTML = mainCards.map(function(c){
+      return '<div class="pcard"><div class="pcard-k">' + esc(c.k) + '</div><div class="pcard-v">' + esc(c.v) + '</div></div>';
+    }).join('');
+  }
+
+  var roiWrap = $('projRoiWrap');
+  if(roiWrap){
+    if(snap.roiProgressPercent != null && snap.roiMaxPercent){
+      show(roiWrap);
+      var pct = Math.min(100, (snap.roiProgressPercent / snap.roiMaxPercent) * 100);
+      var roiBar = $('projRoiBar');
+      if(roiBar) roiBar.style.width = pct.toFixed(1) + '%';
+      var roiPct = $('projRoiPct');
+      if(roiPct) roiPct.textContent = fmtNum(snap.roiProgressPercent) + ' % / ' + fmtNum(snap.roiMaxPercent) + ' %';
+      var roiVals = $('projRoiVals');
+      if(roiVals){
+        var bits = [];
+        if(snap.roiEarnedDisplayedUsd != null) bits.push('Im Dashboard angezeigt: ' + fmtMoney(snap.roiEarnedDisplayedUsd, '$') + ' verdient');
+        if(snap.roiTargetDisplayedUsd != null) bits.push('Ziel: ' + fmtMoney(snap.roiTargetDisplayedUsd, '$'));
+        roiVals.innerHTML = bits.map(esc).join(' <span>·</span> ');
+      }
+    } else {
+      hide(roiWrap);
+    }
+  }
+
+  var extHost = $('projAccountExt');
+  if(extHost){
+    var extItems = [];
+    if(snap.availableBalanceUsd != null) extItems.push({ k:'Verfügbares Guthaben', v: fmtMoney(snap.availableBalanceUsd, '$') });
+    if(snap.totalEarnedDisplayedUsd != null) extItems.push({ k:'Gesamt verdient', v: fmtMoney(snap.totalEarnedDisplayedUsd, '$') });
+    if(snap.dailyPerformancePercent != null) extItems.push({ k:'Tagesperformance', v: fmtPct(snap.dailyPerformancePercent) });
+    if(snap.dailyEarnedDisplayedUsd != null) extItems.push({ k:'Heute als verdient angezeigt', v: fmtMoney(snap.dailyEarnedDisplayedUsd, '$') });
+    if(snap.dailyCommissionsUsd != null) extItems.push({ k:'Provisionen heute', v: fmtMoney(snap.dailyCommissionsUsd, '$') });
+    if(extItems.length){
+      show(extHost);
+      extHost.innerHTML = extItems.map(function(it){
+        return '<div class="stat"><div class="k">' + esc(it.k) + '</div><div class="n" style="font-size:18px">' + esc(it.v) + '</div></div>';
+      }).join('');
+    } else {
+      hide(extHost);
+    }
+  }
+}
+
+/* ---------- Auszahlungen: Summe/Anzahl/Monatswerte/Chart/Liste werden
+   ausschliesslich aus den echten Transaktionen berechnet — nirgends
+   doppelt pflegen, neue Auszahlung eintragen reicht. ---------- */
+function computeWithdrawalStats(withdrawals){
+  var sortedAsc = withdrawals.slice().sort(function(a,b){ return new Date(a.date) - new Date(b.date); });
+  var total = sortedAsc.reduce(function(a,w){ return a + w.amount; }, 0);
+  var monthsMap = {};
+  sortedAsc.forEach(function(w){
+    var ym = w.date.slice(0,7);
+    monthsMap[ym] = (monthsMap[ym] || 0) + w.amount;
+  });
+  var months = Object.keys(monthsMap).sort().map(function(ym){ return { ym:ym, total:monthsMap[ym] }; });
+  return {
+    total: total,
+    count: sortedAsc.length,
+    first: sortedAsc[0],
+    last: sortedAsc[sortedAsc.length - 1],
+    sortedDesc: sortedAsc.slice().reverse(),
+    months: months
+  };
+}
+function monthLabel(ym, asOfIso){
+  var d = new Date(ym + '-01T00:00:00');
+  var label = d.toLocaleDateString('de-DE', {month:'long'}) + ' ' + d.getFullYear();
+  if(asOfIso && asOfIso.slice(0,7) === ym){
+    var asOf = new Date(asOfIso + 'T00:00:00');
+    var daysInMonth = new Date(asOf.getFullYear(), asOf.getMonth() + 1, 0).getDate();
+    if(asOf.getDate() < daysInMonth) label += ' bis ' + fmtDateShort(asOfIso);
+  }
+  return label;
+}
+function renderWithdrawals(section, data){
+  if(!section) return;
+  var withdrawals = data.withdrawals;
+  if(!withdrawals || !withdrawals.length){ hide(section); return; }
+  show(section);
+  var stats = computeWithdrawalStats(withdrawals);
+
+  var sumHost = $('projWdSum');
+  if(sumHost){
+    sumHost.innerHTML =
+      '<div class="wd-total">' + fmtMoney(stats.total, '$') + '</div>' +
+      '<div class="wd-total-meta">' + stats.count + ' dokumentierte Auszahlungen<span>·</span>' + esc(fmtDate(stats.first.date)) + ' bis ' + esc(fmtDate(stats.last.date)) + '</div>';
+  }
+
+  var chartHost = $('projWdChart');
+  if(chartHost){
+    var max = Math.max.apply(null, stats.months.map(function(m){ return m.total; }));
+    chartHost.innerHTML = stats.months.map(function(m){
+      var h = max > 0 ? Math.max(6, (m.total / max) * 100) : 0;
+      return '<div class="wd-bar-col">' +
+        '<div class="wd-bar-val">' + fmtMoney(m.total, '$') + '</div>' +
+        '<div class="wd-bar-track"><div class="wd-bar-fill" style="height:' + h.toFixed(1) + '%"></div></div>' +
+        '<div class="wd-bar-label">' + esc(monthLabel(m.ym, stats.last.date)) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  var listHost = $('projWdList');
+  if(listHost){
+    listHost.innerHTML = stats.sortedDesc.map(function(w){
+      return '<div class="prow"><div class="prow-d">' + esc(fmtDate(w.date)) + '</div>' +
+        '<div class="prow-vals"><span><b>' + esc(fmtMoney(w.amount, '$')) + '</b> <i>' + esc(w.asset) + ' · ' + esc(networkLabel(w.network)) + '</i></span></div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+/* ---------- Anbieterangaben: Konzept-Erklaerung laut Praesentation
+   (z. B. Verbindung zu Bitopex, ROI-Obergrenze, Network-Marketing).
+   Bewusst als kompakte Punkte statt grosser Cards, mit neutralem
+   Icon statt ✓/! — das sind Angaben des Anbieters, keine eigene
+   Einschaetzung. ---------- */
+function renderPresentationConcept(section, data){
+  if(!section) return;
+  var pres = data.presentation;
+  var points = pres && pres.conceptPoints;
+  if(!points || !points.length){ hide(section); return; }
+  show(section);
+  renderPoints($('projPresentationPoints'), points, 'i', 'var(--muted-2)');
+}
+
+/* ---------- Anbieterangaben: historische Portfolio-Daten laut
+   Praesentation. Bewusst gedaempft dargestellt (kleine .stat-Karten,
+   grauer statt markenblauer Chart) und klar als Quelle gekennzeichnet
+   — niemals mit den eigenen Auszahlungen vermischen. ---------- */
+function renderPresentationHistory(section, data){
+  if(!section) return;
+  var pres = data.presentation;
+  var hist = pres && pres.history;
+  if(!hist){ hide(section); return; }
+  show(section);
+
+  var statHost = $('projPresStats');
+  if(statHost){
+    var items = [];
+    if(hist.periodLabel) items.push({ k:'Zeitraum', v: hist.periodLabel });
+    if(hist.startCapitalUsdt != null) items.push({ k:'Startkapital (dargestellt)', v: fmtMoney(hist.startCapitalUsdt, 'USDT') });
+    if(hist.cumulativeReturnPercent != null) items.push({ k:'Kumulierte Rendite', v: '+' + hist.cumulativeReturnPercent.toFixed(1).replace('.', ',') + ' %' });
+    if(hist.avgMonthlyReturnPercent != null) items.push({ k:'Ø monatliche Rendite', v: '+' + fmtNum(hist.avgMonthlyReturnPercent) + ' %' });
+    if(hist.maxDrawdownLabel) items.push({ k:'Maximaler Drawdown', v: hist.maxDrawdownLabel });
+    if(hist.positiveMonths != null && hist.totalMonths != null) items.push({ k:'Positive Monate', v: hist.positiveMonths + ' von ' + hist.totalMonths });
+    if(hist.bestMonth) items.push({ k:'Bester dargestellter Monat', v: hist.bestMonth.label + ': +' + fmtNum(hist.bestMonth.percent) + ' %' });
+    statHost.innerHTML = items.map(function(it){
+      return '<div class="stat"><div class="k">' + esc(it.k) + '</div><div class="n" style="font-size:18px">' + esc(it.v) + '</div></div>';
+    }).join('');
+  }
+
+  var chartHost = $('projPresChart');
+  if(chartHost){
+    var monthly = hist.monthly || [];
+    var max = monthly.length ? Math.max.apply(null, monthly.map(function(m){ return m.performance; })) : 0;
+    chartHost.innerHTML = monthly.map(function(m){
+      var h = max > 0 ? Math.max(4, (m.performance / max) * 100) : 0;
+      var d = new Date(m.month + '-01T00:00:00');
+      var label = d.toLocaleDateString('de-DE', {month:'short', year:'2-digit'});
+      return '<div class="hist-bar-col">' +
+        '<div class="hist-bar-val">+' + fmtNum(m.performance) + ' %</div>' +
+        '<div class="hist-bar-track"><div class="hist-bar-fill" style="height:' + h.toFixed(1) + '%"></div></div>' +
+        '<div class="hist-bar-label">' + esc(label) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
 /* ---------- Timeline: fester, kuratierter Verlauf ---------- */
 function renderTimeline(host, data){
   if(!host) return;
@@ -206,10 +442,16 @@ function renderFeaturedVideo(section, data){
 
   var metaHost = $('projFeaturedMeta');
   if(metaHost){
+    var latestD = latestDataDate(data);
+    var isFresh = latestD && featured.publishedAt && new Date(latestD) > new Date(featured.publishedAt);
+    var dateSpans =
+      (featured.publishedAt ? '<span>Video veröffentlicht: <b>' + esc(fmtDate(featured.publishedAt)) + '</b></span>' : '') +
+      (latestD ? '<span>Aktueller RenditeX-Stand: <b>' + esc(fmtDate(latestD)) + '</b></span>' : '') +
+      (isFresh ? '<span class="proj-fresh">Seit dem Video aktualisiert</span>' : '');
     metaHost.innerHTML =
       '<h3>' + esc(featured.title) + '</h3>' +
       (featured.description ? '<p>' + esc(featured.description) + '</p>' : '') +
-      (featured.publishedAt ? '<div class="proj-video-dates"><span>Video veröffentlicht: <b>' + esc(fmtDate(featured.publishedAt)) + '</b></span></div>' : '');
+      (dateSpans ? '<div class="proj-video-dates">' + dateSpans + '</div>' : '');
   }
 
   renderSinceVideo($('projSinceVideo'), data, featured);
@@ -249,8 +491,28 @@ function renderSinceVideo(host, data, featured){
     return;
   }
 
-  // Qualitative Variante: kein Zeitreihen-Datensatz, aber ein echter,
-  // neuerer Datenstand als das Video.
+  // Modus 2: Auszahlungen (z. B. HyperRocket) — Anzahl + Summe seit Video.
+  var withdrawals = data.withdrawals;
+  if(withdrawals && withdrawals.length){
+    var newerW = withdrawals.filter(function(w){ return new Date(w.date) > vidDate; });
+    if(newerW.length){
+      var sum = newerW.reduce(function(a,w){ return a + w.amount; }, 0);
+      var latestW = newerW.slice().sort(function(a,b){ return new Date(b.date) - new Date(a.date); })[0];
+      show(host);
+      host.innerHTML =
+        '<div class="proj-since-head">Seit diesem Video passiert</div>' +
+        '<div class="proj-since-row">' +
+          '<div class="proj-since-item"><span class="l">Neue Auszahlungen</span><span class="v">' + newerW.length + '</span></div>' +
+          '<div class="proj-since-item"><span class="l">Summe seit Video</span><span class="v">' + fmtMoney(sum, '$') + '</span></div>' +
+          '<div class="proj-since-item"><span class="l">Letzte Auszahlung</span><span class="v">' + esc(fmtDate(latestW.date)) + '</span></div>' +
+          '<a class="proj-since-link" href="#auszahlungen">Alle Auszahlungen ansehen ↓</a>' +
+        '</div>';
+      return;
+    }
+  }
+
+  // Modus 3, qualitativ: kein Zeitreihen-/Auszahlungsdatensatz mit
+  // neueren Einzelpunkten, aber ein echter, neuerer Datenstand als das Video.
   var hasFreshStand = data.updatedAt && new Date(data.updatedAt) > vidDate;
   if(!hasFreshStand){ hide(host); return; }
   show(host);
@@ -367,6 +629,10 @@ function init(data){
 
   renderFeaturedVideo($('hauptvideo'), data);
   renderPerformanceSection($('projPerformance'), data);
+  renderAccountSnapshot($('account-stand'), data);
+  renderWithdrawals($('auszahlungen'), data);
+  renderPresentationConcept($('was-ist-hyperocket'), data);
+  renderPresentationHistory($('praesentation-historie'), data);
   renderTimeline($('projTimeline'), data);
   renderMoreSection($('weitere-videos'), data);
 
@@ -410,5 +676,11 @@ function init(data){
 }
 
 window.RX = window.RX || {};
-window.RX.project = { init: init, STATUS: STATUS, fmtDate: fmtDate, fmtPct: fmtPct };
+window.RX.project = {
+  init: init, STATUS: STATUS, esc: esc,
+  fmtDate: fmtDate, fmtMonthYear: fmtMonthYear, fmtPct: fmtPct, fmtMoney: fmtMoney, fmtNum: fmtNum,
+  youtubeId: youtubeId, youtubeThumb: youtubeThumb, playIcon: PLAY_ICON,
+  pickFeaturedVideo: pickFeaturedVideo, latestPerformance: latestPerformance, latestDataDate: latestDataDate,
+  computeWithdrawalStats: computeWithdrawalStats, networkLabel: networkLabel
+};
 })();
