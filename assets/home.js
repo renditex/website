@@ -100,11 +100,11 @@ function renderFeaturedProjects(){
           '<div class="pf-top"><span class="pf-label">Praxistest</span>' + pillHtml(BITOPEX.status) + '</div>' +
           '<h3>Bitopex</h3>' +
           (BITOPEX.testStartedAt ? '<div class="pf-sub">seit ' + P.esc(P.fmtMonthYear(BITOPEX.testStartedAt)) + '</div>' : '') +
-          '<p>Mein laufender Test der 0DTE- und ALT-0DTE-Strategien.</p>' +
+          '<p>Mein laufender Praxistest der 0DTE- und ALT-0DTE-Strategien mit regelmäßigen Performance-Updates.</p>' +
           '<div class="pf-metrics">' + metrics + '</div>' +
           spark +
           '<div class="pf-meta">Stand: ' + P.esc(P.fmtDate(BITOPEX.updatedAt)) + '</div>' +
-          '<span class="pf-cta">Zum aktuellen Stand <span class="arr">→</span></span>' +
+          '<span class="pf-cta">Aktuellen Stand ansehen <span class="arr">→</span></span>' +
         '</a>'
       );
     }
@@ -118,14 +118,14 @@ function renderFeaturedProjects(){
       '<a class="proj-feature-card" href="/projekte/hyperocket/">' +
         '<div class="pf-top"><span class="pf-label">Praxistest</span>' + pillHtml(HYPEROCKET.status) + '</div>' +
         '<h3>HyperRocket</h3>' +
-        '<p>Mein eigener Account, dokumentierte Auszahlungen und laufende Entwicklung.</p>' +
+        '<p>Mein eigener Account, meine dokumentierten Auszahlungen und die laufende Entwicklung meines Praxistests.</p>' +
         '<div class="pf-metrics">' +
           '<div class="pf-metric"><span class="l">Aktiv investiert</span><span class="v">' + P.fmtMoney(snap.activeInvestmentUsdt, 'USDT') + '</span></div>' +
           (wStats ? '<div class="pf-metric"><span class="l">Dokumentiert ausgezahlt</span><span class="v">' + P.fmtMoney(wStats.total, '$') + '</span></div>' : '') +
         '</div>' +
         spark2 +
         '<div class="pf-meta">Stand: ' + P.esc(P.fmtDate(snap.date)) + '</div>' +
-        '<span class="pf-cta">Zum Praxistest <span class="arr">→</span></span>' +
+        '<span class="pf-cta">Praxistest ansehen <span class="arr">→</span></span>' +
       '</a>'
     );
   }
