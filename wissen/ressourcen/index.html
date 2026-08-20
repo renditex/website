@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bücher &amp; Ressourcen — meine Buchempfehlungen zu Krypto und Geld | RenditeX</title>
+<meta name="description" content="Ein paar Bücher zu Bitcoin, Krypto und Geldgeschichte, die ich selbst gelesen habe — mit kurzer, sachlicher Einordnung statt erfundener Werbeaussagen.">
+<link rel="canonical" href="https://renditex.netlify.app/wissen/ressourcen/">
+<meta property="og:title" content="Bücher &amp; Ressourcen — RenditeX">
+<meta property="og:description" content="Ein paar Bücher zu Bitcoin, Krypto und Geldgeschichte, die ich selbst gelesen habe.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://renditex.netlify.app/wissen/ressourcen/">
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('renditex_theme_v1');
+    if(t !== 'dark' && t !== 'light'){
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+<link rel="stylesheet" href="/assets/renditex.css?v=45">
+<script>
+document.documentElement.className += ' js';
+function rxShowAll(){
+  var n = document.querySelectorAll('.reveal:not(.in)');
+  for (var i = 0; i < n.length; i++) n[i].classList.add('in');
+}
+setTimeout(rxShowAll, 2000);
+window.addEventListener('load', function(){ setTimeout(rxShowAll, 1200); });
+window.addEventListener('error', rxShowAll);
+</script>
+</head>
+<body id="top">
+
+<header id="rx-top"></header>
+<div id="rx-crumb"></div>
+
+<!-- ============ HERO ============ -->
+<div class="wrap hero">
+  <div class="eyebrow"><span class="beat"></span>Wissen · Ressourcen</div>
+  <h1>Bücher &amp; <em>Ressourcen</em></h1>
+  <p class="hero-sub">Ein paar Bücher zu Bitcoin, Krypto und Geldgeschichte, die ich selbst gelesen habe. Kurz eingeordnet, ohne erfundene Werbeaussagen — du entscheidest selbst, ob sie zu dir passen.</p>
+</div>
+
+<!-- ============ BUCHEMPFEHLUNGEN ============ -->
+<section id="buecher">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Meine Buchempfehlungen</h2>
+    </div>
+
+    <div class="adnotice reveal">
+      <b>Werbehinweis:</b> Die folgenden Links sind Partnerlinks (Amazon-Partnerprogramm). Wenn du darüber kaufst, kann ich eine Provision erhalten — für dich entstehen dabei keine zusätzlichen Kosten.
+    </div>
+
+    <div class="book-list reveal">
+      <div class="book-card">
+        <span class="ad">Anzeige</span>
+        <h3>Der Bitcoin Standard</h3>
+        <p>Ordnet Bitcoin in die Geschichte des Geldes ein und erklärt, wie eine dezentrale Alternative zu zentral gesteuerten Geldsystemen entstehen konnte.</p>
+        <div class="book-meta"><span>Autor: <b>Saifedean Ammous</b></span><span>Zielgruppe: <b>Für alle, die Bitcoin geld- und wirtschaftshistorisch einordnen wollen, nicht nur technisch</b></span></div>
+        <div class="actions"><a class="btn primary" href="https://amzn.to/4fHPN5R" target="_blank" rel="sponsored noopener" data-track="book_bitcoin_standard">Zum Buch →</a></div>
+      </div>
+
+      <div class="book-card">
+        <span class="ad">Anzeige</span>
+        <h3>Die Orange Pille</h3>
+        <p>Beleuchtet, warum Bitcoin für viele mehr ist als nur eine neue Zahlungsform, sondern ein grundlegend anderes Geldsystem.</p>
+        <div class="book-meta"><span>Zielgruppe: <b>Für Einsteiger, die über die reine Technik hinaus die größere Idee hinter Bitcoin kennenlernen wollen</b></span></div>
+        <div class="actions"><a class="btn primary" href="https://amzn.to/4i56mdO" target="_blank" rel="sponsored noopener" data-track="book_orange_pille">Zum Buch →</a></div>
+      </div>
+
+      <div class="book-card">
+        <span class="ad">Anzeige</span>
+        <h3>Alles Betrug, außer Bitcoin!</h3>
+        <p>Eine pointierte, kritische Auseinandersetzung mit dem bestehenden Geldsystem und der Rolle, die Bitcoin darin einnehmen kann.</p>
+        <div class="book-meta"><span>Zielgruppe: <b>Für Leser, die eine zugespitzte, kritische Perspektive auf Geldpolitik mögen</b></span></div>
+        <div class="actions"><a class="btn primary" href="https://amzn.to/4i6lcAA" target="_blank" rel="sponsored noopener" data-track="book_alles_betrug">Zum Buch →</a></div>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top:22px">Das ist keine abschließende Literaturliste, sondern eine kleine, persönliche Auswahl. Weitere Ressourcen ergänze ich hier, wenn es etwas Passendes gibt.</div>
+  </div>
+</section>
+
+<footer id="rx-foot"></footer>
+
+<script src="/assets/site.js?v=45"></script>
+<script src="/assets/analytics.js?v=45"></script>
+<script>
+RX.header();
+RX.breadcrumb({
+  trail: [
+    {label:'Start', href:'/'},
+    {label:'Wissen', href:'/#wissen'},
+    {label:'Bücher & Ressourcen', current:true}
+  ]
+});
+RX.footer();
+RX.reveal();
+RX.analytics.trackPageView('ressourcen');
+RX.analytics.wireClicks();
+</script>
+</body>
+</html>

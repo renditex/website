@@ -18,7 +18,6 @@ var LINKS = {
   youtube:  'https://www.youtube.com/@RenditeX',
   telegram: 'https://t.me/+_PoyewKyz8JjZTVi',
   discord:  'https://discord.gg/HdXWJZYe2x',
-  heylink:  'https://heylink.me/RenditeX/',
   whatsapp: 'https://wa.me/+4915143373219'
 };
 
@@ -36,7 +35,8 @@ var NAV = [
   { label:'Start', href:'/' },
   { label:'Wissen', href:'/#wissen', items:[
       {href:'/#wissen', label:'Krypto-Guide (kostenlos)'},
-      {href:'/wissen/die-einjahresfrist/', label:'Die Einjahresfrist'}
+      {href:'/wissen/die-einjahresfrist/', label:'Die Einjahresfrist'},
+      {href:'/wissen/ressourcen/', label:'Bücher & Ressourcen'}
     ]},
   { label:'Tools', href:'/tools/', items:[
       {href:'/fear-greed/', label:'Fear & Greed Index'},
@@ -49,8 +49,10 @@ var NAV = [
   { label:'Praxistests', href:'/projekte/', items:[
       {href:'/projekte/bitopex/', label:'Bitopex'},
       {href:'/projekte/hyperocket/', label:'HyperRocket'},
-      {href:'/projekte/smartit/', label:'SmartIT'}
-    ]}
+      {href:'/projekte/smartit/', label:'SmartIT'},
+      {href:'/projekte/defi-circle/', label:'DeFi Circle'}
+    ]},
+  { label:'Plattformen', href:'/plattformen/' }
 ];
 var CHEVRON = '<svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var BURGER = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
@@ -236,10 +238,11 @@ function footer(){
         '<div class="brand" style="margin-bottom:14px"><span class="wm">Rendite</span>' + LOGO + '</div>' +
         '<div style="font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted-2); margin-bottom:14px">Krypto · Investment · Optionen · Trading</div>' +
         '<div class="foot-links">' +
-          '<a href="/">Alle Tools</a>' +
+          '<a href="/tools/">Tools</a>' +
+          '<a href="/projekte/">Praxistests</a>' +
+          '<a href="/plattformen/">Plattformen</a>' +
           '<a href="' + LINKS.youtube + '" target="_blank" rel="noopener">YouTube</a>' +
           '<a href="' + LINKS.telegram + '" target="_blank" rel="noopener">Telegram</a>' +
-          '<a href="' + LINKS.heylink + '" target="_blank" rel="noopener">Alle Links</a>' +
         '</div>' +
         '<div class="foot-links">' +
           '<a href="/rechtliches/impressum.html">Impressum</a>' +

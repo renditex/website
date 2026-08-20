@@ -21,7 +21,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=37">
+<link rel="stylesheet" href="/assets/renditex.css?v=45">
 <script>
 /* Sicherheitsnetz: Einblenden nur wenn JavaScript laeuft, und spaetestens
    nach 2,5 Sekunden wird alles sichtbar gemacht - egal was passiert. */
@@ -68,13 +68,13 @@ window.addEventListener('error', rxShowAll);
       <p>Ich möchte dir nicht nur Wissen vermitteln, sondern auch etwas an die Hand geben, das dir wirklich weiterhilft. Deshalb baue ich diese Tools selbst — kostenlos, ohne Anmeldung, direkt nutzbar. Drei davon siehst du hier gerade live mit echten Marktdaten berechnet. Klick auf eine Karte, um sie selbst auszuprobieren.</p>
     </div>
     <div class="live-teaser-grid reveal">
-      <a class="live-card" href="/heatzone-chart/">
+      <a class="live-card" href="/heatzone-chart/" data-track="heatzone">
         <div class="live-card-body" id="teaserHeatzone"><span class="live-card-skeleton">Lädt …</span></div>
       </a>
-      <a class="live-card" href="/fear-greed/">
+      <a class="live-card" href="/fear-greed/" data-track="fear_greed">
         <div class="live-card-body" id="teaserFg"><span class="live-card-skeleton">Lädt …</span></div>
       </a>
-      <a class="live-card" href="/sparplan-rechner/">
+      <a class="live-card" href="/sparplan-rechner/" data-track="sparplan">
         <div class="live-card-body" id="teaserSparplan"><span class="live-card-skeleton">Lädt …</span></div>
       </a>
     </div>
@@ -105,8 +105,8 @@ window.addEventListener('error', rxShowAll);
           <span>10 Kapitel</span><span>PDF zum Mitnehmen</span><span>Stand Mai 2026</span>
         </div>
         <div class="actions">
-          <a class="btn primary" href="/guide/RenditeX-Krypto-Guide.pdf" download>Guide starten</a>
-          <a class="btn" href="/guide/RenditeX-Krypto-Guide.pdf" target="_blank" rel="noopener">Erst mal reinschauen</a>
+          <a class="btn primary" href="/guide/RenditeX-Krypto-Guide.pdf" download data-track="guide">Guide starten</a>
+          <a class="btn" href="/guide/RenditeX-Krypto-Guide.pdf" target="_blank" rel="noopener" data-track="guide">Erst mal reinschauen</a>
         </div>
       </div>
     </div>
@@ -119,6 +119,7 @@ window.addEventListener('error', rxShowAll);
       <a class="topic-link" href="/fear-greed/#faktoren">Fear &amp; Greed erklärt</a>
       <a class="topic-link" href="/scam-check/">Scam erkennen</a>
       <a class="topic-link" href="/guide/RenditeX-Krypto-Guide.pdf" target="_blank" rel="noopener">DeFi Grundlagen</a>
+      <a class="topic-link" href="/wissen/ressourcen/" data-track="books">Bücher &amp; Ressourcen</a>
     </div>
   </div>
 </section>
@@ -136,7 +137,7 @@ window.addEventListener('error', rxShowAll);
     </div>
 
     <div class="tools-featured-grid reveal">
-      <a class="tf-card tf-primary" href="/heatzone-chart/">
+      <a class="tf-card tf-primary" href="/heatzone-chart/" data-track="heatzone">
         <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
         <div class="tf-head-row">
           <span class="tool-badge ti-heatzone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 4 4 7-8"/><path d="M14 7h6v6"/></svg></span>
@@ -146,7 +147,7 @@ window.addEventListener('error', rxShowAll);
         <span class="pf-cta">Heatzone öffnen <span class="arr">→</span></span>
       </a>
 
-      <a class="tf-card" href="/fear-greed/">
+      <a class="tf-card" href="/fear-greed/" data-track="fear_greed">
         <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
         <div class="tf-head-row">
           <span class="tool-badge ti-feargreed" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16a7.5 7.5 0 0 1 15 0"/><path d="M12 16l3.5-4.5"/><circle cx="12" cy="16" r="1.3" fill="currentColor" stroke="none"/></svg></span>
@@ -156,7 +157,7 @@ window.addEventListener('error', rxShowAll);
         <span class="pf-cta">Fear &amp; Greed öffnen <span class="arr">→</span></span>
       </a>
 
-      <a class="tf-card" href="/sparplan-rechner/">
+      <a class="tf-card" href="/sparplan-rechner/" data-track="sparplan">
         <div class="tf-top"><span class="tf-label">Rechner</span><span class="badge live">Live</span></div>
         <div class="tf-head-row">
           <span class="tool-badge ti-sparplan" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.3 9.4c0-1.1 1.1-2 2.7-2s2.7.7 2.7 1.8c0 2.4-5.4 1.5-5.4 3.9 0 1.1 1.1 1.9 2.7 1.9s2.7-.8 2.7-1.9"/><path d="M12 7.4v1M12 15.6v1"/></svg></span>
@@ -179,11 +180,11 @@ window.addEventListener('error', rxShowAll);
           <div class="util-demo-row"><span>Steuerfrei in</span><b>31 Tagen</b></div>
         </div>
         <p>Countdown zur einjährigen Steuerfreiheit, als CSV exportierbar.</p>
-        <a class="open" href="/haltefrist-tracker/">Tool öffnen →</a>
+        <a class="open" href="/haltefrist-tracker/" data-track="haltefrist">Tool öffnen →</a>
         <a class="xlink" href="/wissen/die-einjahresfrist/">Die Einjahresfrist im Detail →</a>
       </div>
 
-      <a class="tool-mini" href="/scam-check/">
+      <a class="tool-mini" href="/scam-check/" data-track="scamcheck">
         <div class="tm-head-row">
           <span class="tool-badge sm ti-scamcheck" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l6.5 2.6v5.4c0 4.6-3 7.4-6.5 8.6-3.5-1.2-6.5-4-6.5-8.6V6.1L12 3.5z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg></span>
           <h4>Scam-Check</h4>
@@ -197,7 +198,7 @@ window.addEventListener('error', rxShowAll);
         <span class="open">Tool öffnen →</span>
       </a>
 
-      <a class="tool-mini" href="/halving-countdown/">
+      <a class="tool-mini" href="/halving-countdown/" data-track="halving">
         <div class="tm-head-row">
           <span class="tool-badge sm ti-halving" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h11M6.5 20.5h11"/><path d="M7.5 3.5c0 4.5 3.7 5.6 4.5 5.6s4.5-1.1 4.5-5.6M7.5 20.5c0-4.5 3.7-5.6 4.5-5.6s4.5 1.1 4.5 5.6"/></svg></span>
           <h4>Halving-Countdown</h4>
@@ -267,162 +268,99 @@ window.addEventListener('error', rxShowAll);
     </div>
 
     <div class="channels reveal" style="margin-top:clamp(24px,3.4vw,32px)">
-      <a class="channel" style="--ch:var(--red)" href="https://www.youtube.com/@RenditeX" target="_blank" rel="noopener">
+      <a class="channel" style="--ch:var(--red)" href="https://www.youtube.com/@RenditeX" target="_blank" rel="noopener" data-track="youtube">
         <div class="head">
           <span class="ic" style="background:#fff; border-color:#fff"><img src="/assets/logos/youtube.png" alt="" loading="lazy"></span>
           <span class="k">YouTube</span>
         </div>
-        <h3>Der RenditeX Kanal</h3>
-        <p>Videos zu Krypto, Investments und Cashflow. Plattformen im Test.</p>
+        <h3>Videos, Interviews &amp; Praxistests</h3>
+        <p>Der RenditeX-Kanal — kostenlos und ohne Anmeldung.</p>
       </a>
-      <a class="channel" style="--ch:var(--brand)" href="https://t.me/+_PoyewKyz8JjZTVi" target="_blank" rel="noopener">
+      <a class="channel" style="--ch:var(--brand)" href="https://t.me/+_PoyewKyz8JjZTVi" target="_blank" rel="noopener" data-track="telegram">
         <div class="head">
           <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1L18 6.6c.4-.4-.1-.6-.6-.2L7.1 13.2l-5-1.6c-1.1-.3-1.1-1 .2-1.5l19.6-7.5c.9-.3 1.7.2 1.4 1.7z"/></svg></span>
           <span class="k">Telegram</span>
         </div>
-        <h3>Kostenloser Kanal</h3>
-        <p>Kurze Updates und Hinweise auf neue Videos und Tools.</p>
+        <h3>Neue Inhalte &amp; kurze Updates</h3>
+        <p>Kurzer, kostenloser Kanal für Hinweise auf neue Videos und Tools.</p>
       </a>
-      <a class="channel" style="--ch:#5865F2" href="https://discord.gg/HdXWJZYe2x" target="_blank" rel="noopener">
+      <a class="channel" style="--ch:#5865F2" href="https://discord.gg/HdXWJZYe2x" target="_blank" rel="noopener" data-track="defi_circle">
         <div class="head">
           <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.9A19.7 19.7 0 0 0 15.4 3.4l-.2.4a18 18 0 0 0-6.4 0l-.2-.4a19.7 19.7 0 0 0-4.9 1.5C.7 9.5-.4 14 .2 18.4a19.9 19.9 0 0 0 6 3 14.5 14.5 0 0 0 1.3-2.1 12.9 12.9 0 0 1-2-1c.2-.1.3-.3.5-.4a14.2 14.2 0 0 0 12.1 0l.5.4a12.9 12.9 0 0 1-2 1c.4.7.8 1.4 1.3 2.1a19.8 19.8 0 0 0 6-3c.7-5.1-1-9.6-3.6-13.5zM8 15.5c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.6 8 10.6s2.2 1.1 2.2 2.5-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.5 2.2-2.5 2.2 1.1 2.2 2.5-1 2.4-2.2 2.4z"/></svg></span>
           <span class="k">Discord</span>
         </div>
-        <h3>DeFi Circle</h3>
-        <p>Community für DeFi und Strategien. Basiszugang kostenlos.</p>
-      </a>
-      <a class="channel" style="--ch:#3B39B8" href="https://heylink.me/RenditeX/" target="_blank" rel="noopener">
-        <div class="head">
-          <span class="ic" style="background:#fff; border-color:#fff"><img src="/assets/logos/heylink.png" alt="" loading="lazy"></span>
-          <span class="k">Linksammlung</span>
-        </div>
-        <h3>Alle Links auf einen Blick</h3>
-        <p>Alle Plattformen, Buchempfehlungen und Erklärvideos.</p>
+        <h3>DeFi, Strategien &amp; Community</h3>
+        <p>Community-Zugang über Discord, Basiszugang kostenlos.</p>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ============ PLATTFORMEN ============
-     Bewusst weit unten (nicht mehr im Hauptmenue): kein
-     Affiliate-Schaufenster, sondern eine transparente Referenzliste
-     fuer alle, die gezielt danach suchen. Bitopex/HyperRocket stehen
-     hier nicht mehr, da beide bereits als eigene Projektseiten mit
-     mehr Kontext oben auf der Seite vertreten sind. -->
+<!-- ============ PLATTFORMEN (KOMPAKTE VORSCHAU) ============
+     Bewusst kein voller Anbieter-Katalog mehr auf der Startseite —
+     nur ein kompakter Einstieg mit den drei Kategorien und ein paar
+     Logos je Kategorie. Der volle, redaktionell aufgebaute Bereich
+     mit Featured-Anbietern und Einordnung lebt auf /plattformen/.
+     Bitopex/HyperRocket/SmartIT stehen hier bewusst nicht — das sind
+     Praxistests, keine Plattform-Empfehlungen (siehe /projekte/). -->
 <section id="plattformen">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Weitere Plattformen &amp; Anbieter</h2>
-      <div class="intro">
-        <p>Weitere Dienste und Plattformen, die ich nutze, genutzt oder mir näher angesehen habe — Börsen, Bots, P2P-Kredite, Banking. Zu den meisten findest du auf dem Kanal ein Video, in dem ich zeige, wie sie funktionieren und wo die Haken liegen.</p>
-        <p>Wichtig zur Einordnung: Das hier ist eine Liste von Anbietern, keine Rangliste und keine Empfehlung. Was für mich passt, muss für dich nicht passen. Und jede einzelne dieser Plattformen ist mit Risiken verbunden — je höher die versprochene Rendite, desto größer das Risiko. Projekte mit täglichen Fixauszahlungen gehören zur riskantesten Kategorie überhaupt. Setz dort, wenn überhaupt, nur Beträge ein, deren Verlust dich nicht trifft.</p>
+      <h2>Plattformen &amp; Anbieter</h2>
+      <p>Börsen, P2P-Kredite und Banking-Anbieter, die ich nutze, genutzt oder mir näher angesehen habe. Keine Rangliste, keine Empfehlung.</p>
+    </div>
+
+    <div class="pf-teaser-grid reveal">
+      <div class="pf-teaser-cat">
+        <span class="name">Krypto &amp; Börsen</span>
+        <div class="pf-teaser-logos">
+          <img src="/assets/logos/pionex.png" alt="Pionex" loading="lazy">
+          <img src="/assets/logos/coinbase.png" alt="Coinbase" loading="lazy">
+          <img src="/assets/logos/bybit.png" alt="Bybit EU" loading="lazy" onerror="this.remove()">
+          <span class="more">+1</span>
+        </div>
+      </div>
+      <div class="pf-teaser-cat">
+        <span class="name">P2P &amp; Zinsen</span>
+        <div class="pf-teaser-logos">
+          <img src="/assets/logos/bondora.png" alt="Bondora" loading="lazy">
+          <img src="/assets/logos/mintos.png" alt="Mintos" loading="lazy">
+          <img src="/assets/logos/monefit.png" alt="Monefit" loading="lazy">
+        </div>
+      </div>
+      <div class="pf-teaser-cat">
+        <span class="name">Banking &amp; Finanzen</span>
+        <div class="pf-teaser-logos">
+          <img src="/assets/logos/c24.png" alt="C24" loading="lazy">
+          <img src="/assets/logos/dkb.png" alt="DKB" loading="lazy">
+          <img src="/assets/logos/revolut.png" alt="Revolut" loading="lazy">
+          <span class="more">+1</span>
+        </div>
       </div>
     </div>
 
-    <div class="adnotice reveal">
-      <b>Werbehinweis:</b> Die folgenden Links sind Partnerlinks. Wenn du dich darüber anmeldest, kann ich eine Provision erhalten — für dich entstehen dabei in der Regel keine zusätzlichen Kosten. Das beeinflusst nicht, worüber ich berichte. Jede dieser Plattformen ist mit Risiken verbunden, bis hin zum Totalverlust. Prüfe jedes Angebot selbst, bevor du Geld einzahlst.
-    </div>
-
-    <div class="reveal">
-      <div class="plat-group">
-        <h3>Börsen &amp; Handel</h3>
-        <div class="plats">
-          <a class="plat" href="https://www.binance.com/activity/referral-entry/CPA/together-v4?hl=en&amp;ref=CPA_00ZPRA7X5Z" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#F3BA2F"><i>B</i><img src="/assets/logos/binance.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">Binance</span><span class="d">Eine der größten Krypto-Börsen weltweit, seit 2017.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-          <a class="plat" href="https://coinbase.com/join/KCPHHH7?src=referral-link" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#0052FF; --lt:#fff"><i>C</i><img src="/assets/logos/coinbase.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">Coinbase</span><span class="d">US-Börse seit 2012, börsennotiert, einsteigerfreundlich.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-          <a class="plat" href="https://www.pionex.com/en/signUp?r=0UohUuZHQSn" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#2BB6A3"><i>P</i><img src="/assets/logos/pionex.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">Pionex</span><span class="d">Börse mit eingebauten Handels-Bots, etwa Grid-Bots.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-          <a class="plat" href="https://client.lirunex.online/partner/signup?partnerId=344912" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#1E5FD8; --lt:#fff"><i>L</i><img src="/assets/logos/lirunex.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">Lirunex</span><span class="d">Social Trading und automatisierte Strategien, ab 100 $.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="plat-group">
-        <h3>Weitere Krypto-Plattformen</h3>
-        <div class="plats">
-          <a class="plat" href="https://discord.gg/HdXWJZYe2x" target="_blank" rel="noopener">
-            <span class="logo" style="--lc:#5865F2"><i>D</i><img src="/assets/logos/deficircle.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">DeFi Circle</span><span class="d">Community für DeFi, Strategien und Bots. Basiszugang gratis.</span></span>
-          </a>
-        </div>
-      </div>
-
-      <div class="plat-group">
-        <h3>Zinsen &amp; P2P</h3>
-        <div class="plats">
-          <a class="plat" href="https://goandgrow.eu/ref/viktore4" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#2BA7B5"><i>B</i><img src="/assets/logos/bondora.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">Bondora Go &amp; Grow</span><span class="d">P2P-Plattform mit flexibler Verfügbarkeit, außerhalb von Krypto.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-          <a class="plat" href="https://www.mintos.com/de/l/ref/YKUR47" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#E8EDF5"><i>M</i><img src="/assets/logos/mintos.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">Mintos</span><span class="d">Europäische Kreditplattform seit 2015, Einstieg ab 50 €.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-          <a class="plat" href="https://smartsaver.monefit.com/de/referral/link?code=6dqyyz5e" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#111111; --lb:#111111; --lt:#fff"><i>M</i><img src="/assets/logos/monefit.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">Monefit SmartSaver</span><span class="d">Verbraucherkredite der Creditstar Group, Einstieg ab 10 €.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="plat-group">
-        <h3>Banking</h3>
-        <div class="plats">
-          <a class="plat" href="https://s.c24.de/azOeiDrivi/" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#0B41CD; --lt:#fff"><i>C</i><img src="/assets/logos/c24.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">C24</span><span class="d">Kostenloses Girokonto mit Unterkonten und Cashback.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-          <a class="plat" href="https://tfbank.de/mastercard-gold/freundewerbenfreunde-antrag?referralIdentifier=a0e8b7e3-2ac9-4c48-9930-63375178dfcd" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#C97F52"><i>T</i><img src="/assets/logos/tfbank.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">TF Bank</span><span class="d">Mastercard Gold ohne Jahresgebühr, weltweit gebührenfrei.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-          <a class="plat" href="https://freundewerben.dkb.de/PPZP8P9X" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#0F80D6"><i>D</i><img src="/assets/logos/dkb.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">DKB</span><span class="d">Girokonto einer etablierten deutschen Direktbank.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-          <a class="plat" href="https://revolut.com/referral/?referral-code=viktorvgiu!JAN1-25-VR-DE" target="_blank" rel="sponsored noopener">
-            <span class="logo" style="--lc:#E8EDF5"><i>R</i><img src="/assets/logos/revolut.png" alt="" loading="lazy" onerror="this.remove()"></span>
-            <span class="body"><span class="n">Revolut</span><span class="d">Online-Bank mit Multiwährungskonto und App-Steuerung.</span></span>
-            <span class="ad">Anzeige</span>
-          </a>
-        </div>
-      </div>
-    </div>
+    <div class="src-note reveal" style="margin-top:16px">Partnerlinks transparent gekennzeichnet, keine pauschale Empfehlung — <a href="/plattformen/">alle Plattformen ansehen →</a></div>
   </div>
 </section>
 
 <footer id="rx-foot"></footer>
 
-<script src="/assets/site.js?v=37"></script>
-<script src="/assets/project.js?v=37"></script>
-<script src="/assets/data/bitopex.js?v=37"></script>
-<script src="/assets/data/hyperocket.js?v=37"></script>
-<script src="/assets/data/smartit.js?v=37"></script>
-<script src="/assets/home.js?v=37"></script>
+<script src="/assets/site.js?v=45"></script>
+<script src="/assets/project.js?v=45"></script>
+<script src="/assets/data/bitopex.js?v=45"></script>
+<script src="/assets/data/hyperocket.js?v=45"></script>
+<script src="/assets/data/smartit.js?v=45"></script>
+<script src="/assets/data/deficircle.js?v=45"></script>
+<script src="/assets/data/channel.js?v=45"></script>
+<script src="/assets/home.js?v=45"></script>
+<script src="/assets/analytics.js?v=45"></script>
 <script>
 RX.header();
 RX.footer();
 RX.home.init();
 RX.reveal();
+RX.analytics.trackPageView('home');
+RX.analytics.wireClicks();
 </script>
 </body>
 </html>

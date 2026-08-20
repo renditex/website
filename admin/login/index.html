@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RenditeX Admin — Anmelden</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A1220">
+<link rel="stylesheet" href="/assets/renditex.css?v=45">
+</head>
+<body class="admin-page">
+
+<div class="admin-login-wrap">
+  <div class="admin-login-card">
+    <h1>RenditeX Admin</h1>
+    <form id="loginForm" autocomplete="off">
+      <label for="pw">Passwort</label>
+      <input type="password" id="pw" name="password" autocomplete="current-password" required>
+      <button type="submit" id="loginBtn">Anmelden</button>
+      <div class="admin-login-error" id="loginError" role="alert"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var form = document.getElementById('loginForm');
+  var btn = document.getElementById('loginBtn');
+  var errorEl = document.getElementById('loginError');
+  var pwField = document.getElementById('pw');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    errorEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Prüfe …';
+
+    fetch('/api/analytics/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ password: pwField.value })
+    }).then(function(res){
+      if(res.status === 200){
+        window.location.href = '/admin/analytics/';
+        return;
+      }
+      if(res.status === 401){
+        errorEl.textContent = 'Falsches Passwort.';
+      } else if(res.status === 429){
+        var retryAfter = res.headers.get('Retry-After');
+        var mins = retryAfter ? Math.ceil(parseInt(retryAfter, 10) / 60) : null;
+        errorEl.textContent = 'Zu viele Versuche. Bitte' + (mins ? ' in ' + mins + ' Minute' + (mins === 1 ? '' : 'n') : ' später') + ' erneut versuchen.';
+      } else {
+        errorEl.textContent = 'Anmeldung gerade nicht möglich. Bitte später erneut versuchen.';
+      }
+      btn.disabled = false;
+      btn.textContent = 'Anmelden';
+      pwField.select();
+    }).catch(function(){
+      errorEl.textContent = 'Keine Verbindung zum Server. Bitte später erneut versuchen.';
+      btn.disabled = false;
+      btn.textContent = 'Anmelden';
+    });
+  });
+})();
+</script>
+</body>
+</html>

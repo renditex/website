@@ -17,6 +17,8 @@ var DATA = window.RX_DATA || {};
 var BITOPEX = DATA.bitopex;
 var HYPEROCKET = DATA.hyperocket;
 var SMARTIT = DATA.smartit;
+var DEFICIRCLE = DATA.deficircle;
+var CHANNEL = DATA.channel;
 
 function $(id){ return document.getElementById(id); }
 function hide(el){ if(el) el.hidden = true; }
@@ -227,7 +229,7 @@ function renderFeaturedProjects(){
           '<span class="v" style="color:' + (up ? 'var(--z3)' : 'var(--red)') + '">' + P.fmtPct(v) + '</span></div>';
       }).join('');
       cards.push(
-        '<a class="proj-feature-card" href="/projekte/bitopex/">' +
+        '<a class="proj-feature-card" href="/projekte/bitopex/" data-track="bitopex">' +
           '<div class="pf-top"><span class="pf-label">Praxistest</span>' + pillHtml(BITOPEX.status) + '</div>' +
           '<h3>Bitopex</h3>' +
           (BITOPEX.testStartedAt ? '<div class="pf-sub">seit ' + P.esc(P.fmtMonthYear(BITOPEX.testStartedAt)) + '</div>' : '') +
@@ -246,7 +248,7 @@ function renderFeaturedProjects(){
     var wStats = (HYPEROCKET.withdrawals && HYPEROCKET.withdrawals.length) ? P.computeWithdrawalStats(HYPEROCKET.withdrawals) : null;
     var spark2 = wStats ? sparklineSvg(wStats.months.map(function(m){ return m.total; }), '#12E6D6') : '';
     cards.push(
-      '<a class="proj-feature-card" href="/projekte/hyperocket/">' +
+      '<a class="proj-feature-card" href="/projekte/hyperocket/" data-track="hyperocket">' +
         '<div class="pf-top"><span class="pf-label">Praxistest</span>' + pillHtml(HYPEROCKET.status) + '</div>' +
         '<h3>HyperRocket</h3>' +
         '<p>Mein eigener Account, meine dokumentierten Auszahlungen und die laufende Entwicklung meines Praxistests.</p>' +
@@ -273,7 +275,7 @@ function renderFeaturedProjects(){
     var months3 = Object.keys(monthsMap3).sort().map(function(ym){ return monthsMap3[ym]; });
     var spark3 = months3.length >= 2 ? sparklineSvg(months3, '#8B5CF6') : '';
     cards.push(
-      '<a class="proj-feature-card" href="/projekte/smartit/">' +
+      '<a class="proj-feature-card" href="/projekte/smartit/" data-track="smartit">' +
         '<div class="pf-top"><span class="pf-label">Praxistest</span>' + pillHtml(SMARTIT.status) + '</div>' +
         '<h3>SmartIT</h3>' +
         '<p>Mein Staking-Setup rund um den SIT-Token, mit meinen gestakten Positionen und dem aktuellen Rewards-Stand.</p>' +
@@ -288,9 +290,43 @@ function renderFeaturedProjects(){
     );
   }
 
+  if(DEFICIRCLE && DEFICIRCLE.personal){
+    var dp = DEFICIRCLE.personal;
+    cards.push(
+      '<a class="proj-feature-card" href="/projekte/defi-circle/" data-track="deficircle">' +
+        '<div class="pf-top"><span class="pf-label">Praxistest</span>' + pillHtml(DEFICIRCLE.status) + '</div>' +
+        '<h3>DeFi Circle</h3>' +
+        '<p>Mein Lernweg im DeFi Circle — von Fundamentals über Breakthrough bis zur Elite, mit Community, Level-System und eigener Anwendung.</p>' +
+        '<div class="pf-levelline">' +
+          '<span class="step">Fundamentals</span><span class="sep">→</span>' +
+          '<span class="step">Breakthrough</span><span class="sep">→</span>' +
+          '<span class="step is-current">Elite</span>' +
+        '</div>' +
+        '<div class="pf-devnote">' + P.esc(dp.memberSinceLabel) + ' dabei · ' + P.esc(dp.developmentMultipleLabel) + ' persönliche Entwicklung</div>' +
+        '<div class="pf-meta">Stand: ' + P.esc(P.fmtDate(DEFICIRCLE.updatedAt)) + '</div>' +
+        '<span class="pf-cta">Praxistest ansehen <span class="arr">→</span></span>' +
+      '</a>'
+    );
+  }
+
   if(!cards.length){ hide(section); return; }
   show(section);
   host.innerHTML = cards.join('');
+}
+
+/* ---------- Gemeinsamer Video-Pool ueber alle Projekte und den
+   allgemeinen Kanal hinweg, neuestes zuerst. Einzige Quelle fuer
+   "aktuelles Video" auf der Startseite — ein neues Video muss nur an
+   einer Stelle (der jeweiligen Projekt-Datendatei oder channel.js)
+   eingetragen werden. ---------- */
+function allVideosSorted(){
+  var pool = [];
+  if(BITOPEX && BITOPEX.videos) pool = pool.concat(BITOPEX.videos);
+  if(HYPEROCKET && HYPEROCKET.videos) pool = pool.concat(HYPEROCKET.videos);
+  if(SMARTIT && SMARTIT.videos) pool = pool.concat(SMARTIT.videos);
+  if(DEFICIRCLE && DEFICIRCLE.videos) pool = pool.concat(DEFICIRCLE.videos);
+  if(CHANNEL && CHANNEL.videos) pool = pool.concat(CHANNEL.videos);
+  return pool.slice().sort(function(a, b){ return new Date(b.publishedAt) - new Date(a.publishedAt); });
 }
 
 /* ---------- Neu auf YouTube — groesstes, aktuellstes Video ueber alle
@@ -298,20 +334,18 @@ function renderFeaturedProjects(){
 function renderFeaturedVideo(){
   var section = $('youtube');
   if(!section) return;
-  var pool = [];
-  if(BITOPEX && BITOPEX.videos) pool = pool.concat(BITOPEX.videos);
-  if(HYPEROCKET && HYPEROCKET.videos) pool = pool.concat(HYPEROCKET.videos);
+  var pool = allVideosSorted();
   if(!pool.length){ hide(section); return; }
   show(section);
 
-  var video = pool.slice().sort(function(a, b){ return new Date(b.publishedAt) - new Date(a.publishedAt); })[0];
+  var video = pool[0];
   var id = P.youtubeId(video.youtubeUrl);
   var thumb = video.thumbnail || P.youtubeThumb(video.youtubeUrl);
 
   var thumbHost = $('homeVideoThumb');
   if(thumbHost){
     thumbHost.innerHTML =
-      '<button type="button" class="proj-video-thumb big" data-yt="' + P.esc(id || '') + '" aria-label="Video abspielen: ' + P.esc(video.title) + '">' +
+      '<button type="button" class="proj-video-thumb big" data-yt="' + P.esc(id || '') + '" data-track="video" aria-label="Video abspielen: ' + P.esc(video.title) + '">' +
         (thumb ? '<img src="' + P.esc(thumb) + '" alt="" loading="lazy">' : '') +
         '<span class="play">' + P.playIcon + '</span>' +
       '</button>';
@@ -326,7 +360,8 @@ function renderFeaturedVideo(){
   }
 
   var linkHost = $('homeVideoLink');
-  var proj = video.projectSlug === 'bitopex' ? BITOPEX : (video.projectSlug === 'hyperocket' ? HYPEROCKET : null);
+  var PROJECTS_BY_SLUG = { bitopex: BITOPEX, hyperocket: HYPEROCKET, smartit: SMARTIT, 'defi-circle': DEFICIRCLE };
+  var proj = PROJECTS_BY_SLUG[video.projectSlug] || null;
   if(linkHost){
     if(proj){
       show(linkHost);
@@ -338,6 +373,32 @@ function renderFeaturedVideo(){
       hide(linkHost);
     }
   }
+}
+
+/* ---------- /links — kompakte Video-Karte, gleicher Video-Pool wie
+   renderFeaturedVideo(), aber leichtgewichtig: kein Inline-Player, nur
+   Thumbnail + Titel + direkter Link zu YouTube (siehe Performance-
+   Vorgabe fuer die /links-Seite). No-op auf allen anderen Seiten, da
+   #lxVideo dort nicht existiert. ---------- */
+function renderLinksVideo(){
+  var link = $('lxVideo');
+  if(!link) return;
+  var pool = allVideosSorted();
+  if(!pool.length) return;
+  var video = pool[0];
+  var thumb = video.thumbnail || P.youtubeThumb(video.youtubeUrl);
+
+  link.href = video.youtubeUrl;
+  var thumbHost = $('lxVideoThumb');
+  if(thumbHost){
+    thumbHost.innerHTML =
+      (thumb ? '<img src="' + P.esc(thumb) + '" alt="" loading="lazy">' : '') +
+      '<span class="yt"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 7.5v9l7-4.5z"/></svg></span>';
+  }
+  var titleHost = $('lxVideoTitle');
+  if(titleHost) titleHost.textContent = video.title;
+  var descHost = $('lxVideoDesc');
+  if(descHost && video.description) descHost.textContent = video.description;
 }
 
 /* ---------- "Live auf RenditeX" — kompakter Vorgeschmack direkt nach
@@ -504,5 +565,5 @@ function init(){
 }
 
 window.RX = window.RX || {};
-window.RX.home = { init: init };
+window.RX.home = { init: init, renderLinksVideo: renderLinksVideo };
 })();

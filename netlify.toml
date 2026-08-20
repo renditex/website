@@ -1,0 +1,57 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Kurze, stabile Pfade fuer die Analytics-API. Die eigentlichen
+# Functions liegen unter netlify/functions/analytics-*.js — siehe
+# dort fuer die Zugriffskontrolle (oeffentlicher Event-Endpoint vs.
+# authentifizierte Admin-Endpoints).
+[[redirects]]
+  from = "/api/analytics/event"
+  to = "/.netlify/functions/analytics-event"
+  status = 200
+
+[[redirects]]
+  from = "/api/analytics/login"
+  to = "/.netlify/functions/analytics-login"
+  status = 200
+
+[[redirects]]
+  from = "/api/analytics/logout"
+  to = "/.netlify/functions/analytics-logout"
+  status = 200
+
+[[redirects]]
+  from = "/api/analytics/stats"
+  to = "/.netlify/functions/analytics-stats"
+  status = 200
+
+# /links war ein verworfener Linktree-artiger Zwischenstand (siehe
+# ANALYTICS.md-Historie) und existiert nicht mehr als eigene Seite —
+# die normale Startseite ist jetzt der zentrale Einstiegspunkt. Falls
+# der alte Link irgendwo (Social-Bio, QR-Code) schon geteilt wurde,
+# leitet dieser Redirect ihn sauber auf "/" statt auf eine 404.
+[[redirects]]
+  from = "/links"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/links/*"
+  to = "/"
+  status = 301
+  force = true
+
+# Zusaetzlich zu robots.txt und den noindex-Meta-Tags in den
+# Admin-Seiten selbst: Suchmaschinen, die robots.txt ignorieren,
+# bekommen den Header trotzdem direkt vom Server. Ersetzt keine
+# Authentifizierung — die eigentliche Absicherung passiert in den
+# Functions selbst, siehe ANALYTICS.md.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

@@ -21,7 +21,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=37">
+<link rel="stylesheet" href="/assets/renditex.css?v=45">
 <script>
 document.documentElement.className += ' js';
 function rxShowAll(){
@@ -238,9 +238,10 @@ window.addEventListener('error', rxShowAll);
 ]}
 </script>
 
-<script src="/assets/site.js?v=37"></script>
-<script src="/assets/project.js?v=37"></script>
-<script src="/assets/data/smartit.js?v=37"></script>
+<script src="/assets/site.js?v=45"></script>
+<script src="/assets/project.js?v=45"></script>
+<script src="/assets/data/smartit.js?v=45"></script>
+<script src="/assets/analytics.js?v=45"></script>
 <script>
 RX.header();
 RX.breadcrumb({
@@ -253,6 +254,7 @@ RX.breadcrumb({
 RX.footer();
 RX.project.init(RX_DATA.smartit);
 RX.reveal();
+RX.analytics.trackPageView('smartit');
 </script>
 </body>
 </html>

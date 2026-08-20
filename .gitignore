@@ -4,3 +4,16 @@
 # OS
 Thumbs.db
 .DS_Store
+
+# Node (nur fuer die Netlify-Functions in netlify/functions/ benoetigt).
+# package-lock.json bewusst NICHT ignoriert — sorgt fuer reproduzierbare
+# Netlify-Builds.
+node_modules/
+
+# Netlify CLI lokaler Zustand
+.netlify/
+deno.lock
+
+# Lokale Testgeheimnisse fuer "netlify dev" — niemals committen
+.env
+.env.*

@@ -21,7 +21,7 @@
   }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="/assets/renditex.css?v=37">
+<link rel="stylesheet" href="/assets/renditex.css?v=45">
 <script>
 document.documentElement.className += ' js';
 function rxShowAll(){
@@ -54,7 +54,7 @@ window.addEventListener('error', rxShowAll);
     </div>
 
     <div class="tools-pair-grid reveal">
-      <a class="tf-card tf-primary" href="/heatzone-chart/">
+      <a class="tf-card tf-primary" href="/heatzone-chart/" data-track="heatzone">
         <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
         <div class="tf-head-row">
           <span class="tool-badge ti-heatzone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 4 4 7-8"/><path d="M14 7h6v6"/></svg></span>
@@ -64,7 +64,7 @@ window.addEventListener('error', rxShowAll);
         <span class="pf-cta">Heatzone öffnen <span class="arr">→</span></span>
       </a>
 
-      <a class="tf-card" href="/fear-greed/">
+      <a class="tf-card" href="/fear-greed/" data-track="fear_greed">
         <div class="tf-top"><span class="tf-label">Markt-Tool</span><span class="badge live">Live</span></div>
         <div class="tf-head-row">
           <span class="tool-badge ti-feargreed" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16a7.5 7.5 0 0 1 15 0"/><path d="M12 16l3.5-4.5"/><circle cx="12" cy="16" r="1.3" fill="currentColor" stroke="none"/></svg></span>
@@ -85,7 +85,7 @@ window.addEventListener('error', rxShowAll);
       <p>Was wäre aus einem Sparplan geworden? Weitere Rechner ergänze ich hier, sobald sie fertig sind.</p>
     </div>
 
-    <a class="tf-card tf-primary reveal" href="/sparplan-rechner/" style="max-width:480px">
+    <a class="tf-card tf-primary reveal" href="/sparplan-rechner/" style="max-width:480px" data-track="sparplan">
       <div class="tf-top"><span class="tf-label">Rechner</span><span class="badge live">Live</span></div>
       <div class="tf-head-row">
         <span class="tool-badge ti-sparplan" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.3 9.4c0-1.1 1.1-2 2.7-2s2.7.7 2.7 1.8c0 2.4-5.4 1.5-5.4 3.9 0 1.1 1.1 1.9 2.7 1.9s2.7-.8 2.7-1.9"/><path d="M12 7.4v1M12 15.6v1"/></svg></span>
@@ -117,11 +117,11 @@ window.addEventListener('error', rxShowAll);
           <div class="util-demo-row"><span>Steuerfrei in</span><b>31 Tagen</b></div>
         </div>
         <p>Countdown zur einjährigen Steuerfreiheit, als CSV exportierbar.</p>
-        <a class="open" href="/haltefrist-tracker/">Tool öffnen →</a>
+        <a class="open" href="/haltefrist-tracker/" data-track="haltefrist">Tool öffnen →</a>
         <a class="xlink" href="/wissen/die-einjahresfrist/">Die Einjahresfrist im Detail →</a>
       </div>
 
-      <a class="tool-mini" href="/scam-check/">
+      <a class="tool-mini" href="/scam-check/" data-track="scamcheck">
         <div class="tm-head-row">
           <span class="tool-badge sm ti-scamcheck" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l6.5 2.6v5.4c0 4.6-3 7.4-6.5 8.6-3.5-1.2-6.5-4-6.5-8.6V6.1L12 3.5z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg></span>
           <h4>Scam-Check</h4>
@@ -146,7 +146,7 @@ window.addEventListener('error', rxShowAll);
     </div>
 
     <div class="tools-compact reveal">
-      <a class="tool-mini" href="/halving-countdown/">
+      <a class="tool-mini" href="/halving-countdown/" data-track="halving">
         <div class="tm-head-row">
           <span class="tool-badge sm ti-halving" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h11M6.5 20.5h11"/><path d="M7.5 3.5c0 4.5 3.7 5.6 4.5 5.6s4.5-1.1 4.5-5.6M7.5 20.5c0-4.5 3.7-5.6 4.5-5.6s4.5 1.1 4.5 5.6"/></svg></span>
           <h4>Halving-Countdown</h4>
@@ -160,9 +160,10 @@ window.addEventListener('error', rxShowAll);
 
 <footer id="rx-foot"></footer>
 
-<script src="/assets/site.js?v=37"></script>
-<script src="/assets/project.js?v=37"></script>
-<script src="/assets/home.js?v=37"></script>
+<script src="/assets/site.js?v=45"></script>
+<script src="/assets/project.js?v=45"></script>
+<script src="/assets/home.js?v=45"></script>
+<script src="/assets/analytics.js?v=45"></script>
 <script>
 RX.header();
 RX.breadcrumb({
@@ -174,6 +175,8 @@ RX.breadcrumb({
 RX.footer();
 RX.home.init();
 RX.reveal();
+RX.analytics.trackPageView('tools');
+RX.analytics.wireClicks();
 </script>
 </body>
 </html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RenditeX Admin — Analytics</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A1220">
+<link rel="stylesheet" href="/assets/renditex.css?v=45">
+</head>
+<body class="admin-page">
+
+<div class="admin-shell">
+  <div class="admin-topbar">
+    <div>
+      <h1>RenditeX Analytics</h1>
+      <div class="sub" id="adminUpdated">—</div>
+    </div>
+    <button type="button" class="admin-logout" id="logoutBtn">Abmelden</button>
+  </div>
+
+  <div class="admin-range" id="rangeButtons">
+    <button type="button" data-range="today">Heute</button>
+    <button type="button" data-range="7d">7 Tage</button>
+    <button type="button" data-range="30d" class="active">30 Tage</button>
+    <button type="button" data-range="all">Gesamt</button>
+  </div>
+
+  <div class="admin-kpis" id="kpis">
+    <div class="admin-kpi"><div class="l">Seitenaufrufe</div><div class="v" id="kpiViews">—</div></div>
+    <div class="admin-kpi"><div class="l">Link-Klicks</div><div class="v" id="kpiClicks">—</div></div>
+    <div class="admin-kpi"><div class="l">Klickrate (CTR)</div><div class="v" id="kpiCtr">—</div><div class="h">Klicks ÷ Seitenaufrufe</div></div>
+    <div class="admin-kpi"><div class="l">Top-Ziel</div><div class="v" id="kpiTop" style="font-size:17px">—</div></div>
+  </div>
+
+  <div class="admin-card">
+    <div class="admin-card-head">
+      <h2>Verlauf — letzte 30 Tage</h2>
+      <div class="admin-toggle" id="chartToggle">
+        <button type="button" data-metric="pageViews" class="active">Seitenaufrufe</button>
+        <button type="button" data-metric="linkClicks">Link-Klicks</button>
+      </div>
+    </div>
+    <div class="admin-chart-host" id="chartHost"></div>
+  </div>
+
+  <div class="admin-card">
+    <h2>Top Links</h2>
+    <div id="topLinksHost"><div class="admin-empty">Lädt …</div></div>
+  </div>
+
+  <div class="admin-card">
+    <h2>Kategorien</h2>
+    <div class="admin-catlist" id="categoriesHost"><div class="admin-empty">Lädt …</div></div>
+  </div>
+
+  <div class="admin-grid-2">
+    <div class="admin-card">
+      <h2>Herkunft</h2>
+      <div class="admin-catlist" id="referrersHost"><div class="admin-empty">Lädt …</div></div>
+    </div>
+    <div class="admin-card">
+      <h2>Geräte</h2>
+      <div class="admin-catlist" id="devicesHost"><div class="admin-empty">Lädt …</div></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="/assets/admin-analytics.js?v=45"></script>
+</body>
+</html>

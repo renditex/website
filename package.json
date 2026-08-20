@@ -1,0 +1,8 @@
+{
+  "name": "renditex-website",
+  "private": true,
+  "description": "Statische RenditeX-Website. Kein Build-Schritt fuer die Seiten selbst — package.json existiert ausschliesslich, damit Netlify die serverseitigen Analytics-Functions unter netlify/functions/ mit ihrer einen Abhaengigkeit (@netlify/blobs) bundeln kann.",
+  "dependencies": {
+    "@netlify/blobs": "^11.0.1"
+  }
+}
