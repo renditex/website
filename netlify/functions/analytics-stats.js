@@ -6,6 +6,7 @@
    eigentliche Absicherung — nicht der unbekannte Pfad, siehe
    ANALYTICS.md.
    ============================================================ */
+const { connectLambda } = require('@netlify/blobs');
 const { verifySessionToken, getSessionTokenFromHeaders } = require('./_lib/auth');
 const { loadEvents } = require('./_lib/store');
 const { computeSummary, computeSeries } = require('./_lib/aggregate');
@@ -21,6 +22,8 @@ function json(statusCode, body){
 }
 
 exports.handler = async function(event){
+  connectLambda(event);
+
   if(event.httpMethod !== 'GET'){
     return json(405, { ok: false, error: 'method_not_allowed' });
   }
@@ -43,7 +46,6 @@ exports.handler = async function(event){
     return json(200, Object.assign({ ok: true, range: range, series: series }, summary));
   }catch(e){
     console.error('analytics-stats error:', e);
-    // TEMPORAER zur Fehlersuche, danach wieder entfernen:
-    return json(500, { ok: false, error: 'internal_error', debug: String(e && e.stack || e) });
+    return json(500, { ok: false, error: 'internal_error' });
   }
 };

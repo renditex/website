@@ -6,6 +6,7 @@
    selbst steht nirgends im Code oder Repo — nur der Hash kommt
    ueber eine Netlify-Environment-Variable herein.
    ============================================================ */
+const { connectLambda } = require('@netlify/blobs');
 const { verifyPassword, createSessionToken, buildSetCookie, SESSION_TTL_SECONDS } = require('./_lib/auth');
 const { checkAndBumpLoginRateLimit, resetLoginRateLimit } = require('./_lib/store');
 
@@ -18,6 +19,8 @@ function json(statusCode, body, extraHeaders){
 }
 
 exports.handler = async function(event){
+  connectLambda(event);
+
   if(event.httpMethod !== 'POST'){
     return json(405, { ok: false, error: 'method_not_allowed' });
   }

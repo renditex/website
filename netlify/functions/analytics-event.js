@@ -8,6 +8,7 @@
    das per sendBeacon/fetch(keepalive) fire-and-forget auf und
    ignoriert jede Antwort.
    ============================================================ */
+const { connectLambda } = require('@netlify/blobs');
 const { writeEvent } = require('./_lib/store');
 const { isValidPageView, isValidLinkClick, categoryOf } = require('./_lib/whitelist');
 const { classifyReferrer, classifyDevice } = require('./_lib/classify');
@@ -15,6 +16,8 @@ const { classifyReferrer, classifyDevice } = require('./_lib/classify');
 const NO_CONTENT = { statusCode: 204, headers: { 'Cache-Control': 'no-store' }, body: '' };
 
 exports.handler = async function(event){
+  connectLambda(event);
+
   if(event.httpMethod !== 'POST'){
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
