@@ -43,6 +43,7 @@ exports.handler = async function(event){
     return json(200, Object.assign({ ok: true, range: range, series: series }, summary));
   }catch(e){
     console.error('analytics-stats error:', e);
-    return json(500, { ok: false, error: 'internal_error' });
+    // TEMPORAER zur Fehlersuche, danach wieder entfernen:
+    return json(500, { ok: false, error: 'internal_error', debug: String(e && e.stack || e) });
   }
 };
