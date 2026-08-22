@@ -43,26 +43,24 @@ window.addEventListener('error', rxShowAll);
 
 .areas{display:grid; gap:8px}
 .radar-card{
-  display:grid; grid-template-columns:minmax(240px,340px) 1fr; gap:24px; align-items:center;
   margin-bottom:20px; padding:18px 20px; background:var(--surface-2); border-radius:var(--radius);
+  display:flex; flex-direction:column; gap:14px;
 }
+.radar-card.ready{display:grid; grid-template-columns:minmax(240px,340px) 1fr; gap:24px; align-items:center}
+.radar-pending-msg{margin:0; font-size:13.5px; color:var(--muted); max-width:56ch}
+.radar-svg-wrap[hidden]{display:none}
 .radar-svg-wrap{position:relative}
-#radarSvg{width:100%; height:auto; display:block}
+#radarSvg{width:100%; height:auto; display:block; overflow:visible}
 .radar-grid{fill:none; stroke:var(--line)}
 .radar-grid.mid{stroke:var(--line); stroke-width:1.4; stroke-dasharray:3 3}
 .radar-axis{stroke:var(--line-soft)}
 .radar-label{font-family:var(--font-body); font-size:10.5px; font-weight:700; fill:var(--muted)}
 .radar-shape{fill:var(--brand); fill-opacity:.14; stroke:var(--brand); stroke-width:2; stroke-linejoin:round; transition:d .6s var(--ease-out)}
 .radar-dot{stroke:var(--surface-2); stroke-width:2; transition:cx .6s var(--ease-out), cy .6s var(--ease-out)}
-.radar-caption{
-  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-mono); font-size:12.5px; color:var(--muted-2); text-align:center; pointer-events:none;
-}
-.radar-caption[hidden]{display:none}
 .legend{display:flex; flex-wrap:wrap; align-content:center; gap:10px 14px; font-size:12.5px; color:var(--muted)}
 .legend span{display:inline-flex; align-items:center; gap:6px}
 .legend i{width:9px; height:9px; border-radius:50%; flex:none}
-@media(max-width:720px){ .radar-card{grid-template-columns:1fr} }
+@media(max-width:720px){ .radar-card.ready{grid-template-columns:1fr} }
 
 .area{
   background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--radius);
@@ -180,10 +178,10 @@ window.addEventListener('error', rxShowAll);
       <p style="margin:4px 0 0">Acht Bereiche, keine Summe. Antippen zeigt die wichtigsten Treiber je Bereich.</p>
     </div>
 
-    <div class="radar-card">
-      <div class="radar-svg-wrap">
-        <svg id="radarSvg" viewBox="0 0 300 300" role="img" aria-label="Radar-Übersicht der sechs Marktbereiche"></svg>
-        <p class="radar-caption" id="radarCaption">Lädt Live-Daten …</p>
+    <div class="radar-card" id="radarCard">
+      <p class="radar-pending-msg" id="radarPendingMsg">Das Radar unten erscheint, sobald für alle sechs Bereiche Daten vorliegen (meist innerhalb der ersten 24 Stunden nach dem Start). Bis dahin: einfach in der Liste weiter unten nachsehen.</p>
+      <div class="radar-svg-wrap" id="radarSvgWrap" hidden>
+        <svg id="radarSvg" viewBox="-40 -15 380 330" role="img" aria-label="Radar-Übersicht der sechs Marktbereiche"></svg>
       </div>
       <div class="legend">
         <span><i style="background:var(--z0)"></i>Stark belastend</span>
@@ -697,23 +695,37 @@ function buildRadarSkeleton(){
   });
 }
 
+var radarBuilt = false;
+
 function updateRadarShape(blocks){
   var svg = document.getElementById('radarSvg');
-  var caption = document.getElementById('radarCaption');
+  var wrap = document.getElementById('radarSvgWrap');
+  var pendingMsg = document.getElementById('radarPendingMsg');
+  var card = document.getElementById('radarCard');
   if(!svg) return;
-
-  svg.querySelectorAll('.radar-shape, .radar-dot').forEach(function(n){ n.remove(); });
 
   var scores = RADAR_AXES.map(function(ax){
     var b = blocks ? blocks[ax.key] : null;
     return b && b.score != null ? { score: b.score, bucket: b.verdictBucket } : null;
   });
+  /* Solange nicht alle sechs Bereiche Daten haben, bleibt das Radar
+     komplett ausgeblendet — ein leeres Diagramm-Geruest mit
+     Hinweistext ist fuer Neueinsteiger verwirrender als hilfreich.
+     Stattdessen nur die kurze Textzeile, die Liste darunter zeigt
+     ohnehin schon jeden einzelnen Bereich, der bereits Daten hat. */
   if(scores.some(function(s){ return s == null; })){
-    caption.hidden = false;
-    caption.textContent = 'Noch nicht für alle Bereiche genug Daten — Radar füllt sich nach dem ersten vollständigen Durchlauf.';
+    wrap.hidden = true;
+    pendingMsg.hidden = false;
+    card.classList.remove('ready');
     return;
   }
-  caption.hidden = true;
+
+  if(!radarBuilt){ buildRadarSkeleton(); radarBuilt = true; }
+  wrap.hidden = false;
+  pendingMsg.hidden = true;
+  card.classList.add('ready');
+
+  svg.querySelectorAll('.radar-shape, .radar-dot').forEach(function(n){ n.remove(); });
 
   var pts = scores.map(function(s, i){
     var rFrac = Math.max(0, Math.min(1, (s.score + 100) / 200));
@@ -725,9 +737,6 @@ function updateRadarShape(blocks){
     svg.appendChild(svgEl('circle', { class: 'radar-dot', cx: p.x, cy: p.y, r: 4.5, fill: 'var(--' + scores[i].bucket + ')' }));
   });
 }
-
-document.addEventListener('DOMContentLoaded', buildRadarSkeleton);
-if(document.readyState !== 'loading') buildRadarSkeleton();
 
 /* Kurze, verstaendliche Unterzeile statt der Wiederholung des
    Pill-Labels: nennt den staerksten Treiber beim Namen, ohne dass
