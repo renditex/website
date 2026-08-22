@@ -5,6 +5,16 @@
 [functions]
   node_bundler = "esbuild"
 
+# Markt-Cockpit: aktualisiert den Krypto-Marktstruktur-Block alle 6
+# Stunden im Hintergrund und schreibt das Ergebnis nach Netlify Blobs.
+# Der oeffentliche Lese-Endpoint (cockpit-data.js) liest nur noch aus
+# Blobs, ruft selbst nie CoinGecko auf — siehe COCKPIT.md.
+[functions."cockpit-refresh"]
+  schedule = "0 */6 * * *"
+
+[functions."cockpit-refresh-fred"]
+  schedule = "@daily"
+
 # Kurze, stabile Pfade fuer die Analytics-API. Die eigentlichen
 # Functions liegen unter netlify/functions/analytics-*.js — siehe
 # dort fuer die Zugriffskontrolle (oeffentlicher Event-Endpoint vs.
@@ -27,6 +37,11 @@
 [[redirects]]
   from = "/api/analytics/stats"
   to = "/.netlify/functions/analytics-stats"
+  status = 200
+
+[[redirects]]
+  from = "/api/cockpit/data"
+  to = "/.netlify/functions/cockpit-data"
   status = 200
 
 # /links war ein verworfener Linktree-artiger Zwischenstand (siehe
