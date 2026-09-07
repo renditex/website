@@ -118,6 +118,13 @@ window.RX_DATA.hyperocket = {
       featured: true,
       projectSlug: 'hyperocket',
       description: 'Nach fünf Monaten HyperRocket: mein aktueller Account-Stand und meine bisherigen Auszahlungen.'
+    },
+    {
+      title: 'Interview mit HypeRocket-CEO Sven Möller',
+      youtubeUrl: 'https://youtu.be/1Mz9xbqH0PU',
+      publishedAt: '2026-09-02',
+      projectSlug: 'hyperocket',
+      description: 'Im Gespräch mit Sven Möller über das Projekt, die Trading-Strategien dahinter und die nächsten Schritte (Interview auf Englisch).'
     }
   ],
 
