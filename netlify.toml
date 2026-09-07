@@ -45,8 +45,13 @@
   status = 200
 
 [[redirects]]
-  from = "/api/quiz/telegram"
-  to = "/.netlify/functions/quiz-telegram"
+  from = "/api/quiz/submit"
+  to = "/.netlify/functions/quiz-submit"
+  status = 200
+
+[[redirects]]
+  from = "/api/quiz/leaderboard"
+  to = "/.netlify/functions/quiz-leaderboard"
   status = 200
 
 # /links war ein verworfener Linktree-artiger Zwischenstand (siehe

@@ -35,6 +35,7 @@ var NAV = [
   { label:'Start', href:'/' },
   { label:'Wissen', href:'/#wissen', items:[
       {href:'/#wissen', label:'Krypto-Guide (kostenlos)'},
+      {href:'/krypto-quiz/', label:'Krypto-Quiz'},
       {href:'/wissen/die-einjahresfrist/', label:'Die Einjahresfrist'},
       {href:'/wissen/ressourcen/', label:'Bücher & Ressourcen'}
     ]},
@@ -44,8 +45,7 @@ var NAV = [
       {href:'/sparplan-rechner/', label:'Sparplan-Rechner'},
       {href:'/haltefrist-tracker/', label:'Haltefrist-Tracker'},
       {href:'/scam-check/', label:'Scam-Check'},
-      {href:'/halving-countdown/', label:'Halving-Countdown'},
-      {href:'/krypto-quiz/', label:'Krypto-Quiz'}
+      {href:'/halving-countdown/', label:'Halving-Countdown'}
     ]},
   { label:'Praxistests', href:'/projekte/', items:[
       {href:'/projekte/bitopex/', label:'Bitopex'},

@@ -48,14 +48,6 @@ window.addEventListener('error', rxShowAll);
 .level-card p{color:var(--muted); font-size:14px; margin:0}
 .level-card .lc-meta{font-family:var(--font-mono); font-size:12px; color:var(--muted-2); margin-top:auto; padding-top:10px}
 
-.nick-row{display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-bottom:22px}
-.nick-row label{font-size:14px; color:var(--muted)}
-.nick-row input{
-  font:inherit; font-size:15px; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--line);
-  background:var(--surface); color:var(--text); min-width:220px;
-}
-.nick-row input:focus-visible{outline:2px solid var(--brand); outline-offset:2px}
-
 .quiz-app{display:none}
 .quiz-app.active{display:block}
 .qz-top{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:18px}
@@ -88,13 +80,52 @@ window.addEventListener('error', rxShowAll);
 }
 .qz-why.show{display:block}
 .qz-why b{color:var(--text)}
-.qz-next{margin-top:18px; display:none}
-.qz-next.show{display:inline-flex}
+.qz-next{
+  margin-top:22px; display:none; align-items:center; gap:9px; padding:14px 26px; font-size:15.5px;
+  font-weight:700; border-radius:999px; box-shadow:var(--shadow-md);
+  opacity:0; transform:translateY(6px); transition:opacity .35s var(--ease-out), transform .35s var(--ease-out), box-shadow var(--dur-fast);
+}
+.qz-next.show{display:inline-flex; opacity:1; transform:none}
+.qz-next .arr{transition:transform var(--dur-fast) var(--ease-out)}
+.qz-next:hover .arr{transform:translateX(4px)}
+.qz-next:hover{box-shadow:var(--shadow-lg)}
 
 .qz-result .bignum .v{color:var(--brand-text)}
 .qz-result-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:clamp(20px,3vw,28px)}
 @media(max-width:640px){ .qz-result-grid{grid-template-columns:1fr} }
-.qz-share-note{margin-top:16px; font-size:13.5px; color:var(--muted-2)}
+
+.qz-share{margin-top:26px; padding-top:22px; border-top:1px solid var(--line-soft)}
+.qz-share-label{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-2)}
+.qz-share-btns{display:flex; gap:10px; margin-top:10px}
+.qz-share-btn{
+  width:44px; height:44px; border-radius:12px; display:grid; place-items:center; color:#fff;
+  transition:transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast);
+}
+.qz-share-btn:hover{transform:translateY(-2px); opacity:.92}
+.qz-share-btn svg{width:20px; height:20px; fill:currentColor}
+.qz-share-btn.tg{background:#26A5E4}
+.qz-share-btn.x{background:#0B1638}
+.qz-share-btn.wa{background:#25D366}
+.qz-share-note{margin-top:14px; font-size:13.5px; color:var(--muted-2); max-width:56ch}
+
+.qz-board{margin-top:26px; padding-top:22px; border-top:1px solid var(--line-soft)}
+.qz-board-note{margin:8px 0 14px; font-size:13.5px; color:var(--muted-2); max-width:56ch}
+.qz-board-form{display:flex; flex-wrap:wrap; gap:10px}
+.qz-board-form input{
+  flex:1; min-width:200px; font:inherit; font-size:15px; padding:11px 14px; border-radius:var(--radius-sm);
+  border:1px solid var(--line); background:var(--surface); color:var(--text);
+}
+.qz-board-form input:focus-visible{outline:2px solid var(--brand); outline-offset:2px}
+.qz-board-status{margin:10px 0 0; font-size:13.5px; color:var(--z3)}
+.qz-board-status.err{color:var(--z0)}
+.qz-board-list{margin-top:18px; display:grid; gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); border-radius:var(--radius-lg); overflow:hidden}
+.qz-board-loading{grid-column:1/-1; padding:16px 18px; color:var(--muted-2); font-size:14px; background:var(--surface); margin:0}
+.qz-board-row{display:grid; grid-template-columns:28px 1fr auto auto; gap:12px; align-items:center; background:var(--surface); padding:11px 16px; font-size:14px}
+.qz-board-row .rk{font-family:var(--font-mono); color:var(--muted-2); font-size:12.5px}
+.qz-board-row .nm{font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.qz-board-row .sc{font-family:var(--font-mono); color:var(--brand-text); font-weight:700; white-space:nowrap}
+.qz-board-row .tm{font-family:var(--font-mono); color:var(--muted-2); font-size:12.5px; white-space:nowrap}
+@media(max-width:520px){ .qz-board-row{grid-template-columns:24px 1fr auto} .qz-board-row .tm{display:none} }
 </style>
 </head>
 <body id="top">
@@ -117,11 +148,6 @@ window.addEventListener('error', rxShowAll);
       <p>Du kannst jede Stufe beliebig oft wiederholen — die Fragen bleiben gleich, aber niemand außer dir merkt sich, wie oft.</p>
     </div>
 
-    <div class="nick-row reveal">
-      <label for="nickInput">Name für die Ergebnis-Meldung (optional)</label>
-      <input type="text" id="nickInput" maxlength="24" placeholder="z. B. dein Vorname oder ein Kürzel">
-    </div>
-
     <div class="level-grid reveal" id="levelGrid"></div>
   </div>
 </section>
@@ -140,7 +166,7 @@ window.addEventListener('error', rxShowAll);
         <h3 class="qz-question" id="qzQuestion">—</h3>
         <div class="qz-choices" id="qzChoices"></div>
         <div class="qz-why" id="qzWhy"></div>
-        <button type="button" class="btn primary qz-next" id="qzNext">Nächste Frage →</button>
+        <button type="button" class="btn primary qz-next" id="qzNext"><span id="qzNextLabel">Nächste Frage</span> <span class="arr">→</span></button>
       </div>
 
       <div id="qzResultScreen" style="display:none">
@@ -162,7 +188,32 @@ window.addEventListener('error', rxShowAll);
             <button type="button" class="btn primary" id="qzRetry">Nochmal versuchen</button>
             <button type="button" class="btn" id="qzOtherLevel">Andere Stufe wählen</button>
           </div>
-          <p class="qz-share-note" id="qzShareNote"></p>
+          <div class="qz-share">
+            <span class="qz-share-label">Ergebnis teilen</span>
+            <div class="qz-share-btns">
+              <a class="qz-share-btn tg" id="shareTelegram" target="_blank" rel="noopener" aria-label="Auf Telegram teilen">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1L18 6.6c.4-.4-.1-.6-.6-.2L7.1 13.2l-5-1.6c-1.1-.3-1.1-1 .2-1.5l19.6-7.5c.9-.3 1.7.2 1.4 1.7z"/></svg>
+              </a>
+              <a class="qz-share-btn x" id="shareX" target="_blank" rel="noopener" aria-label="Auf X teilen">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.6 10.6 21 2h-2l-6.4 7.5L7.5 2H2l7.8 11.3L2 22h2l6.8-8 5.4 8H22l-8.4-11.4Zm-2.4 2.8-.8-1.1L4.1 3.5h2.7l5 7.2.8 1.1 6.6 9.4h-2.7l-5.3-7.6Z"/></svg>
+              </a>
+              <a class="qz-share-btn wa" id="shareWhatsapp" target="_blank" rel="noopener" aria-label="Auf WhatsApp teilen">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5s-.7-1.7-1-2.3c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.2 3.4 5.4 4.7.8.3 1.4.5 1.8.7.8.2 1.5.2 2 .1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.1 8.1 0 0 1-4.2-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+              </a>
+            </div>
+            <p class="qz-share-note">Öffnet den Teilen-Dialog der jeweiligen App — dein Ergebnis wird nirgends automatisch übertragen, nur wenn du selbst auf „Senden" tippst.</p>
+          </div>
+
+          <div class="qz-board">
+            <span class="qz-share-label">In die Bestenliste eintragen</span>
+            <p class="qz-board-note">Optional und öffentlich sichtbar — jeder Name geht, auch ein Fantasie-Kürzel. Ohne Angabe erscheinst du als „Anonym".</p>
+            <div class="qz-board-form">
+              <input type="text" id="boardName" maxlength="24" placeholder="Dein Name oder Kürzel (optional)">
+              <button type="button" class="btn primary" id="boardSubmit">Eintragen</button>
+            </div>
+            <p class="qz-board-status" id="boardStatus" hidden></p>
+            <div class="qz-board-list" id="boardList"><p class="qz-board-loading">Bestenliste wird geladen …</p></div>
+          </div>
         </div>
       </div>
 
@@ -281,7 +332,7 @@ function renderQuestion(){
   $('qzQuestion').textContent = q.q;
   $('qzWhy').className = 'qz-why';
   $('qzNext').className = 'qz-next';
-  $('qzNext').textContent = (state.idx === state.level.questions.length - 1) ? 'Ergebnis ansehen →' : 'Nächste Frage →';
+  $('qzNextLabel').textContent = (state.idx === state.level.questions.length - 1) ? 'Ergebnis ansehen' : 'Nächste Frage';
 
   $('qzChoices').innerHTML = q.choices.map(function(c, i){
     return '<button type="button" class="qz-choice" data-i="' + i + '">' +
@@ -332,6 +383,7 @@ function verdictFor(pct){
 function finishQuiz(){
   clearInterval(timerInterval);
   var totalMs = Date.now() - state.startedAt;
+  state.finalTimeMs = totalMs;
   var total = state.level.questions.length;
   var pct = Math.round((state.correctCount / total) * 100);
   var v = verdictFor(pct);
@@ -348,22 +400,78 @@ function finishQuiz(){
   $('qzStatTime').textContent = fmtTime(totalMs);
   $('qzStatAvg').textContent = fmtTime(avgMs);
 
-  var nick = ($('nickInput').value || '').trim().slice(0, 24);
-  $('qzShareNote').textContent = 'Dein Ergebnis wurde anonym' + (nick ? ' unter „' + nick + '"' : '') + ' an die RenditeX-Community-Gruppe gemeldet — keine weiteren Daten werden übertragen.';
+  var shareText = 'Ich habe beim RenditeX Krypto-Quiz (Stufe „' + state.level.label + '") ' +
+    state.correctCount + ' von ' + total + ' Fragen richtig beantwortet, in ' + fmtTime(totalMs) + ' Minuten. Testest du dich auch?';
+  var shareUrl = 'https://renditex.netlify.app/krypto-quiz/';
+  $('shareTelegram').href = 'https://t.me/share/url?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent(shareText);
+  $('shareX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText + ' ' + shareUrl);
+  $('shareWhatsapp').href = 'https://wa.me/?text=' + encodeURIComponent(shareText + ' ' + shareUrl);
 
-  fetch('/api/quiz/telegram', {
+  $('boardName').value = '';
+  var status = $('boardStatus');
+  status.hidden = true; status.className = 'qz-board-status';
+  loadLeaderboard(state.level.id);
+}
+
+/* ---------- Bestenliste ---------- */
+function loadLeaderboard(levelId){
+  var list = $('boardList');
+  list.innerHTML = '<p class="qz-board-loading">Bestenliste wird geladen …</p>';
+  fetch('/api/quiz/leaderboard?level=' + encodeURIComponent(levelId), { cache: 'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(!j || !j.ok || !j.top || !j.top.length){
+        list.innerHTML = '<p class="qz-board-loading">Noch keine Einträge für diese Stufe — sei die/der Erste.</p>';
+        return;
+      }
+      list.innerHTML = j.top.map(function(r, i){
+        return '<div class="qz-board-row">' +
+          '<span class="rk">' + (i + 1) + '.</span>' +
+          '<span class="nm">' + esc(r.name) + '</span>' +
+          '<span class="sc">' + r.correct + '/' + r.total + '</span>' +
+          '<span class="tm">' + fmtTime(r.timeMs) + '</span>' +
+        '</div>';
+      }).join('');
+    })
+    .catch(function(){
+      list.innerHTML = '<p class="qz-board-loading">Bestenliste gerade nicht erreichbar.</p>';
+    });
+}
+
+$('boardSubmit').addEventListener('click', function(){
+  if(!state) return;
+  var status = $('boardStatus');
+  $('boardSubmit').disabled = true;
+  fetch('/api/quiz/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       level: state.level.id,
-      levelLabel: state.level.label,
       correct: state.correctCount,
-      total: total,
-      timeMs: totalMs,
-      nickname: nick || null
+      total: state.level.questions.length,
+      timeMs: state.finalTimeMs,
+      name: $('boardName').value
     })
-  }).catch(function(){ /* Meldung ist ein Nice-to-have, darf das Ergebnis nie stören */ });
-}
+  })
+    .then(function(r){
+      return r.json().then(function(j){
+        if(!r.ok || !j.ok) throw new Error((j && j.error) || 'error');
+        return j;
+      });
+    })
+    .then(function(){
+      status.hidden = false; status.className = 'qz-board-status';
+      status.textContent = 'Eingetragen — danke!';
+      loadLeaderboard(state.level.id);
+    })
+    .catch(function(e){
+      status.hidden = false; status.className = 'qz-board-status err';
+      status.textContent = (e && e.message === 'invalid_name')
+        ? 'Bitte einen anderen Namen wählen — dieser wurde nicht akzeptiert.'
+        : 'Konnte gerade nicht eingetragen werden — später nochmal versuchen.';
+    })
+    .finally(function(){ $('boardSubmit').disabled = false; });
+});
 
 $('qzRetry').addEventListener('click', function(){ startLevel(state.level.id); });
 $('qzOtherLevel').addEventListener('click', function(){
