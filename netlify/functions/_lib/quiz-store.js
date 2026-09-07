@@ -26,6 +26,14 @@ async function writeResult(level, entry){
   return id;
 }
 
+// Leitet die id IMMER aus dem tatsaechlichen Speicher-Schluessel ab,
+// nicht aus dem gespeicherten Inhalt — trifft so auch Eintraege, die
+// vor Einfuehrung des id-Felds im Inhalt selbst geschrieben wurden.
+function idFromKey(key, level){
+  var prefix = 'results/' + level + '/';
+  return key.slice(prefix.length, key.length - '.json'.length);
+}
+
 async function listResultsForLevel(level){
   var store = resultsStore();
   var keys = [];
@@ -36,7 +44,9 @@ async function listResultsForLevel(level){
     cursor = res.cursor;
   } while(cursor);
   var values = await Promise.all(keys.map(function(k){
-    return store.get(k, { type: 'json' }).catch(function(){ return null; });
+    return store.get(k, { type: 'json' })
+      .then(function(v){ return v ? Object.assign({}, v, { id: idFromKey(k, level) }) : null; })
+      .catch(function(){ return null; });
   }));
   return values.filter(Boolean);
 }
