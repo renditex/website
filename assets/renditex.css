@@ -1501,6 +1501,19 @@ a.proj-video-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
   background:var(--surface-2); border:1px solid var(--line-soft); border-radius:999px; padding:5px 12px;
 }
 
+.guide-quiz-cta{
+  display:flex; align-items:center; gap:14px; margin-top:16px; padding:14px 18px;
+  background:color-mix(in srgb, var(--brand) 8%, var(--surface-2)); border:1.5px solid color-mix(in srgb, var(--brand) 35%, var(--line));
+  border-radius:var(--radius); color:inherit; text-decoration:none;
+  transition:transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast);
+}
+.guide-quiz-cta:hover{transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:var(--brand)}
+.guide-quiz-cta .gq-icon{font-size:22px; flex:none}
+.guide-quiz-cta .gq-text{display:flex; flex-direction:column; gap:2px; flex:1; min-width:0}
+.guide-quiz-cta .gq-text b{font-family:var(--font-display); font-size:15px; font-weight:800}
+.guide-quiz-cta .gq-text span{font-family:var(--font-mono); font-size:12px; color:var(--muted-2)}
+.guide-quiz-cta .gq-arr{font-size:19px; font-weight:700; color:var(--brand-text); flex:none}
+
 /* Kompakte, redaktionelle Wissens-Cards — bewusst anders als Tool-/
    Projekt-Cards: keine Statuszahlen, kein Live-Wert, nur Kategorie +
    Titel + kurzer Text. */
