@@ -110,6 +110,11 @@ window.addEventListener('error', rxShowAll);
 
 .qz-board{margin-top:26px; padding-top:22px; border-top:1px solid var(--line-soft)}
 .qz-board-note{margin:8px 0 14px; font-size:13.5px; color:var(--muted-2); max-width:56ch}
+.qz-board-entry{margin-top:22px; padding-top:18px; border-top:1px dashed var(--line-soft)}
+.qz-board-hint{
+  display:inline-flex; align-items:center; gap:7px; margin-top:12px; font-size:13px; color:var(--brand-text);
+  font-weight:600;
+}
 .qz-board-form{display:flex; flex-wrap:wrap; gap:10px}
 .qz-board-form input{
   flex:1; min-width:200px; font:inherit; font-size:15px; padding:11px 14px; border-radius:var(--radius-sm);
@@ -177,6 +182,7 @@ window.addEventListener('error', rxShowAll);
               <div class="label" id="qzVerdictLabel">—</div>
               <div class="en mono" id="qzVerdictLevel">—</div>
               <p id="qzVerdictText"></p>
+              <div class="qz-board-hint">🏆 Es gibt eine öffentliche Bestenliste — weiter unten ↓</div>
             </div>
           </div>
           <div class="qz-result-grid">
@@ -205,14 +211,19 @@ window.addEventListener('error', rxShowAll);
           </div>
 
           <div class="qz-board">
-            <span class="qz-share-label">In die Bestenliste eintragen</span>
-            <p class="qz-board-note">Optional und öffentlich sichtbar — jeder Name geht, auch ein Fantasie-Kürzel. Ohne Angabe erscheinst du als „Anonym".</p>
-            <div class="qz-board-form">
-              <input type="text" id="boardName" maxlength="24" placeholder="Dein Name oder Kürzel (optional)">
-              <button type="button" class="btn primary" id="boardSubmit">Eintragen</button>
-            </div>
-            <p class="qz-board-status" id="boardStatus" hidden></p>
+            <span class="qz-share-label">🏆 Bestenliste dieser Stufe</span>
+            <p class="qz-board-note">Wer hier schon eingetragen ist, siehst du sofort — ganz ohne selbst mitzumachen.</p>
             <div class="qz-board-list" id="boardList"><p class="qz-board-loading">Bestenliste wird geladen …</p></div>
+
+            <div class="qz-board-entry">
+              <span class="qz-share-label">Selbst eintragen?</span>
+              <p class="qz-board-note">Optional und öffentlich sichtbar — jeder Name geht, auch ein Fantasie-Kürzel. Ohne Angabe erscheinst du als „Anonym".</p>
+              <div class="qz-board-form">
+                <input type="text" id="boardName" maxlength="24" placeholder="Dein Name oder Kürzel (optional)">
+                <button type="button" class="btn primary" id="boardSubmit">Eintragen</button>
+              </div>
+              <p class="qz-board-status" id="boardStatus" hidden></p>
+            </div>
           </div>
         </div>
       </div>

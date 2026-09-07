@@ -54,6 +54,11 @@
   to = "/.netlify/functions/quiz-leaderboard"
   status = 200
 
+[[redirects]]
+  from = "/api/quiz/admin"
+  to = "/.netlify/functions/quiz-admin"
+  status = 200
+
 # /links war ein verworfener Linktree-artiger Zwischenstand (siehe
 # ANALYTICS.md-Historie) und existiert nicht mehr als eigene Seite —
 # die normale Startseite ist jetzt der zentrale Einstiegspunkt. Falls

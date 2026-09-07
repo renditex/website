@@ -165,4 +165,83 @@ wireRangeButtons();
 wireChartToggle();
 wireLogout();
 loadRange('30d');
+
+/* ---------- Quiz-Bestenliste — Moderation ---------- */
+var quizResults = [];
+var quizLevel = 'anfaenger';
+
+function fmtQuizTime(ms){
+  var s = Math.round((ms || 0) / 1000);
+  var m = Math.floor(s / 60); s = s % 60;
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function loadQuizAdmin(){
+  fetch('/api/quiz/admin', { method: 'GET', credentials: 'same-origin' })
+    .then(function(res){
+      if(res.status === 401){ goToLogin(); return null; }
+      if(!res.ok) throw new Error('quiz_admin_failed_' + res.status);
+      return res.json();
+    })
+    .then(function(data){
+      if(!data) return;
+      if(!data.ok) throw new Error(data.error || 'unknown');
+      quizResults = data.results || [];
+      renderQuizAdmin();
+    })
+    .catch(function(){
+      $('quizAdminHost').innerHTML = '<div class="admin-empty">Bestenliste konnte nicht geladen werden.</div>';
+    });
+}
+
+function renderQuizAdmin(){
+  var host = $('quizAdminHost');
+  var rows = quizResults.filter(function(r){ return r.level === quizLevel; });
+  if(!rows.length){
+    host.innerHTML = '<div class="admin-empty">Noch keine Einträge für diese Stufe.</div>';
+    return;
+  }
+  host.innerHTML =
+    '<table class="admin-table"><thead><tr><th>Name</th><th class="num">Ergebnis</th><th class="num">Zeit</th><th>Eingetragen</th><th></th></tr></thead><tbody>' +
+    rows.map(function(r){
+      return '<tr>' +
+        '<td>' + esc(r.name) + '</td>' +
+        '<td class="num">' + r.correct + '/' + r.total + '</td>' +
+        '<td class="num">' + fmtQuizTime(r.timeMs) + '</td>' +
+        '<td>' + esc(new Date(r.submittedAt).toLocaleString('de-DE')) + '</td>' +
+        '<td><button type="button" class="admin-del" data-level="' + esc(r.level) + '" data-id="' + esc(r.id) + '">Löschen</button></td>' +
+      '</tr>';
+    }).join('') +
+    '</tbody></table>';
+}
+
+$('quizLevelToggle').addEventListener('click', function(e){
+  var btn = e.target.closest('button[data-level]');
+  if(!btn) return;
+  $('quizLevelToggle').querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  quizLevel = btn.getAttribute('data-level');
+  renderQuizAdmin();
+});
+
+$('quizAdminHost').addEventListener('click', function(e){
+  var btn = e.target.closest('button.admin-del');
+  if(!btn) return;
+  if(!window.confirm('Diesen Bestenlisten-Eintrag wirklich löschen?')) return;
+  btn.disabled = true;
+  fetch('/api/quiz/admin', {
+    method: 'DELETE',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ level: btn.getAttribute('data-level'), id: btn.getAttribute('data-id') })
+  })
+    .then(function(res){ if(!res.ok) throw new Error(); return res.json(); })
+    .then(function(){
+      quizResults = quizResults.filter(function(r){ return r.id !== btn.getAttribute('data-id'); });
+      renderQuizAdmin();
+    })
+    .catch(function(){ btn.disabled = false; window.alert('Löschen fehlgeschlagen — bitte nochmal versuchen.'); });
+});
+
+loadQuizAdmin();
 })();
