@@ -121,7 +121,10 @@ window.RX_DATA.hyperocket = {
     }
   ],
 
-  interview: null,
+  interview: {
+    youtubeUrl: 'https://youtu.be/1Mz9xbqH0PU',
+    title: 'Interview mit HypeRocket-CEO Sven Möller'
+  },
 
   positives: [
     { title:'Mehrere Monate Beobachtung', text:'Der Test basiert nicht nur auf einer einzelnen Momentaufnahme, sondern auf mehreren Monaten eigener Erfahrung.' },
