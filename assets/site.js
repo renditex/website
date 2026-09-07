@@ -44,7 +44,8 @@ var NAV = [
       {href:'/sparplan-rechner/', label:'Sparplan-Rechner'},
       {href:'/haltefrist-tracker/', label:'Haltefrist-Tracker'},
       {href:'/scam-check/', label:'Scam-Check'},
-      {href:'/halving-countdown/', label:'Halving-Countdown'}
+      {href:'/halving-countdown/', label:'Halving-Countdown'},
+      {href:'/krypto-quiz/', label:'Krypto-Quiz'}
     ]},
   { label:'Praxistests', href:'/projekte/', items:[
       {href:'/projekte/bitopex/', label:'Bitopex'},
