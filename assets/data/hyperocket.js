@@ -115,7 +115,6 @@ window.RX_DATA.hyperocket = {
       title: 'HypeRocket hat ALLES geändert: Mein Gewinn nach 5 Monaten',
       youtubeUrl: 'https://youtu.be/iPHxi99XNRI',
       publishedAt: '2026-08-05',
-      featured: true,
       projectSlug: 'hyperocket',
       description: 'Nach fünf Monaten HyperRocket: mein aktueller Account-Stand und meine bisherigen Auszahlungen.'
     },
@@ -123,15 +122,13 @@ window.RX_DATA.hyperocket = {
       title: 'Interview mit HypeRocket-CEO Sven Möller',
       youtubeUrl: 'https://youtu.be/1Mz9xbqH0PU',
       publishedAt: '2026-09-02',
+      featured: true,
       projectSlug: 'hyperocket',
       description: 'Im Gespräch mit Sven Möller über das Projekt, die Trading-Strategien dahinter und die nächsten Schritte (Interview auf Englisch).'
     }
   ],
 
-  interview: {
-    youtubeUrl: 'https://youtu.be/1Mz9xbqH0PU',
-    title: 'Interview mit HypeRocket-CEO Sven Möller'
-  },
+  interview: null,
 
   positives: [
     { title:'Mehrere Monate Beobachtung', text:'Der Test basiert nicht nur auf einer einzelnen Momentaufnahme, sondern auf mehreren Monaten eigener Erfahrung.' },
