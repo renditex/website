@@ -6,13 +6,11 @@
 (function(){
 "use strict";
 
-var LOGO =
-  '<svg class="xmark" viewBox="0 0 46 36" aria-hidden="true">' +
-    '<g stroke-width="3.6" stroke-linecap="butt" fill="none">' +
-      '<g stroke="currentColor"><path d="M2 34 L20 2"/><path d="M9.5 34 L27.5 2"/><path d="M17 34 L35 2"/></g>' +
-      '<g stroke="#E4212B"><path d="M11 2 L29 34"/><path d="M18.5 2 L36.5 34"/><path d="M26 2 L44 34"/></g>' +
-    '</g>' +
-  '</svg>';
+/* Offizielles RenditeX-Logo (Wortmarke + X) als freigestelltes PNG
+   (assets/img/renditex-logo.png, 460x105). width/height als Attribute,
+   damit das Logo auch mit gecachtem Alt-CSS nie in Originalgroesse
+   aufblitzt; die endgueltige Groesse setzt .brand-logo in renditex.css. */
+var LOGO = '<img class="brand-logo" src="/assets/img/renditex-logo.png" alt="RenditeX" width="149" height="34" decoding="async">';
 
 var LINKS = {
   youtube:  'https://www.youtube.com/@RenditeX',
@@ -144,7 +142,7 @@ function header(opts){
   host.innerHTML =
     '<div class="wrap top-in">' +
       '<a class="brand" href="/" aria-label="RenditeX Startseite">' +
-        '<span class="wm">Rendite</span>' + LOGO +
+        LOGO +
         (opts.live ? '<span class="dot" id="brandDot"></span>' : '') +
       '</a>' +
       '<nav class="top-nav" id="topNav">' + nav + '</nav>' +
@@ -236,7 +234,7 @@ function footer(){
   host.innerHTML =
     '<div class="wrap foot-grid">' +
       '<div>' +
-        '<div class="brand" style="margin-bottom:14px"><span class="wm">Rendite</span>' + LOGO + '</div>' +
+        '<div class="brand" style="margin-bottom:14px">' + LOGO + '</div>' +
         '<div style="font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted-2); margin-bottom:14px">Krypto · Investment · Optionen · Trading</div>' +
         '<div class="foot-links">' +
           '<a href="/tools/">Tools</a>' +

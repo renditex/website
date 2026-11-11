@@ -210,14 +210,21 @@ header.top::after{
 }
 .top-in{display:flex; align-items:center; gap:16px; height:64px}
 .brand{display:flex; align-items:center; gap:2px; text-decoration:none; border:0; color:var(--text)}
-.brand .wm{
-  font-family:var(--font-display); font-weight:900; font-size:18px; letter-spacing:.03em;
-  line-height:1;
-}
-.brand .xmark{height:20px; width:auto; display:block; margin-left:1px; color:var(--text)}
+/* Offizielles Logo (PNG, freigestellt) — steht ausschliesslich auf den
+   dunklen Navy-Flaechen von Header und Footer. */
+.brand .brand-logo{height:34px; width:auto; display:block}
 .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--z1); box-shadow:0 0 0 4px rgba(168,84,26,.16); margin-left:12px}
-footer .brand .wm{font-size:22px}
-footer .brand .xmark{height:24px}
+footer .brand .brand-logo{height:42px}
+@media(max-width:520px){
+  /* Das Logo ist etwas breiter als die frueheren Wortmarke — Abstaende
+     und Pillen im Header minimal kompakter, damit die Kopfzeile auf
+     Handys in die Breite passt (vorher ragte sie bei 375px ueber). */
+  .brand .brand-logo{height:26px}
+  .top-in{gap:6px}
+  .pill-live{padding:5px 9px; gap:6px; font-size:12px}
+  .cur-toggle{padding:5px 9px}
+}
+@media(max-width:380px){ .brand .brand-logo{height:24px} }
 nav.top-nav{margin-left:auto; display:flex; gap:4px; align-items:center}
 .nav-item{position:relative}
 nav.top-nav a, .dd-toggle{
