@@ -12,7 +12,7 @@ window.RX_DATA.hyperocket = {
   name: 'HyperRocket',
   status: 'active', // active | watching | paused | ended
 
-  updatedAt: '2026-08-18', // Datum des Account-Snapshots, einzige Quelle fuer "Stand: ..."
+  updatedAt: '2026-11-11', // Datum des Account-Snapshots, einzige Quelle fuer "Stand: ..."
   metaTags: ['Aktiv', 'Praxistest', 'Eigener Account', 'Laufende Updates'],
 
   websiteUrl: 'https://hyperocket.io/?ref=RenditeX',
@@ -24,22 +24,31 @@ window.RX_DATA.hyperocket = {
   // HypeRocket-Dashboard. "Gesamt verdient" und der ROI-Fortschritt
   // sind Dashboard-Begriffe und bewusst NICHT gleich Gewinn/Auszahlung.
   accountSnapshot: {
-    date: '2026-08-18',
-    activeInvestmentUsdt: 8426.38,
-    availableBalanceUsd: 89.67,
-    totalEarnedDisplayedUsd: 189.25,
-    roiProgressPercent: 47.4,
+    date: '2026-11-11',
+    activeInvestmentUsdt: 8510.65,
+    availableBalanceUsd: 37.75,
+    totalEarnedDisplayedUsd: 7722.80,
+    roiProgressPercent: 90,
     roiMaxPercent: 250,
-    roiEarnedDisplayedUsd: 3990.57,
-    roiTargetDisplayedUsd: 21065.96,
-    dailyPerformancePercent: 0.47,
-    dailyEarnedDisplayedUsd: 39.60,
-    dailyCommissionsUsd: 7.48
+    roiEarnedDisplayedUsd: 7657.80,
+    roiTargetDisplayedUsd: 21276.63,
+    dailyPerformancePercent: 0.42,
+    dailyEarnedDisplayedUsd: 35.74
+    // "Provisionen heute" (dailyCommissionsUsd) bewusst weggelassen: im
+    // aktuellen Dashboard-Stand nicht erfasst — keinen alten Wert stehen lassen.
   },
 
   // Echte, tatsaechlich ausgezahlte Betraege (USD-Werte laut Dashboard).
   // Summe, Anzahl, Monatswerte und Chart werden daraus berechnet.
   withdrawals: [
+    { date:'2026-10-19', amount:40.00,  asset:'HYPE', network:'SOL' },
+    { date:'2026-09-25', amount:165.78, asset:'USDC', network:'SOL' },
+    { date:'2026-09-19', amount:157.02, asset:'USDC', network:'SOL' },
+    { date:'2026-09-14', amount:154.48, asset:'USDC', network:'SOL' },
+    { date:'2026-09-10', amount:207.44, asset:'USDC', network:'SOL' },
+    { date:'2026-09-10', amount:50.00,  asset:'HYPE', network:'SOL' },
+    { date:'2026-09-07', amount:160.13, asset:'USDC', network:'SOL' },
+    { date:'2026-09-01', amount:596.14, asset:'USDC', network:'SOL' },
     { date:'2026-08-16', amount:243.47, asset:'USDC', network:'SOL' },
     { date:'2026-08-10', amount:236.51, asset:'USDC', network:'SOL' },
     { date:'2026-08-04', amount:218.26, asset:'USDC', network:'SOL' },
@@ -65,7 +74,10 @@ window.RX_DATA.hyperocket = {
     { dateLabel:'Mai 2026', title:'Erste Auszahlungen dokumentiert', text:'Ab Mitte Mai dokumentiere ich meine ersten tatsächlichen Auszahlungen aus dem eigenen Account.' },
     { dateLabel:'Juni/Juli 2026', title:'Auszahlungen nehmen zu', text:'Weitere Auszahlungen folgen. Juli ist bislang mein stärkster dokumentierter Monat mit 1.563,24 $.' },
     { dateLabel:'August 2026', title:'Weitere Auszahlungen bis 16.08.', text:'Auch im August kommen weitere dokumentierte Auszahlungen hinzu.' },
-    { dateLabel:'18.08.2026', title:'Aktueller Account-Snapshot', text:'In meinem aktuellsten Video ordne ich meinen Stand nach fünf Monaten ein — hier halte ich den Account-Stand direkt danach fest.' }
+    { dateLabel:'18.08.2026', title:'Account-Snapshot nach fünf Monaten', text:'In meinem Video ordne ich meinen Stand nach fünf Monaten ein — hier halte ich den Account-Stand direkt danach fest.' },
+    { dateLabel:'September 2026', title:'Weitere Auszahlungen bis 25.09.', text:'Im September kommen sieben weitere dokumentierte Auszahlungen mit zusammen 1.490,99 $ hinzu.' },
+    { dateLabel:'19.10.2026', title:'Letzte dokumentierte Auszahlung', text:'Eine kleine Auszahlung in HYPE über 40 $.' },
+    { dateLabel:'11.11.2026', title:'Aktueller Account-Snapshot', text:'Neuer Dashboard-Stand: 8.510,65 USDT aktiv investiert, ROI-Fortschritt laut Dashboard 90 %. Insgesamt sind jetzt 26 Auszahlungen dokumentiert.' }
   ],
 
   // Anbieterangaben aus der offiziellen HypeRocket-Praesentation.
@@ -122,9 +134,16 @@ window.RX_DATA.hyperocket = {
       title: 'Interview mit HypeRocket-CEO Sven Möller',
       youtubeUrl: 'https://youtu.be/1Mz9xbqH0PU',
       publishedAt: '2026-09-02',
-      featured: true,
       projectSlug: 'hyperocket',
       description: 'Im Gespräch mit Sven Möller über das Projekt, die Trading-Strategien dahinter und die nächsten Schritte (Interview auf Englisch).'
+    },
+    {
+      title: 'Ein Wochenende mit HypeRocket: Was in Dubai passiert ist',
+      youtubeUrl: 'https://youtu.be/uCIj3Mj1qHI',
+      publishedAt: '2026-11-11',
+      featured: true,
+      projectSlug: 'hyperocket',
+      description: 'Mein Wochenende mit HypeRocket in Dubai und was dort passiert ist.'
     }
   ],
 
@@ -151,11 +170,11 @@ window.RX_DATA.hyperocket = {
   ],
 
   faq: [
-    { q:'Wie viel habe ich aktuell bei HyperRocket investiert?', a:'Mein Account zeigt am 18.08.2026 eine aktive Investition von 8.426,38 USDT.' },
-    { q:'Wie viel wurde bisher ausgezahlt?', a:'Die hier dokumentierten 18 Auszahlungen ergeben zusammen 3.602,39 $.' },
-    { q:'Sind 3.602,39 $ mein Gewinn?', a:'Nicht automatisch. Auf der Seite werden Auszahlungen bewusst getrennt von Gewinn bzw. anderen Dashboard-Kennzahlen dargestellt.' },
-    { q:'Was bedeutet der ROI-Fortschritt von 47,4 %?', a:'Das ist die Bezeichnung bzw. Darstellung in meinem HypeRocket-Dashboard. Die Seite leitet daraus keine zusätzlichen Versprechen oder Garantien ab.' },
-    { q:'Wie aktuell sind die Daten?', a:'Der aktuelle Account-Snapshot ist vom 18.08.2026. Die letzte hier dokumentierte Auszahlung stammt vom 16.08.2026.' },
+    { q:'Wie viel habe ich aktuell bei HyperRocket investiert?', a:'Mein Account zeigt am 11.11.2026 eine aktive Investition von 8.510,65 USDT.' },
+    { q:'Wie viel wurde bisher ausgezahlt?', a:'Die hier dokumentierten 26 Auszahlungen ergeben zusammen 5.133,38 $.' },
+    { q:'Sind 5.133,38 $ mein Gewinn?', a:'Nicht automatisch. Auf der Seite werden Auszahlungen bewusst getrennt von Gewinn bzw. anderen Dashboard-Kennzahlen dargestellt.' },
+    { q:'Was bedeutet der ROI-Fortschritt von 90 %?', a:'Das ist die Bezeichnung bzw. Darstellung in meinem HypeRocket-Dashboard. Die Seite leitet daraus keine zusätzlichen Versprechen oder Garantien ab.' },
+    { q:'Wie aktuell sind die Daten?', a:'Der aktuelle Account-Snapshot ist vom 11.11.2026. Die letzte hier dokumentierte Auszahlung stammt vom 19.10.2026.' },
     { q:'Ist der Link zu HyperRocket ein Partnerlink?', a:'Ja. Wenn du dich darüber registrierst, kann ich eine Vergütung erhalten. Für dich entstehen dadurch keine zusätzlichen Kosten.' }
   ],
 

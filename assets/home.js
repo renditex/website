@@ -365,10 +365,20 @@ function renderFeaturedVideo(){
   if(linkHost){
     if(proj){
       show(linkHost);
-      linkHost.innerHTML =
-        '<div class="proj-since-head">Seit diesem Video gibt es neuere Daten</div>' +
-        '<p style="color:var(--muted); font-size:14.5px; margin-top:8px">Das Video zeigt meinen Stand zum Zeitpunkt der Aufnahme. Den aktuellen Stand dokumentiere ich auf RenditeX weiter.</p>' +
-        '<a class="btn primary" style="margin-top:14px" href="/projekte/' + P.esc(proj.slug) + '/">Aktuellen Stand ansehen</a>';
+      /* "Neuere Daten" nur behaupten, wenn der Datenstand des Projekts
+         wirklich juenger ist als das Video — sonst neutraler Hinweis. */
+      var fresh = proj.updatedAt && video.publishedAt && new Date(proj.updatedAt) > new Date(video.publishedAt);
+      if(fresh){
+        linkHost.innerHTML =
+          '<div class="proj-since-head">Seit diesem Video gibt es neuere Daten</div>' +
+          '<p style="color:var(--muted); font-size:14.5px; margin-top:8px">Das Video zeigt meinen Stand zum Zeitpunkt der Aufnahme. Den aktuellen Stand dokumentiere ich auf RenditeX weiter.</p>' +
+          '<a class="btn primary" style="margin-top:14px" href="/projekte/' + P.esc(proj.slug) + '/">Aktuellen Stand ansehen</a>';
+      } else {
+        linkHost.innerHTML =
+          '<div class="proj-since-head">Mehr zu ' + P.esc(proj.name || 'diesem Projekt') + '</div>' +
+          '<p style="color:var(--muted); font-size:14.5px; margin-top:8px">Zahlen, Auszahlungen und meine Einschätzung zu diesem Projekt findest du gesammelt im Praxistest.</p>' +
+          '<a class="btn primary" style="margin-top:14px" href="/projekte/' + P.esc(proj.slug) + '/">Zum Praxistest</a>';
+      }
     } else {
       hide(linkHost);
     }
