@@ -130,6 +130,8 @@ window.addEventListener('error', rxShowAll);
 .qz-board-row .nm{font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .qz-board-row .sc{font-family:var(--font-mono); color:var(--brand-text); font-weight:700; white-space:nowrap}
 .qz-board-row .tm{font-family:var(--font-mono); color:var(--muted-2); font-size:12.5px; white-space:nowrap}
+.qz-board-row:first-child{background:color-mix(in srgb, var(--gold-vivid) 14%, var(--surface))}
+.qz-board-row:first-child .rk, .qz-board-row:first-child .sc{color:var(--gold-text); font-weight:700}
 @media(max-width:520px){ .qz-board-row{grid-template-columns:24px 1fr auto} .qz-board-row .tm{display:none} }
 </style>
 </head>
